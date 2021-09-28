@@ -1,0 +1,21 @@
+version: '3'
+services:
+  api:
+    #restart: on-failure
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    network_mode: "host"
+    command: python app.py --host 0.0.0.0 --port 5300 --debug
+#    command: flask run --port=5000 --host=0.0.0.0
+#    command: gunicorn --bind 0.0.0.0:5000 app:app --timeout 180 --workers=4
+    environment:
+      - PYTHONUNBUFFERED=1
+    ports:
+      - '0.0.0.0:5300:5300'
+    expose:
+      - '5300'
+    volumes:
+      - .:/app:Z
+
+
