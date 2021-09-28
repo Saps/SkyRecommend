@@ -1,28 +1,17 @@
-import React, {useEffect} from 'react';
-import './App.css';
-import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
-import { connect } from 'react-redux';
+import React from 'react';
+import {BrowserRouter, Route, Switch} from 'react-router-dom';
+import {LoginComponent, MainComponent, NotFoundComponent, RegisterComponent} from './components';
+import './index.scss';
 
-import MainPage from "./openpages/MainPage/MainPage";
-import LoginMain from "./closepages/Login/LoginMain";
-
-const App = (props : any) => {
-
-    const { getTechMenuAction } = props;
-    useEffect(() => {
-        //getTechMenuAction()
-    });
-
-    return (
-        <Router>
-            <Switch>
-                {/* Открытые страницы */}
-                <Route exact path="/" component={MainPage} />
-                <Route exact path="/login" component={LoginMain} />
-            </Switch>
-        </Router>
-    );
+export const App = () => {
+  return (
+      <BrowserRouter>
+        <Switch>
+          <Route exact path="/" component={MainComponent} />
+          <Route exact path="/login" component={LoginComponent} />
+          <Route exact path="/register" component={RegisterComponent} />
+          <Route component={NotFoundComponent} />
+        </Switch>
+      </BrowserRouter>
+  );
 }
-
-
-export default connect()(App);
