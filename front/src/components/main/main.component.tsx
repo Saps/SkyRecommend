@@ -1,7 +1,7 @@
 import React from 'react';
 import {HeaderComponent} from '../common';
 
-export const MainComponent = () => {
+export const MainComponent = (): JSX.Element => {
     return (
         <div>
             <HeaderComponent />

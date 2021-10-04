@@ -2,12 +2,10 @@ import React from 'react';
 import {useFormik} from 'formik';
 import * as Yup from 'yup';
 import {LockOutlined} from '@mui/icons-material';
-import {
-    Avatar, Box, Button, Checkbox, FormControlLabel, Link, Paper, TextField, Typography
-} from '@mui/material';
+import {Avatar, Box, Button, Checkbox, FormControlLabel, Link, Paper, TextField, Typography} from '@mui/material';
 import './login.component.scss';
 
-export const LoginComponent = () => {
+export const LoginComponent = (): JSX.Element => {
     const {errors, handleBlur, handleChange, handleSubmit, touched, values} = useFormik({
         initialValues: {
             login: '',
@@ -15,8 +13,8 @@ export const LoginComponent = () => {
             remember: false,
         },
         validationSchema: Yup.object({
-            login: Yup.string().required('Login is required.'),
-            password: Yup.string().required('Password is required.'),
+            login: Yup.string().required('Login is required'),
+            password: Yup.string().required('Password is required'),
         }),
         onSubmit: values => {
             alert(JSON.stringify(values, null, 2));
@@ -26,8 +24,8 @@ export const LoginComponent = () => {
     return (
         <Box className="login-page">
             <Paper className="login-page__container" elevation={10}>
-                <Avatar sx={{ m: 1, bgcolor: '#9c27b0' }}>
-                    <LockOutlined />
+                <Avatar sx={{m: 1, bgcolor: '#9c27b0'}}>
+                    <LockOutlined/>
                 </Avatar>
                 <Typography component="h1" variant="h5">
                     Sign in
@@ -43,7 +41,7 @@ export const LoginComponent = () => {
                         name="login"
                         onBlur={handleBlur}
                         onChange={handleChange}
-                        sx={{ mt: 1 }}
+                        sx={{mt: 1}}
                         value={values.login}
                         variant="standard"
                     />
@@ -57,13 +55,13 @@ export const LoginComponent = () => {
                         name="password"
                         onBlur={handleBlur}
                         onChange={handleChange}
-                        sx={{ mt: 1 }}
+                        sx={{mt: 1}}
                         type="password"
                         value={values.password}
                         variant="standard"
                     />
                     <FormControlLabel
-                        control={<Checkbox color="primary" id="remember" value="remember" />}
+                        control={<Checkbox color="primary" id="remember" value="remember"/>}
                         label="Remember me"
                         onChange={handleChange}
                     />
