@@ -4,7 +4,7 @@ from sqlalchemy import Column, Integer, String, TIMESTAMP
 Base = declarative_base()
 
 class User_Sessions(Base):
-    __tablename__ = 'nv_sessions'
+    __tablename__ = 'rs_sessions'
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer)
     sess_id = Column(String)

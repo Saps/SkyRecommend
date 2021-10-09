@@ -1,10 +1,10 @@
 from functools import wraps
 from flask_restful import Resource as FRES
 from flask import request, make_response, jsonify
-from api import IAPI
 import json
 from model import user #, userlog
 import datetime
+from api import IAPI
 
 def authenticate(func):
     @wraps(func)
