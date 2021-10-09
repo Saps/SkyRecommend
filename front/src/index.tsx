@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import ReactDOM from 'react-dom';
 import {BrowserRouter, Route, Switch} from 'react-router-dom';
 import {Provider} from 'react-redux';
 import {applyMiddleware, createStore} from 'redux';
-import {LoginComponent, MainComponent, NotFoundComponent, RegisterComponent} from './components';
+import {FooterComponent, HeaderComponent, LoginComponent, MainComponent, RegisterComponent, SidebarComponent} from './components';
 import {rootReducer} from './reducers';
 import thunk from 'redux-thunk';
 import './index.scss';
@@ -16,10 +16,15 @@ ReactDOM.render(
     <Provider store={store}>
         <BrowserRouter>
             <Switch>
-                <Route exact path="/" component={MainComponent}/>
                 <Route exact path="/login" component={LoginComponent}/>
                 <Route exact path="/register" component={RegisterComponent}/>
-                <Route component={NotFoundComponent}/>
+                <Fragment>
+                    <HeaderComponent />
+                    <div className="main-container">
+                        <Route path="/" component={MainComponent}/>
+                    </div>
+                    <FooterComponent />
+                </Fragment>
             </Switch>
         </BrowserRouter>
     </Provider>,
