@@ -50,7 +50,7 @@ export const HeaderComponent = (): JSX.Element => {
         <header>
             <h1>Top</h1>
             <Fragment key="sidebar">
-                <Button onClick={toogleSidebar( true)}>Open sidebar</Button>
+                <Button onClick={toogleSidebar(true)}>Open sidebar</Button>
                 <Drawer
                     anchor="left"
                     open={sidebarOpen}
