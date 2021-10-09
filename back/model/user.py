@@ -38,12 +38,12 @@ class User(Base):
             usname = jsonData['username']
             paword = jsonData['password']
         except KeyError:
-            return 'invalidFormat'
+            return 'invalidFormat', ''
         #mdpass = md5(paword.encode('utf-8')).hexdigest()
         mdpass = paword
         our_user = sess.query(User).filter((User.username == usname) & (User.password == mdpass)).first()
         if not our_user:
-            return 'invalid'
+            return 'invalid', ''
 
         sess.flush()
         sql = "delete from rs_sessions where user_id = :us_id"
