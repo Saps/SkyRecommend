@@ -2,7 +2,7 @@ import React from 'react';
 import {useFormik} from 'formik';
 import * as Yup from 'yup';
 import {LockOutlined} from '@mui/icons-material';
-import {Avatar, Box, Button, Checkbox, FormControlLabel, Link, Paper, TextField, Typography} from '@mui/material';
+import {Avatar, Box, Button, Link, Paper, TextField, Typography} from '@mui/material';
 import './login.component.scss';
 
 export const LoginComponent = (): JSX.Element => {
