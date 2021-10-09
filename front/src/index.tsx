@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import {BrowserRouter, Route, Switch} from 'react-router-dom';
 import {Provider} from 'react-redux';
 import {applyMiddleware, createStore} from 'redux';
-import {FooterComponent, HeaderComponent, LoginComponent, MainComponent, RegisterComponent, SidebarComponent} from './components';
+import {FooterComponent, HeaderComponent, LoginComponent, MainComponent, RegisterComponent} from './components';
 import {rootReducer} from './reducers';
 import thunk from 'redux-thunk';
 import './index.scss';
