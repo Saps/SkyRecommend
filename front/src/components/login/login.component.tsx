@@ -8,12 +8,11 @@ import './login.component.scss';
 export const LoginComponent = (): JSX.Element => {
     const {errors, handleBlur, handleChange, handleSubmit, touched, values} = useFormik({
         initialValues: {
-            login: '',
+            username: '',
             password: '',
-            remember: false,
         },
         validationSchema: Yup.object({
-            login: Yup.string().required('Login is required'),
+            username: Yup.string().required('Username is required'),
             password: Yup.string().required('Password is required'),
         }),
         onSubmit: values => {
@@ -32,21 +31,21 @@ export const LoginComponent = (): JSX.Element => {
                 </Typography>
                 <Box component="form" onSubmit={handleSubmit} noValidate>
                     <TextField
-                        autoComplete="login"
-                        error={touched.login && !!errors.login}
+                        autoComplete="username"
+                        error={touched.username && !!errors.username}
                         fullWidth
-                        helperText={touched.login && !!errors.login ? errors.login : ''}
-                        id="login"
-                        label="Login"
-                        name="login"
+                        helperText={touched.username && !!errors.username ? errors.username : ''}
+                        id="username"
+                        label="Username"
+                        name="username"
                         onBlur={handleBlur}
                         onChange={handleChange}
                         sx={{mt: 1}}
-                        value={values.login}
+                        value={values.username}
                         variant="standard"
                     />
                     <TextField
-                        autoComplete="current-password"
+                        autoComplete="password"
                         error={touched.password && !!errors.password}
                         id="password"
                         fullWidth
@@ -60,12 +59,7 @@ export const LoginComponent = (): JSX.Element => {
                         value={values.password}
                         variant="standard"
                     />
-                    <FormControlLabel
-                        control={<Checkbox color="primary" id="remember" value="remember"/>}
-                        label="Remember me"
-                        onChange={handleChange}
-                    />
-                    <Button disabled={!!errors.login || !!errors.password} type="submit" variant="contained">
+                    <Button disabled={!!errors.username || !!errors.password} type="submit" variant="contained">
                         Sign In
                     </Button>
                 </Box>
