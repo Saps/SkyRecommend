@@ -16,7 +16,13 @@ export const LoginComponent = (): JSX.Element => {
             password: Yup.string().required('Password is required'),
         }),
         onSubmit: values => {
-            alert(JSON.stringify(values, null, 2));
+            fetch('http://185.221.152.242:5480/api/user/login', {
+                method: 'POST',
+                body: JSON.stringify(values),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
         }
     });
 
