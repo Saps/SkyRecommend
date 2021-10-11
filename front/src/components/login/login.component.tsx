@@ -1,11 +1,16 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
 import {useFormik} from 'formik';
 import * as Yup from 'yup';
 import {LockOutlined} from '@mui/icons-material';
 import {Avatar, Box, Button, Link, Paper, TextField, Typography} from '@mui/material';
+import {currentUser, login} from '../../api';
+import {currentUserAction} from '../../actions';
 import './login.component.scss';
 
 export const LoginComponent = (): JSX.Element => {
+    const dispatch = useDispatch();
+
     const {errors, handleBlur, handleChange, handleSubmit, touched, values} = useFormik({
         initialValues: {
             username: '',
@@ -16,13 +21,12 @@ export const LoginComponent = (): JSX.Element => {
             password: Yup.string().required('Password is required'),
         }),
         onSubmit: values => {
-            fetch('http://185.221.152.242:5480/api/user/login', {
-                method: 'POST',
-                body: JSON.stringify(values),
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
+            login(values)
+                .then(async res => {
+                    const userInfo = await currentUser();
+                    dispatch(currentUserAction(userInfo));
+                })
+                .catch(err => alert(err.message));
         }
     });
 
