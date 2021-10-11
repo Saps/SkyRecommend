@@ -33,3 +33,7 @@ export interface ApiError {
     error: boolean;
     message: string;
 }
+
+export interface CommonError {
+    message: string;
+}

@@ -1,15 +1,22 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import {useFormik} from 'formik';
+import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import {LockOutlined} from '@mui/icons-material';
-import {Avatar, Box, Button, Link, Paper, TextField, Typography} from '@mui/material';
-import {currentUser, login} from '../../api';
-import {currentUserAction} from '../../actions';
+import { LockOutlined } from '@mui/icons-material';
+import { Avatar, Box, Button, Link, Paper, TextField, Typography } from '@mui/material';
+import { ThunkDispatch } from 'redux-thunk';
+import { AnyAction } from '@reduxjs/toolkit';
+import { useHistory } from 'react-router-dom';
+
+import { loginAction } from '~/store/user/actions';
+import { RootState } from '~/store/rootReducer';
+import { CommonError } from '~/types';
+
 import './login.component.scss';
 
 export const LoginComponent = (): JSX.Element => {
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<ThunkDispatch<RootState, void, AnyAction>>();
+    const history = useHistory();
 
     const {errors, handleBlur, handleChange, handleSubmit, touched, values} = useFormik({
         initialValues: {
@@ -20,13 +27,15 @@ export const LoginComponent = (): JSX.Element => {
             username: Yup.string().required('Username is required'),
             password: Yup.string().required('Password is required'),
         }),
-        onSubmit: values => {
-            login(values)
-                .then(async res => {
-                    const userInfo = await currentUser(res.access_token);
-                    dispatch(currentUserAction({ ...userInfo, access_token: res.access_token }));
-                })
-                .catch(err => alert(err.message));
+        onSubmit: async values => {
+            try {
+                await dispatch(loginAction(values));
+
+                history.push('/');
+            } catch (e) {
+                alert((e as CommonError).message);
+            }
+            
         }
     });
 

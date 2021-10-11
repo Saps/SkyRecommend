@@ -1,6 +1,6 @@
 import { PayloadAction } from '@reduxjs/toolkit';
-import { CURRENT_USER, DELETE_CURRENT_USER } from '../actions';
-import { FullUserInfo } from '../types';
+import { CURRENT_USER, DELETE_CURRENT_USER } from './actions';
+import { FullUserInfo } from '~/types';
 
 const initialState = {
     access_token: '',
