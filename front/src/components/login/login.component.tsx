@@ -23,8 +23,8 @@ export const LoginComponent = (): JSX.Element => {
         onSubmit: values => {
             login(values)
                 .then(async res => {
-                    const userInfo = await currentUser();
-                    dispatch(currentUserAction(userInfo));
+                    const userInfo = await currentUser(res.access_token);
+                    dispatch(currentUserAction({ ...userInfo, access_token: res.access_token }));
                 })
                 .catch(err => alert(err.message));
         }

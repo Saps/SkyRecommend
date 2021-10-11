@@ -26,9 +26,9 @@ export async function logout(): Promise<LogoutInfo> {
     }
 }
 
-export async function currentUser(): Promise<UserInfo> {
+export async function currentUser(access_token: string): Promise<UserInfo> {
     try {
-        const { data } = await api.get('/user/current');
+        const { data } = await api.get('/user/current', { headers: { Authorization: `Bearer ${access_token}` } });
         return data as UserInfo;
     } catch (e) {
         throw new Error((e as AxiosError<ApiError>)?.response?.data.message);
