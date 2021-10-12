@@ -1,9 +1,8 @@
 import { PayloadAction } from '@reduxjs/toolkit';
 import { CURRENT_USER, DELETE_CURRENT_USER } from './actions';
-import { FullUserInfo } from '~/types';
+import { UserInfo } from '~/types';
 
 const initialState = {
-    access_token: '',
     email: '',
     id: -1,
     params: null,
@@ -11,7 +10,7 @@ const initialState = {
     role: '',
 };
 
-export const userReducer = (state: FullUserInfo = initialState, action: PayloadAction<FullUserInfo>) => {
+export const userReducer = (state: UserInfo = initialState, action: PayloadAction<UserInfo>) => {
     switch (action.type) {
         case CURRENT_USER:
             return { ...action.payload };

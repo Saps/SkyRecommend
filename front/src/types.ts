@@ -11,10 +11,6 @@ export interface UserInfo {
     role: string;
 }
 
-export interface FullUserInfo extends UserInfo {
-    access_token: string;
-}
-
 export interface LoginInfo {
     access_token: string;
     user_role: string;

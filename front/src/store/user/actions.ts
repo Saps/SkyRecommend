@@ -1,4 +1,4 @@
-import { FullUserInfo, UserCredentials } from '~/types';
+import { UserInfo, UserCredentials } from '~/types';
 import { login, currentUser } from '~/api';
 
 import { AppDispatch } from '../store';
@@ -6,16 +6,22 @@ import { AppDispatch } from '../store';
 export const CURRENT_USER = 'CURRENT_USER';
 export const DELETE_CURRENT_USER = 'DELETE_CURRENT_USER';
 
-export const loginAction = (credentials: UserCredentials) => {
+export const getCurrentUserAction = () => {
     return async (dispatch: AppDispatch) => {
-        const loginResult = await login(credentials);
-        const userInfo = await currentUser(loginResult.access_token);
-
-        return dispatch(currentUserAction({ ...userInfo, access_token: loginResult.access_token }));
+        const userInfo = await currentUser();
+        return dispatch(currentUserAction({ ...userInfo }));
     };
 }
 
-export const currentUserAction = (info: FullUserInfo) => ({
+export const loginAction = (credentials: UserCredentials) => {
+    return async (dispatch: AppDispatch) => {
+        const loginResult = await login(credentials);
+        const userInfo = await currentUser();
+        return dispatch(currentUserAction({ ...userInfo }));
+    };
+}
+
+export const currentUserAction = (info: UserInfo) => ({
     type: CURRENT_USER,
     payload: info,
 });

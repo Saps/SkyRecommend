@@ -30,12 +30,10 @@ export const LoginComponent = (): JSX.Element => {
         onSubmit: async values => {
             try {
                 await dispatch(loginAction(values));
-
                 history.push('/');
             } catch (e) {
                 alert((e as CommonError).message);
             }
-            
         }
     });
 

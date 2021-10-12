@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router';
 import { ThunkDispatch } from 'redux-thunk';
 import { AnyAction } from '@reduxjs/toolkit';
-
+import { Link } from '@mui/material';
 import { RootState } from '~/store/rootReducer';
-import { deleteCurrentUserAction } from '~/store/user/actions';
+import { deleteCurrentUserAction, getCurrentUserAction } from '~/store/user/actions';
 
 import './main.component.scss';
 
@@ -18,9 +18,9 @@ export const MainComponent = (): JSX.Element => {
         await dispatch(deleteCurrentUserAction());
     };
 
-    const handleLogin = () => {
-        history.push('/login');
-    };
+    useEffect(() => {
+        dispatch(getCurrentUserAction());
+    }, []);
 
     return (
         <div className="page-container">
@@ -29,12 +29,12 @@ export const MainComponent = (): JSX.Element => {
             ?
                 <div>
                     <div>Вы вошли как {user.username}</div>
-                    <button onClick={handleLogout}>Выйти</button>
+                    <Link onClick={handleLogout}>Выйти</Link>
                 </div>
             :   <div>
                     <div>Вы неавторизованы</div>
-                <button onClick={handleLogin}>Войти</button>
-        </div>
+                    <Link href="/login">Войти</Link>
+                </div>
             }
         </div>
     );
