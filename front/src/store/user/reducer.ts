@@ -10,7 +10,7 @@ const initialState = {
     role: '',
 };
 
-export const userReducer = (state: UserInfo = initialState, action: PayloadAction<UserInfo>) => {
+export const userReducer = (state: UserInfo = initialState, action: PayloadAction<UserInfo>): UserInfo => {
     switch (action.type) {
         case CURRENT_USER:
             return { ...action.payload };
