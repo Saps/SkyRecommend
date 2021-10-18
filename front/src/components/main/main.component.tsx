@@ -3,18 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { ThunkDispatch } from 'redux-thunk';
 import { AnyAction } from '@reduxjs/toolkit';
-
 import {
-    Button,
-    Select,
-    MenuItem,
-    FormControl,
-    InputLabel,
-    Divider,
-    Card,
-    CardContent,
-    Typography,
-    Grid
+    Button, Card, CardContent, Divider, FormControl, Grid, InputLabel, MenuItem, Select, Typography
 } from '@mui/material';
 import { getToken } from '~/api';
 import { RootState } from '~/store/rootReducer';
@@ -34,7 +24,7 @@ export const MainComponent = (): JSX.Element => {
         } else {
             history.replace('/login');
         }
-    }, [dispatch, history, id]);
+    }, []);
 
     return (
         <Grid container justifyContent="center" mt={2}>
