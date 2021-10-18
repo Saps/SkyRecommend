@@ -41,6 +41,7 @@ export async function logout(): Promise<LogoutInfo> {
         const { data } = await api.get('/user/logout');
         localStorage.removeItem('Authorization');
         apiDeleteHeader('Authorization');
+        
         return data as LogoutInfo;
     } catch (e) {
         throw new Error((e as AxiosError<ApiError>)?.response?.data.message);
