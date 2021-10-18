@@ -4,9 +4,8 @@ import { ThunkDispatch } from 'redux-thunk';
 import { AnyAction } from '@reduxjs/toolkit';
 import { useHistory } from 'react-router-dom';
 
-import { Box, Button, Drawer, List, ListItem, ListItemText, AppBar, Toolbar, IconButton, Typography } from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
-import Logout from '@mui/icons-material/Logout';
+import { Box, Drawer, IconButton, List, ListItem, ListItemText, Typography } from '@mui/material';
+import { Logout, Menu } from '@mui/icons-material';
 
 import { RootState } from '~/store/rootReducer';
 import { logoutAction } from '~/store/user/actions';
@@ -47,46 +46,41 @@ export const HeaderComponent = (): JSX.Element => {
 
     const handleLogout = async () => {
         await dispatch(logoutAction());
-
         history.push('/login');
     };
 
     return (
-        <header>
-            <AppBar>
-                <Toolbar>
-                    <IconButton
-                        size="large"
-                        edge="start"
-                        color="inherit"
-                        aria-label="menu"
-                        sx={{ mr: 2 }}
-                        onClick={toogleSidebar(true)}
-                    >
-                        <MenuIcon />
-                    </IconButton>
-                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                        Top
-                    </Typography>
-                    <Typography variant="body1" component="div">
-                        {user.username}
-                    </Typography>
-                    <IconButton
-                        size="large"
-                        edge="end"
-                        aria-label="logout"
-                        aria-controls="topbar-menu"
-                        aria-haspopup="true"
-                        onClick={handleLogout}
-                        color="inherit"
-                    >
-                        <Logout fontSize="small" />
-                    </IconButton>
-                </Toolbar>
-            </AppBar>
-            <h1>Top</h1>
+        <>
+            <header className="app-header">
+                <IconButton
+                    size="large"
+                    edge="start"
+                    color="inherit"
+                    aria-label="menu"
+                    sx={{ mr: 2 }}
+                    onClick={toogleSidebar(true)}
+                >
+                    <Menu />
+                </IconButton>
+                <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                    Top
+                </Typography>
+                <Typography variant="body1" component="div">
+                    {user.username}
+                </Typography>
+                <IconButton
+                    size="large"
+                    edge="end"
+                    aria-label="logout"
+                    aria-controls="topbar-menu"
+                    aria-haspopup="true"
+                    onClick={handleLogout}
+                    color="inherit"
+                >
+                    <Logout fontSize="small" />
+                </IconButton>
+            </header>
             <Fragment key="sidebar">
-                <Button onClick={toogleSidebar(true)}>Open sidebar</Button>
                 <Drawer
                     anchor="left"
                     open={sidebarOpen}
@@ -95,6 +89,6 @@ export const HeaderComponent = (): JSX.Element => {
                     {renderSidebar()}
                 </Drawer>
             </Fragment>
-        </header>
+        </>
     )
 }

@@ -20,9 +20,9 @@ const apiDeleteHeader = (name: string) => {
     }
 };
 
-const token = localStorage.getItem('Authorization');
-if (token) {
-    apiSetHeader('Authorization', `Bearer ${token}`);
+export const getToken = localStorage.getItem('Authorization');
+if (getToken) {
+    apiSetHeader('Authorization', `Bearer ${getToken}`);
 }
 
 export async function login(credentials: UserCredentials): Promise<LoginInfo> {
@@ -41,7 +41,6 @@ export async function logout(): Promise<LogoutInfo> {
         const { data } = await api.get('/user/logout');
         localStorage.removeItem('Authorization');
         apiDeleteHeader('Authorization');
-        
         return data as LogoutInfo;
     } catch (e) {
         throw new Error((e as AxiosError<ApiError>)?.response?.data.message);

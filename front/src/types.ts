@@ -33,3 +33,7 @@ export interface ApiError {
 export interface CommonError {
     message: string;
 }
+
+export type AppState = {
+    user: UserInfo;
+}

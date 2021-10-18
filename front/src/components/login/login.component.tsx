@@ -1,23 +1,23 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { LockOutlined } from '@mui/icons-material';
-import { Avatar, Box, Button, Link, Paper, TextField, Typography } from '@mui/material';
+import { Avatar, Box, Button, Paper, TextField, Typography } from '@mui/material';
 import { ThunkDispatch } from 'redux-thunk';
 import { AnyAction } from '@reduxjs/toolkit';
-import { useHistory } from 'react-router-dom';
-
+import { Redirect, useHistory } from 'react-router-dom';
+import { getToken } from '~/api';
 import { loginAction } from '~/store/user/actions';
 import { RootState } from '~/store/rootReducer';
-import { CommonError } from '~/types';
+import { AppState, CommonError } from '~/types';
 
 import './login.component.scss';
 
 export const LoginComponent = (): JSX.Element => {
     const dispatch = useDispatch<ThunkDispatch<RootState, void, AnyAction>>();
     const history = useHistory();
-
+    const { id } = useSelector((state: AppState) => state.user);
     const {errors, handleBlur, handleChange, handleSubmit, touched, values} = useFormik({
         initialValues: {
             username: '',
@@ -30,17 +30,21 @@ export const LoginComponent = (): JSX.Element => {
         onSubmit: async values => {
             try {
                 await dispatch(loginAction(values));
-                history.push('/');
+                history.replace('/');
             } catch (e) {
                 alert((e as CommonError).message);
             }
         }
     });
 
+    if (id > -1 || getToken) {
+        return <Redirect to="/" />
+    }
+
     return (
         <Box className="login-page">
             <Paper className="login-page__container" elevation={10}>
-                <Avatar sx={{m: 1, bgcolor: '#9c27b0'}}>
+                <Avatar sx={{m: 1, bgcolor: '#ff1f55'}}>
                     <LockOutlined/>
                 </Avatar>
                 <Typography component="h1" variant="h5">
@@ -80,9 +84,6 @@ export const LoginComponent = (): JSX.Element => {
                         Sign In
                     </Button>
                 </Box>
-                <span>
-                    Don't have an account?&nbsp;<Link href="/register">Sign up</Link>
-                </span>
             </Paper>
         </Box>
     );

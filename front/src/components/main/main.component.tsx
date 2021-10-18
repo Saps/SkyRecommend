@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import { ThunkDispatch } from 'redux-thunk';
 import { AnyAction } from '@reduxjs/toolkit';
 
@@ -15,18 +16,25 @@ import {
     Typography,
     Grid
 } from '@mui/material';
-
+import { getToken } from '~/api';
 import { RootState } from '~/store/rootReducer';
 import { getCurrentUserAction } from '~/store/user/actions';
+import { AppState } from '~/types';
 
 import './main.component.scss';
 
 export const MainComponent = (): JSX.Element => {
     const dispatch = useDispatch<ThunkDispatch<RootState, void, AnyAction>>();
+    const history = useHistory();
+    const { id } = useSelector((state: AppState) => state.user);
 
     useEffect(() => {
-        dispatch(getCurrentUserAction());
-    }, []);
+        if (id > -1 || getToken) {
+            dispatch(getCurrentUserAction());
+        } else {
+            history.replace('/login');
+        }
+    }, [dispatch, history, id]);
 
     return (
         <Grid container justifyContent="center" mt={2}>
