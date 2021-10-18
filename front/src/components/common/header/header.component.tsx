@@ -1,9 +1,23 @@
 import React, { Fragment, useState } from 'react';
-import { Box, Button, Drawer, List, ListItem, ListItemText } from '@mui/material';
+import { useSelector, useDispatch } from 'react-redux';
+import { ThunkDispatch } from 'redux-thunk';
+import { AnyAction } from '@reduxjs/toolkit';
+import { useHistory } from 'react-router-dom';
+
+import { Box, Button, Drawer, List, ListItem, ListItemText, AppBar, Toolbar, IconButton, Typography } from '@mui/material';
+import MenuIcon from '@mui/icons-material/Menu';
+import Logout from '@mui/icons-material/Logout';
+
+import { RootState } from '~/store/rootReducer';
+import { logoutAction } from '~/store/user/actions';
+
 import './header.component.scss';
 
 export const HeaderComponent = (): JSX.Element => {
     const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
+    const user = useSelector((state: RootState) => state.user);
+    const dispatch = useDispatch<ThunkDispatch<RootState, void, AnyAction>>();
+    const history = useHistory();
 
     const renderSidebar = (): JSX.Element => {
         return (
@@ -31,8 +45,45 @@ export const HeaderComponent = (): JSX.Element => {
         setSidebarOpen(isOpen);
     };
 
+    const handleLogout = async () => {
+        await dispatch(logoutAction());
+
+        history.push('/login');
+    };
+
     return (
         <header>
+            <AppBar>
+                <Toolbar>
+                    <IconButton
+                        size="large"
+                        edge="start"
+                        color="inherit"
+                        aria-label="menu"
+                        sx={{ mr: 2 }}
+                        onClick={toogleSidebar(true)}
+                    >
+                        <MenuIcon />
+                    </IconButton>
+                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                        Top
+                    </Typography>
+                    <Typography variant="body1" component="div">
+                        {user.username}
+                    </Typography>
+                    <IconButton
+                        size="large"
+                        edge="end"
+                        aria-label="logout"
+                        aria-controls="topbar-menu"
+                        aria-haspopup="true"
+                        onClick={handleLogout}
+                        color="inherit"
+                    >
+                        <Logout fontSize="small" />
+                    </IconButton>
+                </Toolbar>
+            </AppBar>
             <h1>Top</h1>
             <Fragment key="sidebar">
                 <Button onClick={toogleSidebar(true)}>Open sidebar</Button>
