@@ -5,7 +5,7 @@ import {
     Accordion, AccordionDetails, AccordionSummary, Alert, Button,
     FormControl, Grid, InputLabel, Link, MenuItem, Select, TextField
 } from '@mui/material';
-import { getCompanyProperties } from '~/api';
+import { changeCompanyProperties, getCompanyProperties } from '~/api';
 import { CompanyProperty, FieldValues, Value } from '~/types';
 import { COMPANY_PROPERTIES } from './properties';
 
@@ -27,10 +27,12 @@ export const CompanyComponent = (): JSX.Element | null => {
     };
 
     const onFormSubmit = (values: FieldValues) => {
-        const result = {
+        const changedParams = {
             changed_params: Object.entries(values).map(([key, value]) => ({ id: key, value: value === '' ? null : value }))
         };
-        alert(JSON.stringify(result, null, 2));
+        changeCompanyProperties(changedParams)
+            .catch(err => console.log(err));
+        alert(JSON.stringify(changedParams, null, 2));
     };
 
     useEffect(() => {

@@ -46,7 +46,7 @@ export const HeaderComponent = (): JSX.Element => {
 
     const handleLogout = async () => {
         await dispatch(logoutAction());
-        history.push('/login');
+        history.replace('/login');
     };
 
     return (

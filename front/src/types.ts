@@ -55,6 +55,10 @@ export interface FieldValues {
     [id: number]: string;
 }
 
+export interface ChangedParams {
+    changed_params: Value[];
+}
+
 export type AppState = {
     user: UserInfo;
 }
