@@ -1,6 +1,10 @@
-header {
+.app-header {
     display: flex;
-    height: var(--header-height);
-    margin-left: 10px;
-    margin-right: 10px;
+    align-items: center;
+    position: sticky;
+    max-height: var(--header-height);
+    min-height: var(--header-height);
+    background-color: var(--secondary-color);
+    color: #ffffff;
+    padding: 0 20px;
 }

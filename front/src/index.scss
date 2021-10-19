@@ -1,9 +1,18 @@
+@import './assets/styles/fonts';
+@import './assets/styles/mui-customization';
+
 * {
     box-sizing: border-box;
     position: relative;
 
     --header-height: 60px;
     --footer-height: 40px;
+    --primary-color: #0458fe;
+    --secondary-color: #24314a;
+    --info-color: #e1e4f4;
+    --error-color: #ff1f55;
+    --success-color: #28a745;
+    --warning-color: #ffc107;
 }
 
 html, body, #root {
@@ -14,31 +23,31 @@ html, body, #root {
 
 body {
     background-color: #f5f7fa;
-    font-family: Roboto, Arial, sans-serif;
+    font-family: 'TTFirs', sans-serif;
+    font-weight: 300;
+    font-style: normal;
 }
 
 .main-container {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
+    overflow-y: auto;
     height: calc(100% - var(--header-height) - var(--footer-height));
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-    font-family: Roboto, "Helvetica Neue", sans-serif;
+h1, h2, h3, h4, h5, h6 {
     font-weight: 600;
     margin-block-start: 0;
     margin-block-end: 0;
 }
 
-a,
-button,
-input {
+p {
+    margin-block-start: 0;
+    margin-block-end: 0;
+}
+
+a, button, input {
     &:focus {
         outline: none;
     }

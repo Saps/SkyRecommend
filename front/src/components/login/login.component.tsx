@@ -1,30 +1,50 @@
 import React from 'react';
-import {useFormik} from 'formik';
+import { useDispatch, useSelector } from 'react-redux';
+import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import {LockOutlined} from '@mui/icons-material';
-import {Avatar, Box, Button, Checkbox, FormControlLabel, Link, Paper, TextField, Typography} from '@mui/material';
+import { LockOutlined } from '@mui/icons-material';
+import { Avatar, Box, Button, Paper, TextField, Typography } from '@mui/material';
+import { ThunkDispatch } from 'redux-thunk';
+import { AnyAction } from '@reduxjs/toolkit';
+import { Redirect, useHistory } from 'react-router-dom';
+import { getToken } from '~/api';
+import { loginAction } from '~/store/user/actions';
+import { RootState } from '~/store/rootReducer';
+import { AppState, CommonError } from '~/types';
+
 import './login.component.scss';
 
 export const LoginComponent = (): JSX.Element => {
+    const dispatch = useDispatch<ThunkDispatch<RootState, void, AnyAction>>();
+    const history = useHistory();
+    const { id } = useSelector((state: AppState) => state.user);
     const {errors, handleBlur, handleChange, handleSubmit, touched, values} = useFormik({
         initialValues: {
-            login: '',
+            username: '',
             password: '',
-            remember: false,
         },
         validationSchema: Yup.object({
-            login: Yup.string().required('Login is required'),
+            username: Yup.string().required('Username is required'),
             password: Yup.string().required('Password is required'),
         }),
-        onSubmit: values => {
-            alert(JSON.stringify(values, null, 2));
+        onSubmit: async values => {
+            try {
+                await dispatch(loginAction(values));
+                history.replace('/');
+            } catch (e) {
+                alert((e as CommonError).message);
+            }
         }
     });
+
+    if (id > -1 || getToken) {
+        return <Redirect to="/" />
+    }
 
     return (
         <Box className="login-page">
             <Paper className="login-page__container" elevation={10}>
-                <Avatar sx={{m: 1, bgcolor: '#9c27b0'}}>
+                <Avatar sx={{m: 1, bgcolor: '#ff1f55'}}>
                     <LockOutlined/>
                 </Avatar>
                 <Typography component="h1" variant="h5">
@@ -32,21 +52,21 @@ export const LoginComponent = (): JSX.Element => {
                 </Typography>
                 <Box component="form" onSubmit={handleSubmit} noValidate>
                     <TextField
-                        autoComplete="login"
-                        error={touched.login && !!errors.login}
+                        autoComplete="username"
+                        error={touched.username && !!errors.username}
                         fullWidth
-                        helperText={touched.login && !!errors.login ? errors.login : ''}
-                        id="login"
-                        label="Login"
-                        name="login"
+                        helperText={touched.username && !!errors.username ? errors.username : ''}
+                        id="username"
+                        label="Username"
+                        name="username"
                         onBlur={handleBlur}
                         onChange={handleChange}
                         sx={{mt: 1}}
-                        value={values.login}
+                        value={values.username}
                         variant="standard"
                     />
                     <TextField
-                        autoComplete="current-password"
+                        autoComplete="password"
                         error={touched.password && !!errors.password}
                         id="password"
                         fullWidth
@@ -60,18 +80,10 @@ export const LoginComponent = (): JSX.Element => {
                         value={values.password}
                         variant="standard"
                     />
-                    <FormControlLabel
-                        control={<Checkbox color="primary" id="remember" value="remember"/>}
-                        label="Remember me"
-                        onChange={handleChange}
-                    />
-                    <Button disabled={!!errors.login || !!errors.password} type="submit" variant="contained">
+                    <Button disabled={!!errors.username || !!errors.password} type="submit" variant="contained">
                         Sign In
                     </Button>
                 </Box>
-                <span>
-                    Don't have an account?&nbsp;<Link href="/register">Sign up</Link>
-                </span>
             </Paper>
         </Box>
     );
