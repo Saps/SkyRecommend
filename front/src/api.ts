@@ -1,5 +1,5 @@
 import axios, { AxiosResponse, AxiosError } from 'axios';
-import { ApiError, LoginInfo, LoginRequest, LogoutInfo, UserCredentials, UserInfo } from './types';
+import { ApiError, CompanyProperty, LoginInfo, LoginRequest, LogoutInfo, UserCredentials, UserInfo } from './types';
 
 const api = axios.create({
     baseURL: 'http://185.221.152.242:5480/api',
@@ -51,6 +51,15 @@ export async function currentUser(): Promise<UserInfo> {
     try {
         const { data } = await api.get('/user/current');
         return data as UserInfo;
+    } catch (e) {
+        throw new Error((e as AxiosError<ApiError>)?.response?.data.message);
+    }
+}
+
+export async function getCompanyProperties(): Promise<CompanyProperty[]> {
+    try {
+        const { data } = await api.get('/company/props');
+        return data as CompanyProperty[];
     } catch (e) {
         throw new Error((e as AxiosError<ApiError>)?.response?.data.message);
     }

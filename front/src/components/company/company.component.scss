@@ -1,0 +1,23 @@
+.accordion-item {
+    width: 100%;
+}
+
+.accordion-details {
+    .accordion-field {
+        width: 100%;
+
+        &:not(:last-child) {
+            margin-bottom: 16px;
+        }
+    }
+}
+
+form {
+    width: 100%;
+
+    .submit-button {
+        display: block;
+        width: 150px;
+        margin: 24px auto 0px;
+    }
+}
