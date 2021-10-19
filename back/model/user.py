@@ -22,6 +22,7 @@ class User(Base):
     email = Column(String)
     params = Column(JSON)
     role = Column(String)
+    comp_id = Column(Integer)
 
     dmp = u1.SUser()
 
