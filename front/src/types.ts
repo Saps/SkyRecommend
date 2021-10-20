@@ -34,6 +34,31 @@ export interface CommonError {
     message: string;
 }
 
+export interface CompanyProperty {
+    group_name: string;
+    params: CompanyParam[];
+}
+
+export interface CompanyParam {
+    id: number;
+    list_of_values: Value[] | null;
+    name: string;
+    value: string | null;
+}
+
+export interface Value {
+    id: string | number;
+    value: string | null;
+}
+
+export interface FieldValues {
+    [id: number]: string;
+}
+
+export interface ChangedParams {
+    changed_params: Value[];
+}
+
 export type AppState = {
     user: UserInfo;
 }
