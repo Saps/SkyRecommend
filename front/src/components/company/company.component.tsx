@@ -1,4 +1,8 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Redirect } from 'react-router-dom';
+import { ThunkDispatch } from 'redux-thunk';
+import { AnyAction } from '@reduxjs/toolkit';
 import { Formik, FormikProps } from 'formik';
 import { ExpandMore } from '@mui/icons-material';
 import {
@@ -6,8 +10,8 @@ import {
     FormControl, Grid, InputLabel, Link, MenuItem, Select, TextField
 } from '@mui/material';
 import { changeCompanyProperties, getCompanyProperties } from '~/api';
-import { CompanyProperty, FieldValues, Value } from '~/types';
-import { COMPANY_PROPERTIES } from './properties';
+import { RootState } from '~/store/rootReducer';
+import { AppState, CompanyProperty, FieldValues, Value } from '~/types';
 
 import './company.component.scss';
 
@@ -15,6 +19,8 @@ export const CompanyComponent = (): JSX.Element | null => {
     const [expanded, setExpanded] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(true);
     const [companyProperties, setCompanyProperties] = useState<CompanyProperty[]>([]);
+    const dispatch = useDispatch<ThunkDispatch<RootState, void, AnyAction>>();
+    const { id, role } = useSelector((state: AppState) => state.user);
 
     const initialValues = useMemo(() => {
         return companyProperties
@@ -36,18 +42,22 @@ export const CompanyComponent = (): JSX.Element | null => {
     };
 
     useEffect(() => {
-        getCompanyProperties()
-            .then(res => {
-                setCompanyProperties(res);
-                setExpanded(res[0].group_name);
-            })
-            .catch(err => {
-                console.error(err);
-                setCompanyProperties(COMPANY_PROPERTIES);
-                setExpanded(COMPANY_PROPERTIES[0].group_name);
-            })
-            .finally(() => setLoading(false));
-    }, []);
+        if (id > -1 && role !== 'admin') {
+            getCompanyProperties()
+                .then(res => {
+                    setCompanyProperties(res);
+                    setExpanded(res[0].group_name);
+                })
+                .catch(err => console.error(err))
+                .finally(() => setLoading(false));
+        } else {
+            setLoading(false);
+        }
+    }, [dispatch, id, role]);
+
+    if (id < 0) {
+        return <Redirect to="/login" />
+    }
 
     const renderAccordion = (property: CompanyProperty, props: FormikProps<FieldValues>): JSX.Element => {
         const { group_name: key, params } = property;
@@ -109,13 +119,14 @@ export const CompanyComponent = (): JSX.Element | null => {
                                 : (
                                     <Alert severity="error">
                                         У Вас отсутствует привязанная компания. &nbsp;
-                                        <Link href="/">Вернуться на главную страницу</Link>
+                                        <Link href="/">Вернуться на главную страницу.</Link>
                                     </Alert>
                                 )
                         }
-                        <Button className="submit-button" type="submit" variant="contained">
-                            Сохранить
-                        </Button>
+                        {
+                            companyProperties.length > 0 &&
+                            <Button className="submit-button" type="submit" variant="contained">Сохранить</Button>
+                        }
                     </form>
                 )}
             </Formik>

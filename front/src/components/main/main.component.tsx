@@ -16,7 +16,7 @@ import './main.component.scss';
 export const MainComponent = (): JSX.Element => {
     const dispatch = useDispatch<ThunkDispatch<RootState, void, AnyAction>>();
     const history = useHistory();
-    const { id } = useSelector((state: AppState) => state.user);
+    const { id, role } = useSelector((state: AppState) => state.user);
 
     useEffect(() => {
         if (id > -1 || getToken) {
@@ -45,11 +45,15 @@ export const MainComponent = (): JSX.Element => {
                 <Grid item>
                     <Button variant="contained" color="primary">Моя траектория</Button>
                 </Grid>
-                <Grid item>
-                    <Button variant="contained" color="info" onClick={() => history.push('/company')}>
-                        Мои свойства
-                    </Button>
-                </Grid>
+                {
+                    role !== 'admin' &&
+                    <Grid item>
+                        <Button variant="contained" color="info" onClick={() => history.push('/company')}>
+                            Мои свойства
+                        </Button>
+                    </Grid>
+                }
+
             </Grid>
             <Grid item container direction="column" rowSpacing={2} columnSpacing={2}>
                 <Grid item>
