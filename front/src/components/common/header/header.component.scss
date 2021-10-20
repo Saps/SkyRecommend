@@ -4,7 +4,11 @@
     position: sticky;
     max-height: var(--header-height);
     min-height: var(--header-height);
-    background-color: var(--secondary-color);
-    color: #ffffff;
+    background-color: var(--info-color);
+    color: #000000;
     padding: 0 20px;
+
+    &__logo-wrapper {
+        padding: 10px;
+    }
 }

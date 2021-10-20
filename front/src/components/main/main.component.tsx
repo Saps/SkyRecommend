@@ -27,7 +27,7 @@ export const MainComponent = (): JSX.Element => {
     }, []);
 
     return (
-        <Grid container item direction="column" justifyContent="center" mt={1} p={2} xs={6}>
+        <Grid container item direction="column" justifyContent="center" mt={1} p={2} xs={10} sm={8} md={6}>
             <Grid container item alignItems="center" spacing={2} mb={5}>
                 <Grid item>
                     <FormControl>

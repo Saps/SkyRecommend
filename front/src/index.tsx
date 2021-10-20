@@ -7,9 +7,6 @@ import { CompanyComponent, FooterComponent, HeaderComponent, LoginComponent, Mai
 import { store } from '~/store/store';
 import './index.scss';
 
-export const BackPath = process.env.REACT_APP_API_URL;
-export const LocalCalls = process.env.REACT_APP_LOCAL_CALLS;
-
 const theme = createTheme({
     palette: {
         primary: {

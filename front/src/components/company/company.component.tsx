@@ -109,27 +109,25 @@ export const CompanyComponent = (): JSX.Element | null => {
     };
 
     return loading ? null : (
-        <Grid container item direction="column" justifyContent="center" alignItems="center" mt={1} p={2} xs={6}>
-            <Formik initialValues={initialValues} onSubmit={onFormSubmit}>
-                {props => (
-                    <form onSubmit={props.handleSubmit} noValidate>
-                        {
-                            companyProperties.length > 0
-                                ? companyProperties.map(property => renderAccordion(property, props))
-                                : (
-                                    <Alert severity="error">
-                                        У Вас отсутствует привязанная компания. &nbsp;
-                                        <Link href="/">Вернуться на главную страницу.</Link>
-                                    </Alert>
-                                )
-                        }
-                        {
-                            companyProperties.length > 0 &&
-                            <Button className="submit-button" type="submit" variant="contained">Сохранить</Button>
-                        }
-                    </form>
-                )}
-            </Formik>
+        <Grid container item direction="column" justifyContent="center" alignItems="center" mt={1} p={2} xs={10} sm={8} md={6}>
+            {
+                companyProperties.length > 0 ? (
+                    <Formik initialValues={initialValues} onSubmit={onFormSubmit}>
+                        {props => (
+                            <form onSubmit={props.handleSubmit} noValidate>
+                                {companyProperties.map(property => renderAccordion(property, props))}
+                                <Button className="submit-button" type="submit" variant="contained">Сохранить</Button>
+                            </form>
+                        )}
+                    </Formik>
+                ) : (
+                    <Alert severity="error">
+                        У Вас отсутствует привязанная компания. &nbsp;
+                        <Link href="/">Вернуться на главную страницу.</Link>
+                    </Alert>
+                )
+            }
+
         </Grid>
     );
 };

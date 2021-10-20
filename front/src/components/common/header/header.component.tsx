@@ -1,5 +1,6 @@
 import React, { Fragment, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { ReactSVG } from 'react-svg';
 import { ThunkDispatch } from 'redux-thunk';
 import { AnyAction } from '@reduxjs/toolkit';
 import { useHistory } from 'react-router-dom';
@@ -57,13 +58,13 @@ export const HeaderComponent = (): JSX.Element => {
                     edge="start"
                     color="inherit"
                     aria-label="menu"
-                    sx={{ mr: 2 }}
                     onClick={toogleSidebar(true)}
                 >
                     <Menu />
                 </IconButton>
+                <ReactSVG className="app-header__logo-wrapper" src="logotype.svg" />
                 <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                    Top
+                    Startup Guide
                 </Typography>
                 <Typography variant="body1" component="div">
                     {user.username}
