@@ -10,15 +10,15 @@ import { Redirect, useHistory } from 'react-router-dom';
 import { getToken } from '~/api';
 import { loginAction } from '~/store/user/actions';
 import { RootState } from '~/store/rootReducer';
-import { AppState, CommonError } from '~/types';
+import { CommonError } from '~/types';
 
 import './login.component.scss';
 
 export const LoginComponent = (): JSX.Element => {
     const dispatch = useDispatch<ThunkDispatch<RootState, void, AnyAction>>();
     const history = useHistory();
-    const { id } = useSelector((state: AppState) => state.user);
-    const {errors, handleBlur, handleChange, handleSubmit, touched, values} = useFormik({
+    const { id } = useSelector((state: RootState) => state.user);
+    const { errors, handleBlur, handleChange, handleSubmit, touched, values } = useFormik({
         initialValues: {
             username: '',
             password: '',

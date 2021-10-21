@@ -1,20 +1,24 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { Formik, FormikProps } from 'formik';
+import { useSelector } from 'react-redux';
+import { Redirect } from 'react-router-dom';
+import { Formik, FormikProps, FormikState } from 'formik';
 import { ExpandMore } from '@mui/icons-material';
 import {
     Accordion, AccordionDetails, AccordionSummary, Alert, Button,
     FormControl, Grid, InputLabel, Link, MenuItem, Select, TextField
 } from '@mui/material';
+
 import { changeCompanyProperties, getCompanyProperties } from '~/api';
+import { RootState } from '~/store/rootReducer';
 import { CompanyProperty, FieldValues, Value } from '~/types';
-import { COMPANY_PROPERTIES } from './properties';
 
-import './company.component.scss';
+import './company-properties.component.scss';
 
-export const CompanyComponent = (): JSX.Element | null => {
+export const CompanyPropertiesComponent = (): JSX.Element | null => {
     const [expanded, setExpanded] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(true);
     const [companyProperties, setCompanyProperties] = useState<CompanyProperty[]>([]);
+    const { id, role } = useSelector((state: RootState) => state.user);
 
     const initialValues = useMemo(() => {
         return companyProperties
@@ -26,28 +30,40 @@ export const CompanyComponent = (): JSX.Element | null => {
         setExpanded(isExpanded ? panel : '');
     };
 
-    const onFormSubmit = (values: FieldValues) => {
+    const onFormSubmit = async (values: FieldValues) => {
         const changedParams = {
             changed_params: Object.entries(values).map(([key, value]) => ({ id: key, value: value === '' ? null : value }))
         };
-        changeCompanyProperties(changedParams)
-            .catch(err => console.log(err));
-        alert(JSON.stringify(changedParams, null, 2));
+        try {
+            await changeCompanyProperties(changedParams);
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+    const handleGetCompanyProperties = async () => {
+        try {
+            if (id > -1 && role !== 'admin') {
+                const properties = await getCompanyProperties();
+
+                setCompanyProperties(properties);
+                setExpanded(properties[0].group_name);
+            }
+        } catch (err) {
+            console.error(err);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const onFormReset = async (resetForm: (nextState?: Partial<FormikState<FieldValues>>) => void) => {
+        await handleGetCompanyProperties();
+        resetForm({ values: initialValues });
     };
 
     useEffect(() => {
-        getCompanyProperties()
-            .then(res => {
-                setCompanyProperties(res);
-                setExpanded(res[0].group_name);
-            })
-            .catch(err => {
-                console.error(err);
-                setCompanyProperties(COMPANY_PROPERTIES);
-                setExpanded(COMPANY_PROPERTIES[0].group_name);
-            })
-            .finally(() => setLoading(false));
-    }, []);
+        handleGetCompanyProperties();
+    }, [id, role]);
 
     const renderAccordion = (property: CompanyProperty, props: FormikProps<FieldValues>): JSX.Element => {
         const { group_name: key, params } = property;
@@ -98,27 +114,41 @@ export const CompanyComponent = (): JSX.Element | null => {
         );
     };
 
-    return loading ? null : (
-        <Grid container item direction="column" justifyContent="center" alignItems="center" mt={1} p={2} xs={6}>
-            <Formik initialValues={initialValues} onSubmit={onFormSubmit}>
-                {props => (
-                    <form onSubmit={props.handleSubmit} noValidate>
-                        {
-                            companyProperties.length > 0
-                                ? companyProperties.map(property => renderAccordion(property, props))
-                                : (
-                                    <Alert severity="error">
-                                        У Вас отсутствует привязанная компания. &nbsp;
-                                        <Link href="/">Вернуться на главную страницу</Link>
-                                    </Alert>
-                                )
-                        }
-                        <Button className="submit-button" type="submit" variant="contained">
-                            Сохранить
-                        </Button>
-                    </form>
-                )}
-            </Formik>
+    if (id < 0) {
+        return <Redirect to="/login" />
+    } else if (role === 'admin') {
+        return <Redirect to="/" />;
+    }
+
+    return (
+        <Grid container item direction="column" p={2} xs={12} sm={10} md={8}>
+            {
+                loading ? (
+                    <Alert severity="warning">Информация загружается.</Alert>
+                ) : companyProperties.length > 0 ? (
+                    <Formik initialValues={initialValues} onSubmit={onFormSubmit}>
+                        {props => (
+                            <form onSubmit={props.handleSubmit} noValidate>
+                                <h3 className="form-header">Свойства компании</h3>
+                                {companyProperties.map(property => renderAccordion(property, props))}
+                                <div className="form-options">
+                                    <Button color="primary" type="submit" variant="contained">
+                                        Сохранить
+                                    </Button>
+                                    <Button color="info" type="button" variant="contained" onClick={() => onFormReset(props.resetForm)}>
+                                        Сбросить
+                                    </Button>
+                                </div>
+                            </form>
+                        )}
+                    </Formik>
+                ) : (
+                    <Alert severity="error">
+                        У Вас отсутствует привязанная компания. &nbsp;
+                        <Link href="/">Вернуться на главную страницу.</Link>
+                    </Alert>
+                )
+            }
         </Grid>
     );
 };

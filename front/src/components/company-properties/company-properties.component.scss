@@ -1,0 +1,32 @@
+.accordion-item {
+    width: 100%;
+}
+
+.accordion-details {
+    .accordion-field {
+        width: 100%;
+
+        &:not(:last-child) {
+            margin-bottom: 16px;
+        }
+    }
+}
+
+form {
+    width: 100%;
+
+    .form-header {
+        padding-bottom: 16px;
+        text-align: center;
+    }
+
+    .form-options {
+        display: flex;
+        justify-content: center;
+        margin-top: 16px;
+
+        button:not(:last-child) {
+            margin-right: 16px;
+        }
+    }
+}

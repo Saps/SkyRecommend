@@ -3,12 +3,14 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { createTheme, ThemeProvider } from '@mui/material';
-import { CompanyComponent, FooterComponent, HeaderComponent, LoginComponent, MainComponent, RegisterComponent } from './components';
+
+import {
+    CompanyFrameComponent, CompanyPropertiesComponent, FooterComponent,
+    HeaderComponent, LoginComponent, MainComponent, RegisterComponent,
+} from './components';
+
 import { store } from '~/store/store';
 import './index.scss';
-
-export const BackPath = process.env.REACT_APP_API_URL;
-export const LocalCalls = process.env.REACT_APP_LOCAL_CALLS;
 
 const theme = createTheme({
     palette: {
@@ -44,7 +46,8 @@ ReactDOM.render(
                         <HeaderComponent />
                         <div className="main-container">
                             <Route exact path="/" component={MainComponent}/>
-                            <Route exact path="/company" component={CompanyComponent}/>
+                            <Route exact path="/company-properties" component={CompanyPropertiesComponent}/>
+                            <Route exact path="/company-frame" component={CompanyFrameComponent} />
                         </div>
                         <FooterComponent />
                     </Fragment>
