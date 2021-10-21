@@ -5,8 +5,8 @@ import { Provider } from 'react-redux';
 import { createTheme, ThemeProvider } from '@mui/material';
 
 import {
-    CompanyComponent, FooterComponent, HeaderComponent, LoginComponent,
-    MainComponent, RegisterComponent, FrameComponent
+    CompanyFrameComponent, CompanyPropertiesComponent, FooterComponent,
+    HeaderComponent, LoginComponent, MainComponent, RegisterComponent,
 } from './components';
 
 import { store } from '~/store/store';
@@ -46,8 +46,8 @@ ReactDOM.render(
                         <HeaderComponent />
                         <div className="main-container">
                             <Route exact path="/" component={MainComponent}/>
-                            <Route exact path="/company" component={CompanyComponent}/>
-                            <Route exact path="/frame" component={FrameComponent} />
+                            <Route exact path="/company-properties" component={CompanyPropertiesComponent}/>
+                            <Route exact path="/company-frame" component={CompanyFrameComponent} />
                         </div>
                         <FooterComponent />
                     </Fragment>

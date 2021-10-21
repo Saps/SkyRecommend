@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { Redirect } from 'react-router-dom';
 import { Alert, Box, Button, Chip, FormControl, Grid, InputLabel, MenuItem, Select } from '@mui/material';
-import { Formik } from 'formik';
+import { Formik, FormikState } from 'formik';
 
-import { getCompanyFrame, getCompanyFrameOptions, changeCompanyFrame } from '~/api';
+import { changeCompanyFrame, getCompanyFrame, getCompanyFrameOptions } from '~/api';
+import { RootState } from "~/store/rootReducer";
 import { CompanyFrame, CompanyFrameOptions } from '~/types';
 
 const defaultFrame: CompanyFrame = {
@@ -19,34 +22,53 @@ const defaultFrameOptions: CompanyFrameOptions = {
     techs: [],
 };
 
-export const FrameComponent = (): JSX.Element => {
+export const CompanyFrameComponent = (): JSX.Element => {
     const [frame, setFrame] = useState<CompanyFrame>(defaultFrame);
     const [frameOptions, setFrameOptions] = useState<CompanyFrameOptions>(defaultFrameOptions);
     const [loading, setLoading] = useState<boolean>(true);
+    const { id, role } = useSelector((state: RootState) => state.user);
 
     const getData = async () => {
-        const frame = await getCompanyFrame();
-        const frameOptions = await getCompanyFrameOptions();
+        try {
+            if (id > -1 && role !== 'admin') {
+                const frame = await getCompanyFrame();
+                const frameOptions = await getCompanyFrameOptions();
 
-        setFrame(frame);
-        setFrameOptions(frameOptions);
-        setLoading(false);
+                setFrame(frame);
+                setFrameOptions(frameOptions);
+                setLoading(false);
+            }
+        } catch (err) {
+            console.error(err);
+        } finally {
+            setLoading(false);
+        }
     };
 
     const onFormSubmit = async (newFrame: CompanyFrame): Promise<void> => {
+        console.log(newFrame);
         try {
             const result = await changeCompanyFrame(newFrame);
             console.log('result is', result);
         } catch (e) {
             console.log(e);
         }
+    };
 
-        alert(JSON.stringify(newFrame, null, 2));
+    const onFormReset = async (resetForm: (nextState?: Partial<FormikState<CompanyFrame>>) => void) => {
+        await getData();
+        resetForm({ values: frame });
     };
 
     useEffect(() => {
         getData();
-    }, []);
+    }, [id, role]);
+
+    if (id < 0) {
+        return <Redirect to="/login" />
+    } else if (role === 'admin') {
+        return <Redirect to="/" />;
+    }
 
     return (
         <Grid container direction="column" p={2} xs={12} sm={10} md={8} lg={6}>
@@ -150,7 +172,12 @@ export const FrameComponent = (): JSX.Element => {
                                         </FormControl>
                                     </Grid>
                                     <Grid item container key="submit" justifyContent="center">
-                                        <Button type="submit" variant="contained">Сохранить</Button>
+                                        <Button type="submit" variant="contained" sx={{ marginRight: '16px' }}>
+                                            Сохранить
+                                        </Button>
+                                        <Button color="info" type="button" variant="contained" onClick={() => onFormReset(props.resetForm)}>
+                                            Сбросить
+                                        </Button>
                                     </Grid>
                                 </Grid>
                             </form>

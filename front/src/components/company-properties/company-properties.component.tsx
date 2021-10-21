@@ -1,11 +1,8 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import { ThunkDispatch } from 'redux-thunk';
-import { AnyAction } from '@reduxjs/toolkit';
-import { Formik, FormikProps } from 'formik';
+import { Formik, FormikProps, FormikState } from 'formik';
 import { ExpandMore } from '@mui/icons-material';
-
 import {
     Accordion, AccordionDetails, AccordionSummary, Alert, Button,
     FormControl, Grid, InputLabel, Link, MenuItem, Select, TextField
@@ -15,20 +12,17 @@ import { changeCompanyProperties, getCompanyProperties } from '~/api';
 import { RootState } from '~/store/rootReducer';
 import { CompanyProperty, FieldValues, Value } from '~/types';
 
-import './company.component.scss';
+import './company-properties.component.scss';
 
-export const CompanyComponent = (): JSX.Element | null => {
+export const CompanyPropertiesComponent = (): JSX.Element | null => {
     const [expanded, setExpanded] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(true);
     const [companyProperties, setCompanyProperties] = useState<CompanyProperty[]>([]);
-    const dispatch = useDispatch<ThunkDispatch<RootState, void, AnyAction>>();
     const { id, role } = useSelector((state: RootState) => state.user);
 
     const initialValues = useMemo(() => {
         return companyProperties
-            .reduce((acc: Value[], item: CompanyProperty) =>
-                acc.concat(...item.params.map(e => ({ id: e.id, value: e.value })))
-            , [])
+            .reduce((acc: Value[], item: CompanyProperty) => acc.concat(...item.params.map(e => ({ id: e.id, value: e.value }))), [])
             .reduce((acc: FieldValues, item: Value) => ({ ...acc, [item.id]: item.value }), {});
     }, [companyProperties]);
 
@@ -38,18 +32,13 @@ export const CompanyComponent = (): JSX.Element | null => {
 
     const onFormSubmit = async (values: FieldValues) => {
         const changedParams = {
-            changed_params: Object.entries(values).map(
-                ([key, value]) => ({ id: key, value: value === '' ? null : value })
-            )
+            changed_params: Object.entries(values).map(([key, value]) => ({ id: key, value: value === '' ? null : value }))
         };
-
         try {
             await changeCompanyProperties(changedParams);
         } catch (err) {
             console.log(err);
         }
-
-        alert(JSON.stringify(changedParams, null, 2));
     };
 
     const handleGetCompanyProperties = async () => {
@@ -65,15 +54,16 @@ export const CompanyComponent = (): JSX.Element | null => {
         } finally {
             setLoading(false);
         }
-    }
+    };
+
+    const onFormReset = async (resetForm: (nextState?: Partial<FormikState<FieldValues>>) => void) => {
+        await handleGetCompanyProperties();
+        resetForm({ values: initialValues });
+    };
 
     useEffect(() => {
         handleGetCompanyProperties();
-    }, [dispatch, id, role]);
-
-    if (id < 0) {
-        return <Redirect to="/login" />
-    }
+    }, [id, role]);
 
     const renderAccordion = (property: CompanyProperty, props: FormikProps<FieldValues>): JSX.Element => {
         const { group_name: key, params } = property;
@@ -124,6 +114,12 @@ export const CompanyComponent = (): JSX.Element | null => {
         );
     };
 
+    if (id < 0) {
+        return <Redirect to="/login" />
+    } else if (role === 'admin') {
+        return <Redirect to="/" />;
+    }
+
     return (
         <Grid container item direction="column" p={2} xs={12} sm={10} md={8} lg={6}>
             {
@@ -135,7 +131,14 @@ export const CompanyComponent = (): JSX.Element | null => {
                             <form onSubmit={props.handleSubmit} noValidate>
                                 <h3 className="form-header">Свойства компании</h3>
                                 {companyProperties.map(property => renderAccordion(property, props))}
-                                <Button className="submit-button" type="submit" variant="contained">Сохранить</Button>
+                                <div className="form-options">
+                                    <Button color="primary" type="submit" variant="contained">
+                                        Сохранить
+                                    </Button>
+                                    <Button color="info" type="button" variant="contained" onClick={() => onFormReset(props.resetForm)}>
+                                        Сбросить
+                                    </Button>
+                                </div>
                             </form>
                         )}
                     </Formik>
