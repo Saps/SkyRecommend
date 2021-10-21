@@ -26,7 +26,7 @@ export const CompanyComponent = (): JSX.Element | null => {
 
     const initialValues = useMemo(() => {
         return companyProperties
-            .reduce((acc: Value[], item: CompanyProperty) => 
+            .reduce((acc: Value[], item: CompanyProperty) =>
                 acc.concat(...item.params.map(e => ({ id: e.id, value: e.value })))
             , [])
             .reduce((acc: FieldValues, item: Value) => ({ ...acc, [item.id]: item.value }), {});
@@ -46,9 +46,9 @@ export const CompanyComponent = (): JSX.Element | null => {
         try {
             await changeCompanyProperties(changedParams);
         } catch (err) {
-            console.log(err)
+            console.log(err);
         }
-        
+
         alert(JSON.stringify(changedParams, null, 2));
     };
 
@@ -124,13 +124,16 @@ export const CompanyComponent = (): JSX.Element | null => {
         );
     };
 
-    return loading ? null : (
-        <Grid container item direction="column" justifyContent="center" alignItems="center" mt={1} p={2} xs={10} sm={8} md={6}>
+    return (
+        <Grid container item direction="column" p={2} xs={12} sm={10} md={8} lg={6}>
             {
-                companyProperties.length > 0 ? (
+                loading ? (
+                    <Alert severity="warning">Информация загружается.</Alert>
+                ) : companyProperties.length > 0 ? (
                     <Formik initialValues={initialValues} onSubmit={onFormSubmit}>
                         {props => (
                             <form onSubmit={props.handleSubmit} noValidate>
+                                <h3 className="form-header">Свойства компании</h3>
                                 {companyProperties.map(property => renderAccordion(property, props))}
                                 <Button className="submit-button" type="submit" variant="contained">Сохранить</Button>
                             </form>
@@ -143,7 +146,6 @@ export const CompanyComponent = (): JSX.Element | null => {
                     </Alert>
                 )
             }
-
         </Grid>
     );
 };

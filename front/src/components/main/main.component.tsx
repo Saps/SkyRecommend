@@ -26,7 +26,7 @@ export const MainComponent = (): JSX.Element => {
     }, []);
 
     return (
-        <Grid container item direction="column" justifyContent="center" mt={1} p={2} xs={10} sm={8} md={6}>
+        <Grid container item direction="column" justifyContent="center" p={2} xs={12} sm={10} md={8} lg={6}>
             <Grid container item alignItems="center" spacing={2} mb={5}>
                 <Grid item>
                     <FormControl>
@@ -49,12 +49,12 @@ export const MainComponent = (): JSX.Element => {
                     <>
                         <Grid item>
                             <Button variant="contained" color="info" onClick={() => history.push('/company')}>
-                                Мои свойства
+                                Свойства
                             </Button>
                         </Grid>
                         <Grid item>
                             <Button variant="contained" color="secondary" onClick={() => history.push('/frame')}>
-                                Рамочный фрейм
+                                Фрейм
                             </Button>
                         </Grid>
                     </>

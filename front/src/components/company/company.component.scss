@@ -15,9 +15,14 @@
 form {
     width: 100%;
 
+    .form-header {
+        padding-bottom: 16px;
+        text-align: center;
+    }
+
     .submit-button {
         display: block;
         width: 150px;
-        margin: 24px auto 0px;
+        margin: 16px auto 0px;
     }
 }

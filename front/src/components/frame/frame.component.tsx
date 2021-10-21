@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Grid, FormControl, Select, MenuItem, Button, InputLabel, Box, Chip } from '@mui/material';
+import { Alert, Box, Button, Chip, FormControl, Grid, InputLabel, MenuItem, Select } from '@mui/material';
 import { Formik } from 'formik';
 
 import { getCompanyFrame, getCompanyFrameOptions, changeCompanyFrame } from '~/api';
@@ -49,16 +49,16 @@ export const FrameComponent = (): JSX.Element => {
     }, []);
 
     return (
-        <Grid container mt={1} direction="column" alignItems="center">
+        <Grid container direction="column" p={2} xs={12} sm={10} md={8} lg={6}>
             <Grid item>
                 {loading
-                ? 'Подождите, загружаемся...'
+                ? <Alert severity="warning">Информация загружается.</Alert>
                 : <Formik initialValues={frame} onSubmit={onFormSubmit}>
                         {props =>
                             <form onSubmit={props.handleSubmit} noValidate>
                                 <Grid container direction="column" rowSpacing={3} p={2}>
-                                    <Grid item key="header" justifyContent="center">
-                                        <Box component="h3" sx={{ textAlign: 'center' }}>Рамочный фрейм компании</Box>
+                                    <Grid item key="header">
+                                        <Box component="h3" sx={{ textAlign: 'center' }}>Фрейм компании</Box>
                                     </Grid>
                                     <Grid item key="study">
                                         <FormControl fullWidth variant="standard">

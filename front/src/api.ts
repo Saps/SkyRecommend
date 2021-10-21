@@ -1,8 +1,8 @@
 import axios, { AxiosResponse, AxiosError } from 'axios';
 
 import {
-    ApiError, ChangedParams, CompanyProperty, LoginInfo, LoginRequest,
-    LogoutInfo, UserCredentials, UserInfo, CompanyFrame, CompanyFrameOptions
+    ApiError, ChangedParams, CompanyFrame, CompanyFrameOptions, CompanyProperty,
+    LoginInfo, LoginRequest, LogoutInfo, UserCredentials, UserInfo
 } from '~/types';
 
 const api = axios.create({
@@ -101,9 +101,9 @@ export async function getCompanyFrameOptions(): Promise<CompanyFrameOptions> {
 
     try {
         const keys = ['study', 'markets', 'services', 'techs'];
-        const data = await Promise.all(keys.map(key => getOptions(key)));
+        const [study, markets, srvs, techs] = await Promise.all(keys.map(key => getOptions(key)));
 
-        return { study: data[0], markets: data[1], srvs: data[2], techs: data[3] } as CompanyFrameOptions;
+        return { study, markets, srvs, techs };
     } catch (e) {
         throw new Error((e as AxiosError<ApiError>)?.response?.data.message);
     }
