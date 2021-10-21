@@ -8,7 +8,7 @@ export const ServiceListComponent = (): JSX.Element => {
     const history = useHistory();
 
     return (
-        <Grid container item direction="column" justifyContent="center" p={2} xs={12} sm={10} md={8} lg={6}>
+        <Grid container item direction="column" justifyContent="center" p={2} xs={12} sm={10} md={8}>
             <Grid container item alignItems="center" spacing={2} mb={5}>
                 <Grid item>
                     <FormControl>
@@ -28,12 +28,12 @@ export const ServiceListComponent = (): JSX.Element => {
                 </Grid>
                 <Grid item>
                     <Button variant="contained" color="info" onClick={() => history.push('/company-properties')}>
-                        Свойства
+                        Свойства компании
                     </Button>
                 </Grid>
                 <Grid item>
                     <Button variant="contained" color="secondary" onClick={() => history.push('/company-frame')}>
-                        Фрейм
+                        Фрейм компании
                     </Button>
                 </Grid>
             </Grid>

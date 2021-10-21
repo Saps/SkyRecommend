@@ -121,7 +121,7 @@ export const CompanyPropertiesComponent = (): JSX.Element | null => {
     }
 
     return (
-        <Grid container item direction="column" p={2} xs={12} sm={10} md={8} lg={6}>
+        <Grid container item direction="column" p={2} xs={12} sm={10} md={8}>
             {
                 loading ? (
                     <Alert severity="warning">Информация загружается.</Alert>
