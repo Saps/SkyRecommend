@@ -59,6 +59,16 @@ export interface ChangedParams {
     changed_params: Value[];
 }
 
-export type AppState = {
-    user: UserInfo;
+export interface CompanyFrame {
+    markets: string[];
+    srvs: string[];
+    study: string;
+    techs: string[];
+}
+
+export interface CompanyFrameOptions {
+    markets: string[];
+    srvs: string[];
+    study: string[];
+    techs: string[];
 }

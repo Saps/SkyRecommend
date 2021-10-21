@@ -3,7 +3,12 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { createTheme, ThemeProvider } from '@mui/material';
-import { CompanyComponent, FooterComponent, HeaderComponent, LoginComponent, MainComponent, RegisterComponent } from './components';
+
+import {
+    CompanyComponent, FooterComponent, HeaderComponent, LoginComponent,
+    MainComponent, RegisterComponent, FrameComponent
+} from './components';
+
 import { store } from '~/store/store';
 import './index.scss';
 
@@ -42,6 +47,7 @@ ReactDOM.render(
                         <div className="main-container">
                             <Route exact path="/" component={MainComponent}/>
                             <Route exact path="/company" component={CompanyComponent}/>
+                            <Route exact path="/frame" component={FrameComponent} />
                         </div>
                         <FooterComponent />
                     </Fragment>

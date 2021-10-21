@@ -1,5 +1,9 @@
 import axios, { AxiosResponse, AxiosError } from 'axios';
-import { ApiError, ChangedParams, CompanyProperty, LoginInfo, LoginRequest, LogoutInfo, UserCredentials, UserInfo } from './types';
+
+import {
+    ApiError, ChangedParams, CompanyProperty, LoginInfo, LoginRequest,
+    LogoutInfo, UserCredentials, UserInfo, CompanyFrame, CompanyFrameOptions
+} from '~/types';
 
 const api = axios.create({
     baseURL: 'http://185.221.152.242:5480/api',
@@ -21,6 +25,7 @@ const apiDeleteHeader = (name: string) => {
 };
 
 export const getToken = localStorage.getItem('Authorization');
+
 if (getToken) {
     apiSetHeader('Authorization', `Bearer ${getToken}`);
 }
@@ -59,6 +64,7 @@ export async function currentUser(): Promise<UserInfo> {
 export async function getCompanyProperties(): Promise<CompanyProperty[]> {
     try {
         const { data } = await api.get('/company/props');
+
         return data as CompanyProperty[];
     } catch (e) {
         throw new Error((e as AxiosError<ApiError>)?.response?.data.message);
@@ -70,6 +76,45 @@ export async function changeCompanyProperties(values: ChangedParams): Promise<an
         const { data } = await api.post('/company/props', values);
         return data;
     } catch (e) {
+        throw new Error((e as AxiosError<ApiError>)?.response?.data.message);
+    }
+}
+
+
+
+export async function getCompanyFrame(): Promise<CompanyFrame> {
+    try {
+        const { data } = await api.get('/company/frame');
+
+        return data as CompanyFrame;
+    } catch (e) {
+        throw new Error((e as AxiosError<ApiError>)?.response?.data.message);
+    }
+}
+
+export async function getCompanyFrameOptions(): Promise<CompanyFrameOptions> {
+    const getOptions = async (key: string): Promise<string[]> => {
+        const { data } = await api.get(`ref/${key}`);
+
+        return data as string[];
+    };
+
+    try {
+        const keys = ['study', 'markets', 'services', 'techs'];
+        const data = await Promise.all(keys.map(key => getOptions(key)));
+
+        return { study: data[0], markets: data[1], srvs: data[2], techs: data[3] } as CompanyFrameOptions;
+    } catch (e) {
+        throw new Error((e as AxiosError<ApiError>)?.response?.data.message);
+    }
+}
+
+export async function changeCompanyFrame(newFrame: CompanyFrame): Promise<any> {
+    try {
+        const { data } = await api.post('/company/frame', newFrame);
+
+        return data;
+    }  catch (e) {
         throw new Error((e as AxiosError<ApiError>)?.response?.data.message);
     }
 }

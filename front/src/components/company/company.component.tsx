@@ -5,13 +5,15 @@ import { ThunkDispatch } from 'redux-thunk';
 import { AnyAction } from '@reduxjs/toolkit';
 import { Formik, FormikProps } from 'formik';
 import { ExpandMore } from '@mui/icons-material';
+
 import {
     Accordion, AccordionDetails, AccordionSummary, Alert, Button,
     FormControl, Grid, InputLabel, Link, MenuItem, Select, TextField
 } from '@mui/material';
+
 import { changeCompanyProperties, getCompanyProperties } from '~/api';
 import { RootState } from '~/store/rootReducer';
-import { AppState, CompanyProperty, FieldValues, Value } from '~/types';
+import { CompanyProperty, FieldValues, Value } from '~/types';
 
 import './company.component.scss';
 
@@ -20,11 +22,13 @@ export const CompanyComponent = (): JSX.Element | null => {
     const [loading, setLoading] = useState<boolean>(true);
     const [companyProperties, setCompanyProperties] = useState<CompanyProperty[]>([]);
     const dispatch = useDispatch<ThunkDispatch<RootState, void, AnyAction>>();
-    const { id, role } = useSelector((state: AppState) => state.user);
+    const { id, role } = useSelector((state: RootState) => state.user);
 
     const initialValues = useMemo(() => {
         return companyProperties
-            .reduce((acc: Value[], item: CompanyProperty) => acc.concat(...item.params.map(e => ({ id: e.id, value: e.value }))), [])
+            .reduce((acc: Value[], item: CompanyProperty) => 
+                acc.concat(...item.params.map(e => ({ id: e.id, value: e.value })))
+            , [])
             .reduce((acc: FieldValues, item: Value) => ({ ...acc, [item.id]: item.value }), {});
     }, [companyProperties]);
 
@@ -32,27 +36,39 @@ export const CompanyComponent = (): JSX.Element | null => {
         setExpanded(isExpanded ? panel : '');
     };
 
-    const onFormSubmit = (values: FieldValues) => {
+    const onFormSubmit = async (values: FieldValues) => {
         const changedParams = {
-            changed_params: Object.entries(values).map(([key, value]) => ({ id: key, value: value === '' ? null : value }))
+            changed_params: Object.entries(values).map(
+                ([key, value]) => ({ id: key, value: value === '' ? null : value })
+            )
         };
-        changeCompanyProperties(changedParams)
-            .catch(err => console.log(err));
+
+        try {
+            await changeCompanyProperties(changedParams);
+        } catch (err) {
+            console.log(err)
+        }
+        
         alert(JSON.stringify(changedParams, null, 2));
     };
 
-    useEffect(() => {
-        if (id > -1 && role !== 'admin') {
-            getCompanyProperties()
-                .then(res => {
-                    setCompanyProperties(res);
-                    setExpanded(res[0].group_name);
-                })
-                .catch(err => console.error(err))
-                .finally(() => setLoading(false));
-        } else {
+    const handleGetCompanyProperties = async () => {
+        try {
+            if (id > -1 && role !== 'admin') {
+                const properties = await getCompanyProperties();
+
+                setCompanyProperties(properties);
+                setExpanded(properties[0].group_name);
+            }
+        } catch (err) {
+            console.error(err);
+        } finally {
             setLoading(false);
         }
+    }
+
+    useEffect(() => {
+        handleGetCompanyProperties();
     }, [dispatch, id, role]);
 
     if (id < 0) {

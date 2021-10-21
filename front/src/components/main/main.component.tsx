@@ -9,14 +9,13 @@ import {
 import { getToken } from '~/api';
 import { RootState } from '~/store/rootReducer';
 import { getCurrentUserAction } from '~/store/user/actions';
-import { AppState } from '~/types';
 
 import './main.component.scss';
 
 export const MainComponent = (): JSX.Element => {
     const dispatch = useDispatch<ThunkDispatch<RootState, void, AnyAction>>();
     const history = useHistory();
-    const { id, role } = useSelector((state: AppState) => state.user);
+    const { id, role } = useSelector((state: RootState) => state.user);
 
     useEffect(() => {
         if (id > -1 || getToken) {
@@ -47,11 +46,18 @@ export const MainComponent = (): JSX.Element => {
                 </Grid>
                 {
                     role !== 'admin' &&
-                    <Grid item>
-                        <Button variant="contained" color="info" onClick={() => history.push('/company')}>
-                            Мои свойства
-                        </Button>
-                    </Grid>
+                    <>
+                        <Grid item>
+                            <Button variant="contained" color="info" onClick={() => history.push('/company')}>
+                                Мои свойства
+                            </Button>
+                        </Grid>
+                        <Grid item>
+                            <Button variant="contained" color="secondary" onClick={() => history.push('/frame')}>
+                                Рамочный фрейм
+                            </Button>
+                        </Grid>
+                    </>
                 }
 
             </Grid>
