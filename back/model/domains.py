@@ -13,6 +13,7 @@ class RSDomain(Base):
     rus_descr = Column(String)
 
     all_lov = {}
+    back_lov = {}
     all_cat = {}
 
     def initLOV(self):
@@ -21,9 +22,13 @@ class RSDomain(Base):
         for vlv in vlist:
             self.all_lov[vlv.id] = vlv.rus_name
             self.all_cat[vlv.id] = vlv.val_type
+            self.back_lov[vlv.rus_name] = vlv.id
 
     def getVal(self, num):
         return self.all_lov[num]
+
+    def getId(self, val):
+        return self.back_lov[val]
 
     def getCat(self, num):
         return self.all_cat[num]

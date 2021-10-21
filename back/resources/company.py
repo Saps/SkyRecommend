@@ -11,7 +11,7 @@ class CompanyProps(Resource):
     def get(self):
         cmp = companies.RSCompany().findCompany()
         if not isinstance(cmp, companies.RSCompany):
-            return make_response(jsonify({"Message" : cmp}), 200)
+            return make_response(jsonify({"Message" : cmp}), 409)
         js_res = cmp.getProps()
 
         return make_response(jsonify(js_res), 200)
@@ -21,6 +21,6 @@ class CompanyFrame(Resource):
     def get(self):
         cmp = companies.RSCompany().findCompany()
         if not isinstance(cmp, companies.RSCompany):
-            return make_response(jsonify({"Message": cmp}), 200)
+            return make_response(jsonify({"Message": cmp}), 409)
         cf = cmp.getFrame()
         return make_response(jsonify(cf), 200)
