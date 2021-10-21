@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Redirect } from 'react-router-dom';
+import { Redirect, useHistory } from 'react-router-dom';
 import { ThunkDispatch } from 'redux-thunk';
 import { AnyAction } from '@reduxjs/toolkit';
 import { Alert, Grid } from '@mui/material';
@@ -14,18 +14,23 @@ export const MainComponent = (): JSX.Element => {
     const dispatch = useDispatch<ThunkDispatch<RootState, void, AnyAction>>();
     const { id, role } = useSelector((state: RootState) => state.user);
     const [loading, setLoading] = useState<boolean>();
+    const history = useHistory();
 
     const getUser = async () => {
         if (id < 0 && getToken) {
-            setLoading(true);
-            await dispatch(getCurrentUserAction());
-            setLoading(false);
+            try {
+                setLoading(true);
+                await dispatch(getCurrentUserAction());
+                setLoading(false);
+            } catch (err) {
+                history.replace('/login');
+            }
         }
     };
 
     useEffect(() => {
         getUser();
-    }, []);
+    }, [dispatch, history, id]);
 
     if (id < 0 && !getToken) {
         return <Redirect to="/login" />;
