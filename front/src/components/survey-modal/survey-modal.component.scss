@@ -22,6 +22,22 @@
 
             &:not(:last-child) {
                 margin-right: 16px;
+                margin-bottom: 0px;
+            }
+        }
+    }
+}
+
+@media (max-width: 700px) {
+    .survey-modal__options {
+        flex-direction: column;
+
+        button {
+            word-break: break-word;
+
+            &:not(:last-child) {
+                margin-right: 0px;
+                margin-bottom: 16px;
             }
         }
     }
