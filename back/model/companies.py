@@ -91,7 +91,7 @@ class RSCompany(Base):
             entries.append(e)
 
         sess.add_all(entries)
-        sess.commit()
+        sess.flush()
 
 
     def eatFrame(self, frame):
@@ -104,7 +104,7 @@ class RSCompany(Base):
         if dom_spr.getVal(self.d_study) != frame['study']:
             self.d_study =  dom_spr.getId(frame['study'])
             sess.add(self)
-            sess.commit()
+            sess.flush()
 
         alldoms = frame['markets']
         alldoms.extend(frame['techs'])
@@ -115,7 +115,7 @@ class RSCompany(Base):
             ad.append(dom_spr.getId(a))
 
         sess.query(comp_doms.RSCompDom).filter(comp_doms.RSCompDom.dom_id.notin_(ad)).delete()
-        sess.commit()
+        sess.flush()
         curr_tms = sess.query(comp_doms.RSCompDom).filter(comp_doms.RSCompDom.comp_id == self.id) \
             .order_by(comp_doms.RSCompDom.dom_id).all()
         for t in curr_tms:
@@ -128,6 +128,6 @@ class RSCompany(Base):
             to_ins.append(e)
 
         sess.add_all(to_ins)
-        sess.commit()
+        sess.flush()
 
 

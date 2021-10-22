@@ -56,14 +56,14 @@ class User(Base):
         user_session.sess_id = sess_uid
         user_session.last_check = datetime.datetime.now()
         sess.add(user_session)
-        sess.commit()
+        sess.flush()
         return sess_uid, our_user.role
 
     def doUnLogin(self):
         m = IAPI.US
         s = db_session()
         s.delete(m)
-        s.commit()
+        s.flush()
 
 
     def userCurrent(self):
