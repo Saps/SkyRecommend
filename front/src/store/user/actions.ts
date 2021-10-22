@@ -13,7 +13,7 @@ export const getCurrentUserAction = () => {
             const userInfo: UserInfo = await currentUser();
             return dispatch(currentUserAction({ ...userInfo }));
         } catch (error) {
-            console.warn('User is unauthorized');
+            throw new Error('User is unauthorized');
         }
     };
 }

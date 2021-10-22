@@ -24,11 +24,11 @@ export const HeaderComponent = (): JSX.Element => {
             <Box
                 sx={{width: 250}}
                 role="presentation"
-                onClick={toogleSidebar(false)}
-                onKeyDown={toogleSidebar( false)}
+                onClick={toggleSidebar(false)}
+                onKeyDown={toggleSidebar( false)}
             >
                 <List>
-                    {['Inbox', 'Starred', 'Send email', 'Drafts', 'All mail', 'Trash', 'Spam'].map((text: string, index: number) => (
+                    {['Inbox', 'Starred', 'Send email', 'Drafts', 'All mail'].map(text => (
                         <ListItem button key={text}>
                             <ListItemText primary={text}/>
                         </ListItem>
@@ -38,7 +38,7 @@ export const HeaderComponent = (): JSX.Element => {
         );
     };
 
-    const toogleSidebar = (isOpen: boolean) => (event: any) => {
+    const toggleSidebar = (isOpen: boolean) => (event: any) => {
         if (event.type === 'keydown' && ['Shift', 'Tab'].includes(event.key)) {
             return;
         }
@@ -47,7 +47,7 @@ export const HeaderComponent = (): JSX.Element => {
 
     const handleLogout = async () => {
         await dispatch(logoutAction());
-        history.push('/login');
+        history.replace('/login');
     };
 
     return (
@@ -58,7 +58,7 @@ export const HeaderComponent = (): JSX.Element => {
                     edge="start"
                     color="inherit"
                     aria-label="menu"
-                    onClick={toogleSidebar(true)}
+                    onClick={toggleSidebar(true)}
                 >
                     <Menu />
                 </IconButton>
@@ -85,7 +85,7 @@ export const HeaderComponent = (): JSX.Element => {
                 <Drawer
                     anchor="left"
                     open={sidebarOpen}
-                    onClose={toogleSidebar(false)}
+                    onClose={toggleSidebar(false)}
                 >
                     {renderSidebar()}
                 </Drawer>
