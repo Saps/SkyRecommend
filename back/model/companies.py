@@ -45,6 +45,8 @@ class RSCompany(Base):
                 if vl:
                     vall = vl.value
                     vaid = vl.id
+                else:
+                    continue
                 par = {
                     'id' : vaid,
                     'name' : curr_prop.visual_name,
