@@ -8,6 +8,6 @@ class RSCompDom(Base):
     id = Column(Integer, primary_key=True)
     comp_id = Column(Integer)
     dom_id = Column(Integer)
-    comp_cond_id = Column(Integer)
+    #comp_cond_id = Column(Integer)
 
 

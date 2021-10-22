@@ -16,6 +16,12 @@ class CompanyProps(Resource):
 
         return make_response(jsonify(js_res), 200)
 
+    def post(self):
+        p2 = request.json
+        cmp = companies.RSCompany().findCompany()
+        cmp.eatParams(p2['changed_params'])
+        return make_response(jsonify({"Message" : "OK"}), 200)
+
 
 class CompanyFrame(Resource):
     def get(self):
@@ -24,3 +30,10 @@ class CompanyFrame(Resource):
             return make_response(jsonify({"Message": cmp}), 409)
         cf = cmp.getFrame()
         return make_response(jsonify(cf), 200)
+
+
+    def post(self):
+        p2 = request.json
+        cmp = companies.RSCompany().findCompany()
+        cmp.eatFrame(p2)
+        return make_response(jsonify({"Message" : "OK"}), 200)

@@ -2,7 +2,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String, TIMESTAMP
 from api import IAPI
 from api import db_session
-from . import properties, property_groups, user, comp_prop_values, comp_conds, domains, comp_doms
+from . import properties, property_groups, user, comp_prop_values, domains, comp_doms
 
 Base = declarative_base()
 
@@ -11,6 +11,7 @@ class RSCompany(Base):
     id = Column(Integer, primary_key=True)
     inn = Column(String)
     cname = Column(String)
+    d_study = Column(Integer)
 
 
     def findCompany(self):
@@ -63,20 +64,11 @@ class RSCompany(Base):
         dom_spr = domains.RSDomain()
         dom_spr.initLOV()
 
-        curr_cond = sess.query(comp_conds.RSCompCond).filter(comp_conds.RSCompCond.date_end == None) \
-                    .filter(comp_conds.RSCompCond.comp_id == self.id).first()
-        if curr_cond == None:
-            return 'No data about condition'
-        res_frame['study'] = dom_spr.getVal(curr_cond.d_study)
-
-        curr_servs = sess.query(comp_doms.RSCompDom).filter(comp_doms.RSCompDom.comp_cond_id == curr_cond.id) \
-                     .order_by(comp_doms.RSCompDom.dom_id).all()
-        res_frame['srvs'] = []
-        for cs in curr_servs:
-            res_frame['srvs'].append(dom_spr.getVal(cs.dom_id))
+        res_frame['study'] = dom_spr.getVal(self.d_study)
 
         res_frame['techs'] = []
         res_frame['markets'] = []
+        res_frame['srvs'] = []
         curr_tms = sess.query(comp_doms.RSCompDom).filter(comp_doms.RSCompDom.comp_id == self.id) \
                    .order_by(comp_doms.RSCompDom.dom_id).all()
         for tms in curr_tms:
@@ -85,5 +77,57 @@ class RSCompany(Base):
                 res_frame['markets'].append(dom_spr.getVal(tms.dom_id))
             if dm == 'Techs':
                 res_frame['techs'].append(dom_spr.getVal(tms.dom_id))
+            if dm == 'ServMatrix':
+                res_frame['srvs'].append(dom_spr.getVal(tms.dom_id))
 
         return res_frame
+
+    def eatParams(self, pars):
+        entries = []
+        sess = db_session()
+        for pr in pars:
+            e = sess.query(comp_prop_values.RSCompPropValue).get(pr['id'])
+            e.value = pr['value']
+            entries.append(e)
+
+        sess.add_all(entries)
+        sess.commit()
+
+
+    def eatFrame(self, frame):
+        res_frame = {}
+        sess = db_session()
+
+        dom_spr = domains.RSDomain()
+        dom_spr.initLOV()
+
+        if dom_spr.getVal(self.d_study) != frame['study']:
+            self.d_study =  dom_spr.getId(frame['study'])
+            sess.add(self)
+            sess.commit()
+
+        alldoms = frame['markets']
+        alldoms.extend(frame['techs'])
+        alldoms.extend(frame['srvs'])
+
+        ad = []
+        for a in alldoms:
+            ad.append(dom_spr.getId(a))
+
+        sess.query(comp_doms.RSCompDom).filter(comp_doms.RSCompDom.dom_id.notin_(ad)).delete()
+        sess.commit()
+        curr_tms = sess.query(comp_doms.RSCompDom).filter(comp_doms.RSCompDom.comp_id == self.id) \
+            .order_by(comp_doms.RSCompDom.dom_id).all()
+        for t in curr_tms:
+            ad.remove(t.dom_id)
+        to_ins = []
+        for a in ad:
+            e = comp_doms.RSCompDom()
+            e.comp_id = self.id
+            e.dom_id = a
+            to_ins.append(e)
+
+        sess.add_all(to_ins)
+        sess.commit()
+
+
