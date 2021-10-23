@@ -7,11 +7,19 @@ from api import candapi
 from hashlib import md5
 
 
-class AlgorGet(Resource):
+class AlgorActiveGet(Resource):
     def get(self):
         c = companies.RSCompany().findCompany()
         d = candapi.CandApi()
-        res = d.getAllFrame(c)
+        res = d.getFinalResult(c)
         return make_response(jsonify(res), 200)
 
+# копипаста для тех, кто изучает код
+# улыбнитесь! Вас _не_ снимает скрытая камера! :)
 
+class AlgorAllGet(Resource):
+    def get(self):
+        c = companies.RSCompany().findCompany()
+        d = candapi.CandApi()
+        res = d.getFinalResult(c, is_all=True)
+        return make_response(jsonify(res), 200)
