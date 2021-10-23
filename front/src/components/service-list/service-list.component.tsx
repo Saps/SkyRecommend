@@ -21,10 +21,7 @@ export const ServiceListComponent = (): JSX.Element => {
                     </FormControl>
                 </Grid>
                 <Grid item>
-                    <Button variant="contained" color="success">Подобрать</Button>
-                </Grid>
-                <Grid item>
-                    <Button variant="contained" color="primary">Моя траектория</Button>
+                    <Button variant="contained" color="primary">Подобрать</Button>
                 </Grid>
                 <Grid item>
                     <Button variant="contained" color="info" onClick={() => history.push('/company-properties')}>

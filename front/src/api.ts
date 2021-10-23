@@ -6,7 +6,7 @@ import {
 } from '~/types';
 
 const api = axios.create({
-    baseURL: 'http://185.221.152.242:5480/api',
+    baseURL: `${process.env.REACT_APP_API_URL}/api`,
     headers: {
         'Content-Type': 'application/json'
     },
