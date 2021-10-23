@@ -1,0 +1,16 @@
+.card-content {
+    &__item {
+        width: 50%;
+    }
+}
+
+@media (max-width: 550px) {
+    .MuiGrid-root .MuiGrid-container .card-content {
+        flex-direction: column;
+        text-align: center;
+
+        &__item {
+            width: 100%;
+        }
+    }
+}
