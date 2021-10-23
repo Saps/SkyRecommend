@@ -87,18 +87,8 @@ export const ServiceListComponent = (): JSX.Element => {
     }
 
     return (
-        <Grid container item direction="column" justifyContent="center" p={2} xs={12} sm={10} md={8}>
+        <Grid container item direction="column" p={2} xs={12} sm={10} md={8}>
             <Grid container item justifyContent="center" spacing={2} mb={5}>
-                {/*<Grid item>*/}
-                {/*    <FormControl>*/}
-                {/*        <InputLabel id="searchType">Тип поиска</InputLabel>*/}
-                {/*        <Select labelId="searchType" label="Тип поиска" value={'guaranteed'}>*/}
-                {/*            <MenuItem value={'guaranteed'}>Гарантированный</MenuItem>*/}
-                {/*            <MenuItem value={'fast'}>Быстрый</MenuItem>*/}
-                {/*            <MenuItem value={'perspective'}>Перспективный</MenuItem>*/}
-                {/*        </Select>*/}
-                {/*    </FormControl>*/}
-                {/*</Grid>*/}
                 <Grid item key="search-button">
                     <Button variant="contained" color="primary" onClick={onSearch}>Подобрать</Button>
                 </Grid>
