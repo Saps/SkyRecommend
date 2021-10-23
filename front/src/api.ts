@@ -61,6 +61,15 @@ export async function currentUser(): Promise<UserInfo> {
     }
 }
 
+export async function findServices(): Promise<string[]> {
+    try {
+        const { data } = await api.get('/findservs');
+        return data;
+    } catch (e) {
+        throw new Error((e as AxiosError<ApiError>)?.response?.data.message);
+    }
+}
+
 export async function getCompanyProperties(): Promise<CompanyProperty[]> {
     try {
         const { data } = await api.get('/company/props');
@@ -79,8 +88,6 @@ export async function changeCompanyProperties(values: ChangedParams): Promise<an
         throw new Error((e as AxiosError<ApiError>)?.response?.data.message);
     }
 }
-
-
 
 export async function getCompanyFrame(): Promise<CompanyFrame> {
     try {
