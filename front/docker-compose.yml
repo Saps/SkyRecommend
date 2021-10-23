@@ -1,8 +1,8 @@
-version: '3.6'
+version: 3
 
 services:
   front:
-    build: ./front
+    build: .
     networks:
     - inner
     ports:
