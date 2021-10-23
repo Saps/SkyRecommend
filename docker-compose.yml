@@ -6,7 +6,7 @@ services:
     networks:
     - inner
     ports:
-    - '8032:8080'
+    - '80:8080'
 
 networks:
   inner:
