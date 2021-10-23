@@ -3,11 +3,7 @@ version: '3'
 services:
   front:
     build: .
-    networks:
-    - inner
     ports:
     - '80:8180'
 
-networks:
-  inner:
-    name: 'sky_bridge'
+
