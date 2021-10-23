@@ -1,13 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useHistory } from 'react-router-dom';
 import {
     Button, Card, CardContent, Divider, FormControl, Grid, InputLabel, MenuItem, Select, Typography
 } from '@mui/material';
-import { SurveyModalComponent } from '../index';
 
 export const ServiceListComponent = (): JSX.Element => {
     const history = useHistory();
-    const [surveyModalOpen, setSurveyModalOpen] = useState<boolean>(true);
 
     return (
         <Grid container item direction="column" justifyContent="center" p={2} xs={12} sm={10} md={8}>
@@ -31,12 +29,11 @@ export const ServiceListComponent = (): JSX.Element => {
                     </Button>
                 </Grid>
                 <Grid item>
-                    <Button variant="contained" color="secondary" onClick={() => setSurveyModalOpen(true)}>
-                        Пройти опрос
+                    <Button variant="contained" color="secondary" onClick={() => history.push('/company-frame')}>
+                        Фрейм компании
                     </Button>
                 </Grid>
             </Grid>
-            <SurveyModalComponent open={surveyModalOpen} setOpen={setSurveyModalOpen} />
             <Grid item container direction="column" rowSpacing={2} columnSpacing={2}>
                 <Grid item>
                     <Card>
