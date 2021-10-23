@@ -1,0 +1,13 @@
+version: '3.6'
+
+services:
+  front:
+    build: ./front
+    networks:
+    - inner
+    ports:
+    - '8032:8080'
+
+networks:
+  inner:
+    name: 'sky_bridge'

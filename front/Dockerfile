@@ -1,6 +1,10 @@
 FROM node:14-alpine
 
-COPY . .
+RUN mkdir /app
+WORKDIR /app
+COPY package.json yarn.lock server.js /app/
+RUN yarn install --production
+COPY . /app
+RUN NODE_ENV=production yarn build
 
-RUN npm install --production
-CMD NODE_ENV=production npm start --env={env}
+CMD node ./server.js
