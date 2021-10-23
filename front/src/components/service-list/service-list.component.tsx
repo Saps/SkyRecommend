@@ -64,7 +64,7 @@ export const ServiceListComponent = (): JSX.Element => {
 
     const renderService = (item: string, index: number): JSX.Element => {
         return (
-            <Grid item>
+            <Grid item key={`${item} ${index}`}>
                 <Card>
                     <CardContent>
                         <Grid container alignItems="center" columnSpacing={2} className="card-content">
@@ -99,28 +99,28 @@ export const ServiceListComponent = (): JSX.Element => {
                 {/*        </Select>*/}
                 {/*    </FormControl>*/}
                 {/*</Grid>*/}
-                <Grid item>
+                <Grid item key="search-button">
                     <Button variant="contained" color="primary" onClick={onSearch}>Подобрать</Button>
                 </Grid>
-                <Grid item>
+                <Grid item key="company-properties-button">
                     <Button variant="contained" color="info" onClick={() => history.push('/company-properties')}>
                         Свойства компании
                     </Button>
                 </Grid>
-                <Grid item>
+                <Grid item key="company-frame-button">
                     <Button variant="contained" color="secondary" onClick={() => history.push('/company-frame')}>
                         Фрейм компании
                     </Button>
                 </Grid>
             </Grid>
             {
-                error
-                    ? <Alert severity="error">{error}</Alert>
-                    : (
-                        <Grid item container direction="column" rowSpacing={2} columnSpacing={2}>
-                            {services.map(renderService)}
-                        </Grid>
-                    )
+                error ? (
+                    <Alert severity="error">{error}</Alert>
+                ) : (
+                    <Grid item container direction="column" rowSpacing={2} columnSpacing={2}>
+                        {services.map(renderService)}
+                    </Grid>
+                )
             }
         </Grid>
     );
