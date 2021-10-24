@@ -18,8 +18,13 @@ export const SuccessModalComponent = ({ algorithmName, open, services, setOpen }
                     Сервисы были успешно подобраны
                 </Typography>
                 <div className="success-modal__info">
-                    {algorithmName} успешно отработал. Были подобраны следующие сервисы:
-                    {services.map((service: string) => <p><strong>{service}</strong></p>)}.
+                    <u><i>{algorithmName}</i></u> успешно отработал. Были подобраны следующие сервисы:
+                    {services.map((service: string) => <p><strong>{service}</strong></p>)}
+                    <p>
+                        Потребности, с которыми Вы согласны, необходимо внести в поле "сервисы"
+                        и сохранить профиль компании. После этого Вы сможете подобрать партнеров.
+                    </p>
+
                 </div>
             </div>
         </Modal>
