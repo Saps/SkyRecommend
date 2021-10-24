@@ -47,7 +47,7 @@ export const LoginComponent = (): JSX.Element => {
                     <LockOutlined/>
                 </Avatar>
                 <Typography component="h1" variant="h5">
-                    Sign in
+                    Вход в Startup Guide
                 </Typography>
                 <Box component="form" onSubmit={handleSubmit} noValidate>
                     <TextField
@@ -56,7 +56,7 @@ export const LoginComponent = (): JSX.Element => {
                         fullWidth
                         helperText={touched.username && !!errors.username ? errors.username : ''}
                         id="username"
-                        label="Username"
+                        label="Логин"
                         name="username"
                         onBlur={handleBlur}
                         onChange={handleChange}
@@ -70,7 +70,7 @@ export const LoginComponent = (): JSX.Element => {
                         id="password"
                         fullWidth
                         helperText={touched.password && !!errors.password ? errors.password : ''}
-                        label="Password"
+                        label="Пароль"
                         name="password"
                         onBlur={handleBlur}
                         onChange={handleChange}
@@ -80,7 +80,7 @@ export const LoginComponent = (): JSX.Element => {
                         variant="standard"
                     />
                     <Button disabled={!!errors.username || !!errors.password} type="submit" variant="contained">
-                        Sign In
+                        Войти
                     </Button>
                 </Box>
             </Paper>

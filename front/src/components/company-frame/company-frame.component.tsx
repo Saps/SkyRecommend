@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { Redirect, useHistory } from 'react-router-dom';
 import { Alert, Box, Button, Chip, FormControl, Grid, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import { Formik, FormikState } from 'formik';
-import { changeCompanyFrame, getCompanyFrame, getCompanyFrameOptions, sendSurvey } from '~/api';
+import {changeCompanyFrame, getAlgorithmResult, getCompanyFrame, getCompanyFrameOptions, sendSurvey} from '~/api';
 import { RootState } from "~/store/rootReducer";
 import { CompanyFrame, CompanyFrameOptions, SurveyValues } from '~/types';
 import { CompanyPropertiesComponent, SurveyModalComponent } from '../index';
@@ -78,6 +78,17 @@ export const CompanyFrameComponent = (): JSX.Element => {
     const onSurveySubmit = async (values: SurveyValues) => {
         try {
             const result = await sendSurvey(values);
+            const srvs = getUniqueValues(frame.srvs.concat(result));
+            setFrame({ ...frame, srvs });
+            setShowServices(true);
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
+    const getAlgoResult = async () => {
+        try {
+            const result = await getAlgorithmResult();
             const srvs = getUniqueValues(frame.srvs.concat(result));
             setFrame({ ...frame, srvs });
             setShowServices(true);
@@ -262,7 +273,7 @@ export const CompanyFrameComponent = (): JSX.Element => {
                                             <Button color="secondary" type="button" variant="contained" onClick={() => setIsOpen(true)}>
                                                 Пройти опрос
                                             </Button>
-                                            <Button color="secondary" type="button" variant="contained">
+                                            <Button color="secondary" type="button" variant="contained" onClick={() => getAlgoResult()}>
                                                 Пройти алгоритм
                                             </Button>
                                             {
