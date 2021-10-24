@@ -4,6 +4,6 @@ services:
   front:
     build: .
     ports:
-    - '80:8180'
+    - '8180:8180'
 
 
