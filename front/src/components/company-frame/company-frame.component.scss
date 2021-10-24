@@ -1,22 +1,13 @@
 .form-options {
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
-    margin-top: 16px;
 
-    button:not(:last-child) {
-        margin-right: 16px;
-        margin-bottom: 0px;
-    }
-}
+    button {
+        margin-top: 16px;
 
-
-@media (max-width: 450px) {
-    .form-options {
-        flex-direction: column;
-
-        button:not(:last-child) {
-            margin-right: 0px;
-            margin-bottom: 16px;
+        &:not(:last-child) {
+            margin-right: 16px;
         }
     }
 }
