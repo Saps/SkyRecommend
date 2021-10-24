@@ -12,6 +12,8 @@ class RSCompany(Base):
     inn = Column(String)
     cname = Column(String)
     d_study = Column(Integer)
+    okved_osn = Column(String)
+    okved_dop = Column(String)
 
 
     def findCompany(self):
