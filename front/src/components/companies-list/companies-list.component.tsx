@@ -35,7 +35,7 @@ export const CompaniesListComponent = (): JSX.Element => {
         return (
             <Grid container alignItems="center" spacing={2}>
                 <Grid item><Typography variant="body1">Оценка:</Typography></Grid>
-                <Grid item><Rating value={rating} max={100} readOnly /></Grid>
+                <Grid item><Rating value={rating / 10} precision={0.1} max={10} readOnly /></Grid>
             </Grid>
         );
     };
