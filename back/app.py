@@ -1,6 +1,7 @@
 from flask import Flask
 from api import *
 from resources import RestApiBP
+from routes import Routes
 from flask_cors import CORS
 
 app = Flask(__name__)
@@ -19,6 +20,7 @@ app.config['MAIL_PASSWORD'] = ''
 
 #app.register_blueprint(RFront)
 bp1 = app.register_blueprint(RestApiBP, url_prefix='/api')
+bp2 = app.register_blueprint(Routes, url_prefix='/doc')
 
 @app.after_request
 def after_request(response):
