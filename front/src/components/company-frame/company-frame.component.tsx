@@ -6,7 +6,7 @@ import { Formik, FormikState } from 'formik';
 import { changeCompanyFrame, findServices, getCompanyFrame, getCompanyFrameOptions, sendSurvey } from '~/api';
 import { RootState } from "~/store/rootReducer";
 import { CompanyFrame, CompanyFrameOptions, SurveyValues } from '~/types';
-import { CompanyPropertiesComponent, SurveyModalComponent } from '../index';
+import { CompanyPropertiesComponent, SuccessModalComponent, SurveyModalComponent } from '../index';
 
 import './company-frame.component.scss';
 
@@ -29,9 +29,12 @@ const defaultFrameOptions: CompanyFrameOptions = {
 };
 
 export const CompanyFrameComponent = (): JSX.Element => {
+    const [algorithmName, setAlgorithmName] = useState<string>('');
+    const [foundServices, setFoundServices] = useState<string[]>([]);
     const [frame, setFrame] = useState<CompanyFrame>(defaultFrame);
     const [frameOptions, setFrameOptions] = useState<CompanyFrameOptions>(defaultFrameOptions);
     const [isOpen, setIsOpen] = useState<boolean>(false);
+    const [isSuccessOpen, setIsSuccessOpen] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(true);
     const [showServices, setShowServices] = useState<boolean>();
     const history = useHistory();
@@ -78,6 +81,9 @@ export const CompanyFrameComponent = (): JSX.Element => {
     const onSurveySubmit = async (values: SurveyValues) => {
         try {
             const result = await sendSurvey(values);
+            setAlgorithmName('Алгоритм поиска на основе опроса');
+            setFoundServices(result);
+            setIsSuccessOpen(true);
             const srvs = getUniqueValues(frame.srvs.concat(result));
             setFrame({ ...frame, srvs });
             setShowServices(true);
@@ -89,6 +95,9 @@ export const CompanyFrameComponent = (): JSX.Element => {
     const getAlgorithmResult = async () => {
         try {
             const result = await findServices();
+            setAlgorithmName('Алгоритм поиска на основе исторической информации');
+            setFoundServices(result);
+            setIsSuccessOpen(true);
             const srvs = getUniqueValues(frame.srvs.concat(result));
             setFrame({ ...frame, srvs });
             setShowServices(true);
@@ -288,11 +297,15 @@ export const CompanyFrameComponent = (): JSX.Element => {
                                             }
                                         </div>
                                     </Grid>
-                                    <SurveyModalComponent
-                                        onSubmit={onSurveySubmit}
-                                        open={isOpen}
-                                        setOpen={setIsOpen}
-                                    />
+                                    {isOpen && <SurveyModalComponent onSubmit={onSurveySubmit} open={isOpen} setOpen={setIsOpen} />}
+                                    {isSuccessOpen &&
+                                        <SuccessModalComponent
+                                            algorithmName={algorithmName}
+                                            open={isSuccessOpen}
+                                            services={foundServices}
+                                            setOpen={setIsSuccessOpen}
+                                        />
+                                    }
                                 </form>
                             }
                         </Formik>

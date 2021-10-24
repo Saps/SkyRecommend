@@ -7,4 +7,5 @@ export * from './login/login.component';
 export * from './main/main.component';
 export * from './not-found/not-found.component';
 export * from './register/register.component';
+export * from './success-modal/success-modal.component';
 export * from './survey-modal/survey-modal.component';
