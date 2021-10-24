@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
 import { Alert, Button, Card, CardContent, Grid, Typography } from '@mui/material';
 import { findServices } from "~/api";
 import { CommonError } from "~/types";
@@ -7,13 +6,8 @@ import { CommonError } from "~/types";
 import './service-list.component.scss';
 
 export const ServiceListComponent = (): JSX.Element => {
-    const history = useHistory();
     const [error, setError] = useState<string>();
     const [services, setServices] = useState<string[]>([]);
-
-    useEffect(() => {
-        onSearch();
-    }, []);
 
     const onSearch = async () => {
         try {
@@ -88,28 +82,23 @@ export const ServiceListComponent = (): JSX.Element => {
 
     return (
         <Grid container item direction="column" p={2} xs={12} sm={10} md={8}>
-            <Grid container item justifyContent="center" spacing={2} mb={5}>
+            <Grid container item justifyContent="center" spacing={2} mb={3}>
                 <Grid item key="search-button">
-                    <Button variant="contained" color="primary" onClick={onSearch}>Подобрать</Button>
-                </Grid>
-                <Grid item key="company-properties-button">
-                    <Button variant="contained" color="info" onClick={() => history.push('/company-properties')}>
-                        Свойства компании
-                    </Button>
-                </Grid>
-                <Grid item key="company-frame-button">
-                    <Button variant="contained" color="secondary" onClick={() => history.push('/company-frame')}>
-                        Фрейм компании
-                    </Button>
+                    <Button variant="contained" color="primary" onClick={onSearch}>Подобрать сервисы</Button>
                 </Grid>
             </Grid>
             {
                 error ? (
                     <Alert severity="error">{error}</Alert>
-                ) : (
+                ) : services.length > 0 ? (
                     <Grid item container direction="column" rowSpacing={2} columnSpacing={2}>
                         {services.map(renderService)}
                     </Grid>
+
+                ) : (
+                    <Alert severity="info">
+                        После нажатия на кнопку "Подобрать сервисы" здесь отобразятся результаты поиска.
+                    </Alert>
                 )
             }
         </Grid>

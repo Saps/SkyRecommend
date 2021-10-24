@@ -125,9 +125,6 @@ export const CompanyPropertiesComponent = (): JSX.Element | null => {
             )}
         </Formik>
     ) : (
-        <Alert severity="error">
-            У Вас отсутствует привязанная компания. &nbsp;
-            <Link href="/">Вернуться на главную страницу.</Link>
-        </Alert>
+        <Alert severity="error">Дополнительная информация о компании отсутствует.</Alert>
     );
 };
