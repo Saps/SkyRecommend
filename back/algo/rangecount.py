@@ -22,7 +22,7 @@ def rangeCount(tg_list, res_frame):
 
         ids_arr = tg_el['ids'].split(',')
         o_len = len(set(ids_arr) & set(com_arr)) / (len(ids_arr) + len(com_arr))
-
+        #w?
         alg = {
             'a_name' : 'RangeCount: алгоритм ранжирования по близости свойств',
             'a_message' : 'Вычислена симметричная близость свойств нужд компании и партнера, она равна '+str(o_len)
