@@ -70,6 +70,11 @@ class RSCompany(Base):
 
         res_frame['study'] = dom_spr.getVal(self.d_study)
 
+        res_frame['company_name'] = self.cname
+        res_frame['inn'] = self.inn
+        res_frame['okved_osn'] = self.okved_osn
+        res_frame['okved_dop'] = self.okved_dop
+
         res_frame['techs'] = []
         res_frame['markets'] = []
         res_frame['srvs'] = []
@@ -105,10 +110,18 @@ class RSCompany(Base):
         dom_spr = domains.RSDomain()
         dom_spr.initLOV()
 
-        if dom_spr.getVal(self.d_study) != frame['study']:
-            self.d_study =  dom_spr.getId(frame['study'])
-            sess.add(self)
-            sess.flush()
+
+        self.d_study =  dom_spr.getId(frame['study'])
+        if 'company_name' in frame.keys():
+            self.cname = frame['company_name']
+        if 'inn' in frame.keys():
+            self.inn = frame['inn']
+        if 'okved_osn' in frame.keys():
+            self.okved_osn = frame['okved_osn']
+        if 'okved_dop' in frame.keys():
+            self.okved_dop = frame['okdev_dop']
+        sess.add(self)
+        sess.flush()
 
         alldoms = frame['markets']
         alldoms.extend(frame['techs'])
