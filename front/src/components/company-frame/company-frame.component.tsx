@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { Redirect, useHistory } from 'react-router-dom';
 import { Alert, Box, Button, Chip, FormControl, Grid, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import { Formik, FormikState } from 'formik';
-import {changeCompanyFrame, getAlgorithmResult, getCompanyFrame, getCompanyFrameOptions, sendSurvey} from '~/api';
+import { changeCompanyFrame, findServices, getCompanyFrame, getCompanyFrameOptions, sendSurvey } from '~/api';
 import { RootState } from "~/store/rootReducer";
 import { CompanyFrame, CompanyFrameOptions, SurveyValues } from '~/types';
 import { CompanyPropertiesComponent, SurveyModalComponent } from '../index';
@@ -88,7 +88,7 @@ export const CompanyFrameComponent = (): JSX.Element => {
 
     const getAlgoResult = async () => {
         try {
-            const result = await getAlgorithmResult();
+            const result = await findServices();
             const srvs = getUniqueValues(frame.srvs.concat(result));
             setFrame({ ...frame, srvs });
             setShowServices(true);

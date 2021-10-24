@@ -145,13 +145,3 @@ export async function sendSurvey(values: SurveyValues): Promise<any> {
         throw new Error((e as AxiosError<ApiError>)?.response?.data.message);
     }
 }
-
-export async function getAlgorithmResult(): Promise<string[]> {
-    try {
-        const { data } = await api.get('/findserv');
-
-        return data;
-    }  catch (e) {
-        throw new Error((e as AxiosError<ApiError>)?.response?.data.message);
-    }
-}
