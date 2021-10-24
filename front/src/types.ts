@@ -78,5 +78,5 @@ export interface CompanyFrameOptions {
 }
 
 export interface SurveyValues {
-    [question: string]: string | number;
+    [key: string]: number;
 }

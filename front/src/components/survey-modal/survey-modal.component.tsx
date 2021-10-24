@@ -11,14 +11,10 @@ interface SurveyModalComponentProps {
     setOpen: (value: boolean) => void;
 }
 
-interface FormValues {
-    [key: string]: string;
-}
-
 export const SurveyModalComponent = ({ onSubmit, open, setOpen }: SurveyModalComponentProps): JSX.Element => {
     const [questions, setQuestions] = useState<string[]>([]);
 
-    const initialValues = useMemo((): FormValues => {
+    const initialValues = useMemo((): { [key: string]: string } => {
         return questions.reduce((acc, item) => Object.assign(acc, { [item]: '0' }), {});
     }, [questions]);
 
@@ -31,9 +27,11 @@ export const SurveyModalComponent = ({ onSubmit, open, setOpen }: SurveyModalCom
         }
     };
 
-    const onFormSubmit = async (values: FormValues) => {
+    const onFormSubmit = async (values: { [key: string]: string }) => {
         setOpen(false);
-        onSubmit(values);
+        const result = Object.entries(values)
+            .reduce((acc, [key, value]) => Object.assign(acc, { [key]: +value }), {});
+        onSubmit(result);
     };
 
     useEffect(() => {
