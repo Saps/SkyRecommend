@@ -80,3 +80,15 @@ export interface CompanyFrameOptions {
 export interface SurveyValues {
     [key: string]: number;
 }
+
+interface AlgorithmInfo {
+    a_message: string;
+    a_name: string;
+}
+
+export interface CompanyCandidate {
+    name: string;
+    rating: number;
+    type: string;
+    algos: AlgorithmInfo[];
+}

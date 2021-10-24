@@ -1,7 +1,7 @@
 .survey-modal {
-    width: 60%;
-    max-width: 600px;
-    min-width: 150px;
+    width: 80%;
+    max-width: 800px;
+    min-width: 250px;
     position: absolute;
     top: 50%;
     left: 50%;
@@ -22,6 +22,7 @@
             justify-content: space-between;
             align-items: center;
             width: 100%;
+            margin-top: 8px;
 
             &__left {
                 width: calc(100% - 165px);
@@ -29,7 +30,10 @@
 
             &__right {
                 flex-direction: row;
-                width: 150px;
+
+                @media (max-width: 450px) {
+                    flex-direction: column;
+                }
             }
         }
     }
@@ -38,5 +42,19 @@
         display: flex;
         justify-content: center;
         margin-top: 16px;
+
+        button:not(:last-child) {
+            margin-right: 16px;
+            margin-bottom: 0px;
+        }
+
+        @media (max-width: 450px) {
+            flex-direction: column;
+
+            button:not(:last-child) {
+                margin-right: 0px;
+                margin-bottom: 16px;
+            }
+        }
     }
 }

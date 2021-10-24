@@ -1,23 +1,23 @@
 import React, { useState } from 'react';
 import {
-    Alert, Box, Button, Card, CardContent, Grid, Typography,
-    FormControl, InputLabel, MenuItem, Select, SelectChangeEvent
+    Alert, Button, Card, CardContent, Grid, Typography, Rating,
+    FormControl, InputLabel, MenuItem, Select, Box, SelectChangeEvent
 } from '@mui/material';
 
-import { findServices } from "~/api";
-import { CommonError } from "~/types";
+import { findCompanies } from '~/api';
+import { CommonError, CompanyCandidate } from '~/types';
 
 import './companies-list.component.scss';
 
 export const CompaniesListComponent = (): JSX.Element => {
     const [error, setError] = useState<string>();
-    const [services, setServices] = useState<string[]>([]);
+    const [services, setServices] = useState<CompanyCandidate[]>([]);
     const [searchType, setSearchType] = useState<string>('active');
 
     const onSearch = async () => {
         try {
             setError('');
-            const result = await findServices();
+            const result = await findCompanies(searchType === 'active');
             setServices(result);
         } catch (e) {
             console.error(e);
@@ -31,43 +31,16 @@ export const CompaniesListComponent = (): JSX.Element => {
         setSearchType(value);
     };
 
-    const renderMark = (index: number): JSX.Element => {
-        if (index % 4 === 0) {
-            return (
-                <Typography variant="body1" color="success.main">
-                    Оценка: хорошо<br />
-                    По скорости: средне<br />
-                    Рискованность: высокая
-                </Typography>
-            );
-        } else if (index % 4 === 1) {
-            return (
-                <Typography variant="body1" color="primary">
-                    Оценка: хорошо<br />
-                    По скорости: средне<br />
-                    Рискованность: высокая
-                </Typography>
-            );
-        } else if (index % 4 === 2) {
-            return (
-                <Typography variant="body1" color="warning.main">
-                    Оценка: хорошо<br />
-                    По скорости: средне<br />
-                    Рискованность: высокая
-                </Typography>
-            );
-        } else {
-            return (
-                <Typography variant="body1" color="error">
-                    Оценка: хорошо<br />
-                    По скорости: средне<br />
-                    Рискованность: высокая
-                </Typography>
-            );
-        }
+    const renderMark = (rating: number): JSX.Element => {
+        return (
+            <Grid container alignItems="center" spacing={2}>
+                <Grid item><Typography variant="body1">Оценка:</Typography></Grid>
+                <Grid item><Rating value={rating} max={10} readOnly /></Grid>
+            </Grid>
+        );
     };
 
-    const renderService = (item: string, index: number): JSX.Element => {
+    const renderService = (item: CompanyCandidate, index: number): JSX.Element => {
         return (
             <Grid item key={`${item} ${index}`}>
                 <Card>
@@ -75,14 +48,14 @@ export const CompaniesListComponent = (): JSX.Element => {
                         <Grid container alignItems="center" columnSpacing={2} className="card-content">
                             <Grid item className="card-content__item">
                                 <Typography variant="h6">
-                                    {item}
+                                    {item.name}
                                 </Typography>
                                 <Typography variant="body1">
-                                    Описание
+                                    {item.type}
                                 </Typography>
                             </Grid>
                             <Grid item className="card-content__item">
-                                {renderMark(index)}
+                                {renderMark(item.rating)}
                             </Grid>
                         </Grid>
                     </CardContent>
@@ -94,47 +67,41 @@ export const CompaniesListComponent = (): JSX.Element => {
     return (
         <Grid container item direction="column" p={2} xs={12} sm={10} md={8}>
             {error
-                ? <Alert severity="error">{error}</Alert>
-                : (
-                    <Grid item container direction="column" spacing={2}>
-                        <Grid item>
-                            <Box component="h3" sx={{ textAlign: 'center' }}>
-                                Рекомендованные компании
-                            </Box>
-                        </Grid>
-                        <Grid item container alignItems="center" justifyContent="center" spacing={2}>
-                            <Grid item>
-                                <Button variant="contained" color="primary" onClick={onSearch}>
-                                    Подобрать компании
-                                </Button>
-                            </Grid>
-                            <Grid item>
-                                <FormControl>
-                                    <InputLabel id="searchType">Тип поиска</InputLabel>
-                                    <Select
-                                        labelId="searchType"
-                                        label="Тип поиска"
-                                        value={searchType}
-                                        onChange={handleSearchTypeChange}
-                                    >
-                                        <MenuItem value={'active'}>Действующие программы</MenuItem>
-                                        <MenuItem value={'all'}>Все программы</MenuItem>
-                                    </Select>
-                                </FormControl>
-                            </Grid>
-                        </Grid>
-                        {services.length > 0
-                            ? services.map(renderService)
-                            : (
-                                <Grid item>
-                                    <Alert severity="info">
-                                        После нажатия на кнопку "Подобрать компании" здесь отобразятся результаты поиска.
-                                    </Alert>
-                                </Grid>
-                            )
-                        }
+            ? <Alert severity="error">{error}</Alert>
+            : <Grid item container direction="column" spacing={2}>
+                <Grid item>
+                    <Box component="h3">Рекомендованные компании</Box>
+                </Grid>
+                <Grid item container alignItems="center" justifyContent="center" spacing={2}>
+                    <Grid item>
+                        <Button variant="contained" color="primary" onClick={onSearch}>
+                            Подобрать компании
+                        </Button>
                     </Grid>
-                )
+                    <Grid item>
+                        <FormControl>
+                            <InputLabel id="searchType">Тип поиска</InputLabel>
+                            <Select
+                                labelId="searchType"
+                                label="Тип поиска"
+                                value={searchType}
+                                onChange={handleSearchTypeChange}
+                            >
+                                <MenuItem value={'active'}>Действующие программы</MenuItem>
+                                <MenuItem value={'all'}>Все программы</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </Grid>
+                </Grid>
+                {services.length > 0
+                ? services.map(renderService)
+                : <Grid item>
+                    <Alert severity="info">
+                        После нажатия на кнопку "Подобрать компании" здесь отобразятся результаты поиска.
+                    </Alert>
+                </Grid>
+                }
+            </Grid>
             }
         </Grid>
     );

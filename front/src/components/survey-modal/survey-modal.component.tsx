@@ -39,9 +39,9 @@ export const SurveyModalComponent = ({ onSubmit, open, setOpen }: SurveyModalCom
     }, []);
 
     return (
-        <Modal open={open} onClose={() => setOpen(false)}>
+        <Modal open={open} onClick={setOpen.bind(this, false)}>
             <div className="survey-modal">
-                <Typography variant="h6" component="h2" mb={1}>
+                <Typography variant="h6" component="h2">
                     Подбор сервисов
                 </Typography>
                 <Formik initialValues={initialValues} onSubmit={onFormSubmit}>
@@ -50,7 +50,7 @@ export const SurveyModalComponent = ({ onSubmit, open, setOpen }: SurveyModalCom
                             <div className="survey-modal__questions">
                                 {
                                     questions.map(question => (
-                                        <FormControl className="question-item">
+                                        <FormControl className="question-item" key={question}>
                                             <FormLabel className="question-item__left">
                                                 {question}
                                             </FormLabel>
@@ -70,6 +70,9 @@ export const SurveyModalComponent = ({ onSubmit, open, setOpen }: SurveyModalCom
                             <div className="survey-modal__options">
                                 <Button color="primary" type="submit" variant="contained">
                                     Сохранить
+                                </Button>
+                                <Button color="info" type="button" variant="contained" onClick={setOpen.bind(this, false)}>
+                                    Отменить
                                 </Button>
                             </div>
                         </form>
