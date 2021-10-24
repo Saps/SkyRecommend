@@ -1,0 +1,22 @@
+.form-options {
+    display: flex;
+    justify-content: center;
+    margin-top: 16px;
+
+    button:not(:last-child) {
+        margin-right: 16px;
+        margin-bottom: 0px;
+    }
+}
+
+
+@media (max-width: 450px) {
+    .form-options {
+        flex-direction: column;
+
+        button:not(:last-child) {
+            margin-right: 0px;
+            margin-bottom: 16px;
+        }
+    }
+}

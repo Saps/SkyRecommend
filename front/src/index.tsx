@@ -3,13 +3,12 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { createTheme, ThemeProvider } from '@mui/material';
-
+import { store } from '~/store/store';
 import {
-    CompanyFrameComponent, CompanyPropertiesComponent, FooterComponent,
-    HeaderComponent, LoginComponent, MainComponent, RegisterComponent,
+    CompanyPropertiesComponent, FooterComponent, HeaderComponent,
+    LoginComponent, MainComponent, RegisterComponent, ServiceListComponent,
 } from './components';
 
-import { store } from '~/store/store';
 import './index.scss';
 
 const theme = createTheme({
@@ -46,8 +45,7 @@ ReactDOM.render(
                         <HeaderComponent />
                         <div className="main-container">
                             <Route exact path="/" component={MainComponent}/>
-                            <Route exact path="/company-properties" component={CompanyPropertiesComponent}/>
-                            <Route exact path="/company-frame" component={CompanyFrameComponent} />
+                            <Route exact path="/services" component={ServiceListComponent} />
                         </div>
                         <FooterComponent />
                     </Fragment>

@@ -1,15 +1,11 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { Redirect } from 'react-router-dom';
 import { Formik, FormikProps, FormikState } from 'formik';
 import { ExpandMore } from '@mui/icons-material';
 import {
     Accordion, AccordionDetails, AccordionSummary, Alert, Button,
     FormControl, Grid, InputLabel, Link, MenuItem, Select, TextField
 } from '@mui/material';
-
 import { changeCompanyProperties, getCompanyProperties } from '~/api';
-import { RootState } from '~/store/rootReducer';
 import { CompanyProperty, FieldValues, Value } from '~/types';
 
 import './company-properties.component.scss';
@@ -18,7 +14,6 @@ export const CompanyPropertiesComponent = (): JSX.Element | null => {
     const [expanded, setExpanded] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(true);
     const [companyProperties, setCompanyProperties] = useState<CompanyProperty[]>([]);
-    const { id, role } = useSelector((state: RootState) => state.user);
 
     const initialValues = useMemo(() => {
         return companyProperties
@@ -43,12 +38,8 @@ export const CompanyPropertiesComponent = (): JSX.Element | null => {
 
     const handleGetCompanyProperties = async () => {
         try {
-            if (id > -1 && role !== 'admin') {
-                const properties = await getCompanyProperties();
-
-                setCompanyProperties(properties);
-                setExpanded(properties[0].group_name);
-            }
+            const properties = await getCompanyProperties();
+            setCompanyProperties(properties);
         } catch (err) {
             console.error(err);
         } finally {
@@ -63,7 +54,7 @@ export const CompanyPropertiesComponent = (): JSX.Element | null => {
 
     useEffect(() => {
         handleGetCompanyProperties();
-    }, [id, role]);
+    }, []);
 
     const renderAccordion = (property: CompanyProperty, props: FormikProps<FieldValues>): JSX.Element => {
         const { group_name: key, params } = property;
@@ -114,41 +105,26 @@ export const CompanyPropertiesComponent = (): JSX.Element | null => {
         );
     };
 
-    if (id < 0) {
-        return <Redirect to="/login" />
-    } else if (role === 'admin') {
-        return <Redirect to="/" />;
-    }
-
-    return (
-        <Grid container item direction="column" p={2} xs={12} sm={10} md={8}>
-            {
-                loading ? (
-                    <Alert severity="warning">Информация загружается.</Alert>
-                ) : companyProperties.length > 0 ? (
-                    <Formik initialValues={initialValues} onSubmit={onFormSubmit}>
-                        {props => (
-                            <form onSubmit={props.handleSubmit} noValidate>
-                                <h3 className="form-header">Свойства компании</h3>
-                                {companyProperties.map(property => renderAccordion(property, props))}
-                                <div className="form-options">
-                                    <Button color="primary" type="submit" variant="contained">
-                                        Сохранить
-                                    </Button>
-                                    <Button color="info" type="button" variant="contained" onClick={() => onFormReset(props.resetForm)}>
-                                        Сбросить
-                                    </Button>
-                                </div>
-                            </form>
-                        )}
-                    </Formik>
-                ) : (
-                    <Alert severity="error">
-                        У Вас отсутствует привязанная компания. &nbsp;
-                        <Link href="/">Вернуться на главную страницу.</Link>
-                    </Alert>
-                )
-            }
-        </Grid>
+    return loading ? (
+        <Alert severity="warning">Информация загружается.</Alert>
+    ) : companyProperties.length > 0 ? (
+        <Formik initialValues={initialValues} onSubmit={onFormSubmit}>
+            {props => (
+                <form className="company-properties-form" onSubmit={props.handleSubmit} noValidate>
+                    <h3 className="form-header">Дополнительная информация о компании</h3>
+                    {companyProperties.map(property => renderAccordion(property, props))}
+                    <div className="form-options">
+                        <Button color="primary" type="submit" variant="contained">
+                            Сохранить
+                        </Button>
+                        <Button color="info" type="button" variant="contained" onClick={() => onFormReset(props.resetForm)}>
+                            Сбросить
+                        </Button>
+                    </div>
+                </form>
+            )}
+        </Formik>
+    ) : (
+        <Alert severity="error">Дополнительная информация о компании отсутствует.</Alert>
     );
 };
