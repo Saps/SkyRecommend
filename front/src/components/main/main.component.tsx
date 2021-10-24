@@ -8,7 +8,7 @@ import { Alert, Grid } from '@mui/material';
 import { getToken } from '~/api';
 import { RootState } from '~/store/rootReducer';
 import { getCurrentUserAction } from '~/store/user/actions';
-import { AdminPageComponent, ServiceListComponent } from "~/components";
+import { AdminPageComponent, CompanyFrameComponent } from "~/components";
 
 export const MainComponent = (): JSX.Element => {
     const dispatch = useDispatch<ThunkDispatch<RootState, void, AnyAction>>();
@@ -45,6 +45,6 @@ export const MainComponent = (): JSX.Element => {
     } else if (role === 'admin') {
         return <AdminPageComponent />;
     } else {
-        return <ServiceListComponent />;
+        return <CompanyFrameComponent />;
     }
 };

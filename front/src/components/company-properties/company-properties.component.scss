@@ -12,21 +12,12 @@
     }
 }
 
-form {
+.company-properties-form {
     width: 100%;
+    padding-top: 16px;
 
     .form-header {
         padding-bottom: 16px;
         text-align: center;
-    }
-
-    .form-options {
-        display: flex;
-        justify-content: center;
-        margin-top: 16px;
-
-        button:not(:last-child) {
-            margin-right: 16px;
-        }
     }
 }
