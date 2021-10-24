@@ -31,7 +31,8 @@ class QuestApi:
             for ws in wset:
                 if ws not in res1_set.keys():
                     res1_set[ws] = 0
-                res1_set[ws] = res1_set[ws] + json_in[m[0]]*wset[ws]
+                if m[0] in json_in.keys():
+                    res1_set[ws] = res1_set[ws] + json_in[m[0]]*wset[ws]
         result = []
         for r in res1_set:
             if res1_set[r]>1.0:
