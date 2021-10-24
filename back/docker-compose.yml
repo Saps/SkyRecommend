@@ -2,7 +2,7 @@ version: '3'
 services:
   api:
     #restart: on-failure
-    build: 
+    build:
       context: .
       dockerfile: Dockerfile
     network_mode: "host"
@@ -15,7 +15,4 @@ services:
       - '0.0.0.0:5480:5480'
     expose:
       - '5480'
-    volumes:
-      - .:/app:Z
-
 

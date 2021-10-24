@@ -14,4 +14,4 @@ SQLAlchemy
 urllib3
 Werkzeug
 psycopg2
-
+gunicorn
