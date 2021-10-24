@@ -118,6 +118,9 @@ export const CompanyFrameComponent = (): JSX.Element => {
                                 <form className="company-frame-form" onSubmit={props.handleSubmit} noValidate>
                                     <Grid container direction="column" rowSpacing={2} p={2}>
                                         <Grid item key="header">
+                                            <Box component="h2" sx={{ marginBottom: '8px', textAlign: 'center' }}>
+                                                Страница для тестового примера жюри
+                                            </Box>
                                             <Box component="h3" sx={{ textAlign: 'center' }}>
                                                 Основная информация о компании
                                             </Box>
@@ -271,10 +274,10 @@ export const CompanyFrameComponent = (): JSX.Element => {
                                                 Сбросить
                                             </Button>
                                             <Button color="secondary" type="button" variant="contained" onClick={() => setIsOpen(true)}>
-                                                Пройти опрос
+                                                Уточнить детали
                                             </Button>
                                             <Button color="secondary" type="button" variant="contained" onClick={() => getAlgorithmResult()}>
-                                                Пройти алгоритм
+                                                Подобрать сервисы
                                             </Button>
                                             {
                                                 showServices && (
