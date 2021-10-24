@@ -5,7 +5,7 @@ import { Provider } from 'react-redux';
 import { createTheme, ThemeProvider } from '@mui/material';
 import { store } from '~/store/store';
 import {
-    FooterComponent, HeaderComponent, LoginComponent, MainComponent, RegisterComponent, ServiceListComponent,
+    FooterComponent, HeaderComponent, LoginComponent, MainComponent, RegisterComponent, CompaniesListComponent,
 } from './components';
 
 import './index.scss';
@@ -44,7 +44,7 @@ ReactDOM.render(
                         <HeaderComponent />
                         <div className="main-container">
                             <Route exact path="/" component={MainComponent}/>
-                            <Route exact path="/services" component={ServiceListComponent} />
+                            <Route exact path="/companies" component={CompaniesListComponent} />
                         </div>
                         <FooterComponent />
                     </Fragment>

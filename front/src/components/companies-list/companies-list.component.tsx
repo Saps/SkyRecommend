@@ -1,16 +1,15 @@
 import React, { useState } from 'react';
-
 import {
-    Alert, Button, Card, CardContent, Grid, Typography,
-    FormControl, InputLabel, MenuItem, Select, Box, SelectChangeEvent
+    Alert, Box, Button, Card, CardContent, Grid, Typography,
+    FormControl, InputLabel, MenuItem, Select, SelectChangeEvent
 } from '@mui/material';
 
 import { findServices } from "~/api";
 import { CommonError } from "~/types";
 
-import './service-list.component.scss';
+import './companies-list.component.scss';
 
-export const ServiceListComponent = (): JSX.Element => {
+export const CompaniesListComponent = (): JSX.Element => {
     const [error, setError] = useState<string>();
     const [services, setServices] = useState<string[]>([]);
     const [searchType, setSearchType] = useState<string>('active');
@@ -26,7 +25,7 @@ export const ServiceListComponent = (): JSX.Element => {
         }
     };
 
-    const handleSearchTypeChange = async (e: SelectChangeEvent<string>) => {
+    const handleSearchTypeChange = async (e: SelectChangeEvent) => {
         const value: string = (e.target as HTMLSelectElement).value;
 
         setSearchType(value);
@@ -95,41 +94,47 @@ export const ServiceListComponent = (): JSX.Element => {
     return (
         <Grid container item direction="column" p={2} xs={12} sm={10} md={8}>
             {error
-            ? <Alert severity="error">{error}</Alert>
-            : <Grid item container direction="column" spacing={2}>
-                <Grid item>
-                    <Box component="h3">Рекомендованные сервисы</Box>
-                </Grid>
-                <Grid item container alignItems="center" justifyContent="center" spacing={2}>
-                    <Grid item>
-                        <Button variant="contained" color="primary" onClick={onSearch}>
-                            Подобрать компании
-                        </Button>
+                ? <Alert severity="error">{error}</Alert>
+                : (
+                    <Grid item container direction="column" spacing={2}>
+                        <Grid item>
+                            <Box component="h3" sx={{ textAlign: 'center' }}>
+                                Рекомендованные компании
+                            </Box>
+                        </Grid>
+                        <Grid item container alignItems="center" justifyContent="center" spacing={2}>
+                            <Grid item>
+                                <Button variant="contained" color="primary" onClick={onSearch}>
+                                    Подобрать компании
+                                </Button>
+                            </Grid>
+                            <Grid item>
+                                <FormControl>
+                                    <InputLabel id="searchType">Тип поиска</InputLabel>
+                                    <Select
+                                        labelId="searchType"
+                                        label="Тип поиска"
+                                        value={searchType}
+                                        onChange={handleSearchTypeChange}
+                                    >
+                                        <MenuItem value={'active'}>Действующие программы</MenuItem>
+                                        <MenuItem value={'all'}>Все программы</MenuItem>
+                                    </Select>
+                                </FormControl>
+                            </Grid>
+                        </Grid>
+                        {services.length > 0
+                            ? services.map(renderService)
+                            : (
+                                <Grid item>
+                                    <Alert severity="info">
+                                        После нажатия на кнопку "Подобрать компании" здесь отобразятся результаты поиска.
+                                    </Alert>
+                                </Grid>
+                            )
+                        }
                     </Grid>
-                    <Grid item>
-                        <FormControl>
-                            <InputLabel id="searchType">Тип поиска</InputLabel>
-                            <Select
-                                labelId="searchType"
-                                label="Тип поиска"
-                                value={searchType}
-                                onChange={handleSearchTypeChange}
-                            >
-                                <MenuItem value={'active'}>Действующие программы</MenuItem>
-                                <MenuItem value={'all'}>Все программы</MenuItem>
-                            </Select>
-                        </FormControl>
-                    </Grid>
-                </Grid>
-                {services.length > 0
-                ? services.map(renderService)
-                : <Grid item>
-                    <Alert severity="info">
-                        После нажатия на кнопку "Подобрать компании" здесь отобразятся результаты поиска.
-                    </Alert>
-                </Grid>
-                }
-            </Grid>
+                )
             }
         </Grid>
     );

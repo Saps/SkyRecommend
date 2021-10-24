@@ -86,7 +86,7 @@ export const CompanyFrameComponent = (): JSX.Element => {
         }
     };
 
-    const getAlgoResult = async () => {
+    const getAlgorithmResult = async () => {
         try {
             const result = await findServices();
             const srvs = getUniqueValues(frame.srvs.concat(result));
@@ -273,12 +273,12 @@ export const CompanyFrameComponent = (): JSX.Element => {
                                             <Button color="secondary" type="button" variant="contained" onClick={() => setIsOpen(true)}>
                                                 Пройти опрос
                                             </Button>
-                                            <Button color="secondary" type="button" variant="contained" onClick={() => getAlgoResult()}>
+                                            <Button color="secondary" type="button" variant="contained" onClick={() => getAlgorithmResult()}>
                                                 Пройти алгоритм
                                             </Button>
                                             {
                                                 showServices && (
-                                                    <Button color="info" type="button" variant="contained" onClick={() => history.push('/services')}>
+                                                    <Button color="info" type="button" variant="contained" onClick={() => history.push('/companies')}>
                                                         Продолжить
                                                     </Button>
                                                 )
