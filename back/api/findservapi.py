@@ -58,15 +58,20 @@ class FindServApi:
             rt_set.append(n1[0])
 
         sql3 = f"""
-            select src,dst from recode_kip
+            select src,dst,dst2 from recode_kip
             order by 1
         """
         recode_arr = {}
+        recode_arr2 = {}
         for n3 in self.performToResult(sql3):
             recode_arr[n3[0]]=n3[1]
+            if n3[2]!=None:
+                recode_arr2[n3[0]] = n3[2]
         result_list = []
         for n4 in set(rt_set):
             result_list.append(recode_arr[n4])
+            if n4 in recode_arr2.keys():
+                result_list.append(recode_arr2[n4])
         return result_list
 
 

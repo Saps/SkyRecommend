@@ -119,7 +119,7 @@ class RSCompany(Base):
         if 'okved_osn' in frame.keys():
             self.okved_osn = frame['okved_osn']
         if 'okved_dop' in frame.keys():
-            self.okved_dop = frame['okdev_dop']
+            self.okved_dop = frame['okved_dop']
         sess.add(self)
         sess.flush()
 
