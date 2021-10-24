@@ -16,7 +16,12 @@ class CandApi:
         f = getattr(algo, "rangeCount")
         f(self.frameset, self.res_frame)
 
-        return self.frameset
+        for fx, fz in enumerate(self.frameset):
+            del self.frameset[fx]['ids']
+
+        newlist = sorted(self.frameset, key=lambda k: -k['rating'])
+
+        return newlist[:6]
 
 
 ####################################### Формирование запроса и выборка рамочного фрейма
@@ -28,7 +33,8 @@ class CandApi:
                 "name": s[3],
                 "type": s[1],
                 "rating": 0,
-                "ids" : s[4]
+                "ids" : s[4],
+                "algos" : []
             }
             res.append(rs)
         return res
@@ -57,7 +63,11 @@ class CandApi:
 
         dom_study = comp_obj.d_study
         dom_tech_ids =  ','.join(res_tech_ids)
+        if len(dom_tech_ids) < 1:
+            dom_tech_ids = '0'
         dom_mark_ids = ','.join(res_mark_ids)
+        if len(dom_mark_ids) < 1:
+            dom_mark_ids = '0'
         #dom_srvs_ids = ','.join(res_srvs_ids)
         add_act = ' and rs.is_active = 1'
         if is_all:
