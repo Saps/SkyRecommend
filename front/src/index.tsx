@@ -5,8 +5,7 @@ import { Provider } from 'react-redux';
 import { createTheme, ThemeProvider } from '@mui/material';
 import { store } from '~/store/store';
 import {
-    CompanyPropertiesComponent, FooterComponent, HeaderComponent,
-    LoginComponent, MainComponent, RegisterComponent, ServiceListComponent,
+    FooterComponent, HeaderComponent, LoginComponent, MainComponent, RegisterComponent, ServiceListComponent,
 } from './components';
 
 import './index.scss';

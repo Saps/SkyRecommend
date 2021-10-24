@@ -7,7 +7,6 @@ import { Avatar, Box, Button, Paper, TextField, Typography } from '@mui/material
 import { ThunkDispatch } from 'redux-thunk';
 import { AnyAction } from '@reduxjs/toolkit';
 import { Redirect, useHistory } from 'react-router-dom';
-import { getToken } from '~/api';
 import { loginAction } from '~/store/user/actions';
 import { RootState } from '~/store/rootReducer';
 import { CommonError } from '~/types';
@@ -17,7 +16,7 @@ import './login.component.scss';
 export const LoginComponent = (): JSX.Element => {
     const dispatch = useDispatch<ThunkDispatch<RootState, void, AnyAction>>();
     const history = useHistory();
-    const { id } = useSelector((state: RootState) => state.user);
+    const user = useSelector((state: RootState) => state.user);
     const { errors, handleBlur, handleChange, handleSubmit, touched, values } = useFormik({
         initialValues: {
             username: '',
@@ -37,7 +36,7 @@ export const LoginComponent = (): JSX.Element => {
         }
     });
 
-    if (id > -1 || getToken) {
+    if (user.id > -1) {
         return <Redirect to="/" />
     }
 
