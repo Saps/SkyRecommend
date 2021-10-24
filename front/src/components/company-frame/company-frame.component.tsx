@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import { Alert, Box, Button, Chip, FormControl, Grid, InputLabel, MenuItem, Select } from '@mui/material';
+import { Alert, Box, Button, Chip, FormControl, Grid, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import { Formik, FormikState } from 'formik';
 import { changeCompanyFrame, getCompanyFrame, getCompanyFrameOptions } from '~/api';
 import { RootState } from "~/store/rootReducer";
@@ -11,6 +11,10 @@ import { CompanyPropertiesComponent } from '../index';
 import './company-frame.component.scss';
 
 const defaultFrame: CompanyFrame = {
+    company_name: '',
+    inn: '',
+    okved_osn: '',
+    okved_dop: '',
     markets: [],
     srvs: [],
     study: '',
@@ -86,6 +90,54 @@ export const CompanyFrameComponent = (): JSX.Element => {
                                             <Box component="h3" sx={{ textAlign: 'center' }}>
                                                 Основная информация о компании
                                             </Box>
+                                        </Grid>
+                                        <Grid item>
+                                            <FormControl fullWidth variant="standard">
+                                                <TextField
+                                                    label={'Наименование'}
+                                                    name={'company_name'}
+                                                    onBlur={props.handleBlur}
+                                                    onChange={props.handleChange}
+                                                    value={props.values['company_name']}
+                                                    variant="standard"
+                                                />
+                                            </FormControl>
+                                        </Grid>
+                                        <Grid item>
+                                            <FormControl fullWidth variant="standard">
+                                                <TextField
+                                                    label={'ИНН'}
+                                                    name={'inn'}
+                                                    onBlur={props.handleBlur}
+                                                    onChange={props.handleChange}
+                                                    value={props.values['inn']}
+                                                    variant="standard"
+                                                />
+                                            </FormControl>
+                                        </Grid>
+                                        <Grid item>
+                                            <FormControl fullWidth variant="standard">
+                                                <TextField
+                                                    label={'ОКВД основной'}
+                                                    name={'okved_osn'}
+                                                    onBlur={props.handleBlur}
+                                                    onChange={props.handleChange}
+                                                    value={props.values['okved_osn']}
+                                                    variant="standard"
+                                                />
+                                            </FormControl>
+                                        </Grid>
+                                        <Grid item>
+                                            <FormControl fullWidth variant="standard">
+                                                <TextField
+                                                    label={'ОКВД дополнительные'}
+                                                    name={'okved_dop'}
+                                                    onBlur={props.handleBlur}
+                                                    onChange={props.handleChange}
+                                                    value={props.values['okved_dop']}
+                                                    variant="standard"
+                                                />
+                                            </FormControl>
                                         </Grid>
                                         <Grid item key="study">
                                             <FormControl fullWidth variant="standard">

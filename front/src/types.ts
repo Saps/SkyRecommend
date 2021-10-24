@@ -60,6 +60,10 @@ export interface ChangedParams {
 }
 
 export interface CompanyFrame {
+    company_name: string;
+    inn: string;
+    okved_osn: string;
+    okved_dop: string;
     markets: string[];
     srvs: string[];
     study: string;
