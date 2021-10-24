@@ -76,8 +76,14 @@ export const CompanyFrameComponent = (): JSX.Element => {
     };
 
     const onSurveySubmit = async (values: SurveyValues) => {
-        const result = await sendSurvey(values);
-        console.log(result);
+        try {
+            const result = await sendSurvey(values);
+            const srvs = getUniqueValues(frame.srvs.concat(result));
+            setFrame({ ...frame, srvs });
+            setShowServices(true);
+        } catch (err) {
+            console.error(err);
+        }
     };
 
     useEffect(() => {

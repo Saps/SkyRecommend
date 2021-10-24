@@ -12,21 +12,10 @@ import { logoutAction } from '~/store/user/actions';
 
 import './header.component.scss';
 
-const adminMenuItems = [
-    {
-        id: 'menu-item-logout',
-        value: 'Выйти из системы',
-    },
-];
-
-const userMenuItems = [
+const menuItems = [
     {
         id: 'menu-item-main',
         value: 'Основная страница',
-    },
-    {
-        id: 'menu-item-services',
-        value: 'Подобрать сервисы',
     },
     {
         id: 'menu-item-logout',
@@ -47,8 +36,6 @@ export const HeaderComponent = (): JSX.Element => {
         const { id } = event.currentTarget;
         if (id === 'menu-item-main') {
             history.push('/');
-        } else if (id === 'menu-item-services') {
-            history.push('/services');
         } else if (id === 'menu-item-logout') {
             handleLogout();
         }
@@ -86,7 +73,7 @@ export const HeaderComponent = (): JSX.Element => {
                         open={!!anchorEl}
                         onClose={handleCloseMenu}
                     >
-                    {(user.role === 'admin' ? adminMenuItems : userMenuItems).map(option => (
+                    {menuItems.map(option => (
                         <MenuItem id={option.id} key={option.id} onClick={handleCloseMenu}>
                             {option.value}
                         </MenuItem>
