@@ -2,7 +2,7 @@ import axios, { AxiosResponse, AxiosError } from 'axios';
 
 import {
     ApiError, ChangedParams, CompanyFrame, CompanyFrameOptions, CompanyProperty,
-    LoginInfo, LoginRequest, LogoutInfo, SurveyValues, UserCredentials, UserInfo
+    LoginInfo, LoginRequest, LogoutInfo, SurveyValues, UserCredentials, UserInfo, CompanyCandidate,
 } from '~/types';
 
 const api = axios.create({
@@ -139,6 +139,17 @@ export async function getQuestions(): Promise<string[]> {
 export async function sendSurvey(values: SurveyValues): Promise<any> {
     try {
         const { data } = await api.post('/quest', values);
+
+        return data;
+    }  catch (e) {
+        throw new Error((e as AxiosError<ApiError>)?.response?.data.message);
+    }
+}
+
+export async function findCompanies(isActive: boolean = false): Promise<CompanyCandidate[]> {
+    try {
+        const url = isActive ? '/candapi/algor' : '/candapi/algor/all';
+        const { data } = await api.get(url);
 
         return data;
     }  catch (e) {
