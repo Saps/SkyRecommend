@@ -32,11 +32,11 @@ export const CompanyFrameComponent = (): JSX.Element => {
     const [frame, setFrame] = useState<CompanyFrame>(defaultFrame);
     const [frameOptions, setFrameOptions] = useState<CompanyFrameOptions>(defaultFrameOptions);
     const [loading, setLoading] = useState<boolean>(true);
-    const { id, role } = useSelector((state: RootState) => state.user);
+    const user = useSelector((state: RootState) => state.user);
 
     const getData = async () => {
         try {
-            if (id > -1 && role !== 'admin') {
+            if (user.id > -1 && user.role !== 'admin') {
                 setLoading(true);
                 const [frame, frameOptions] = await Promise.all([
                     getCompanyFrame(),
@@ -68,11 +68,11 @@ export const CompanyFrameComponent = (): JSX.Element => {
 
     useEffect(() => {
         getData();
-    }, [id, role]);
+    }, [user.id, user.role]);
 
-    if (id < 0) {
+    if (user.id < 0) {
         return <Redirect to="/login" />
-    } else if (role === 'admin') {
+    } else if (user.role === 'admin') {
         return <Redirect to="/" />;
     }
 

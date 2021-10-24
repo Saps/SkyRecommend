@@ -12,12 +12,12 @@ import { AdminPageComponent, CompanyFrameComponent } from "~/components";
 
 export const MainComponent = (): JSX.Element => {
     const dispatch = useDispatch<ThunkDispatch<RootState, void, AnyAction>>();
-    const { id, role } = useSelector((state: RootState) => state.user);
+    const user = useSelector((state: RootState) => state.user);
     const [loading, setLoading] = useState<boolean>();
     const history = useHistory();
 
     const getUser = async () => {
-        if (id < 0 && getToken) {
+        if (getToken) {
             try {
                 setLoading(true);
                 await dispatch(getCurrentUserAction());
@@ -30,9 +30,9 @@ export const MainComponent = (): JSX.Element => {
 
     useEffect(() => {
         getUser();
-    }, [dispatch, history, id]);
+    }, [dispatch, history]);
 
-    if (id < 0 && !getToken) {
+    if (!getToken) {
         return <Redirect to="/login" />;
     } else if (loading) {
         return (
@@ -42,7 +42,7 @@ export const MainComponent = (): JSX.Element => {
                 </Alert>
             </Grid>
         )
-    } else if (role === 'admin') {
+    } else if (user.role === 'admin') {
         return <AdminPageComponent />;
     } else {
         return <CompanyFrameComponent />;

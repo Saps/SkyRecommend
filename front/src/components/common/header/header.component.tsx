@@ -12,7 +12,14 @@ import { logoutAction } from '~/store/user/actions';
 
 import './header.component.scss';
 
-const menuItems = [
+const adminMenuItems = [
+    {
+        id: 'menu-item-logout',
+        value: 'Выйти из системы',
+    },
+];
+
+const userMenuItems = [
     {
         id: 'menu-item-main',
         value: 'Основная страница',
@@ -79,7 +86,7 @@ export const HeaderComponent = (): JSX.Element => {
                         open={!!anchorEl}
                         onClose={handleCloseMenu}
                     >
-                    {menuItems.map(option => (
+                    {(user.role === 'admin' ? adminMenuItems : userMenuItems).map(option => (
                         <MenuItem id={option.id} key={option.id} onClick={handleCloseMenu}>
                             {option.value}
                         </MenuItem>
