@@ -87,8 +87,8 @@ export const CompaniesListComponent = (): JSX.Element => {
                                 value={searchType}
                                 onChange={handleSearchTypeChange}
                             >
-                                <MenuItem value={'active'}>Действующие программы</MenuItem>
-                                <MenuItem value={'all'}>Все программы</MenuItem>
+                                <MenuItem value={'active'}>Действующие компании</MenuItem>
+                                <MenuItem value={'all'}>Все компании</MenuItem>
                             </Select>
                         </FormControl>
                     </Grid>
