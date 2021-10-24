@@ -5,7 +5,6 @@ import { ThunkDispatch } from 'redux-thunk';
 import { AnyAction } from '@reduxjs/toolkit';
 import { Alert, Grid } from '@mui/material';
 
-import { getToken } from '~/api';
 import { RootState } from '~/store/rootReducer';
 import { getCurrentUserAction } from '~/store/user/actions';
 import { AdminPageComponent, CompanyFrameComponent } from "~/components";
@@ -17,7 +16,7 @@ export const MainComponent = (): JSX.Element => {
     const history = useHistory();
 
     const getUser = async () => {
-        if (user.id < 0 && getToken) {
+        if (user.id < 0) {
             try {
                 setLoading(true);
                 await dispatch(getCurrentUserAction());
@@ -32,9 +31,7 @@ export const MainComponent = (): JSX.Element => {
         getUser();
     }, [dispatch, history]);
 
-    if (user.id < 0 && !getToken) {
-        return <Redirect to="/login" />;
-    } else if (loading) {
+    if (user.id < 0 || loading) {
         return (
             <Grid container item direction="column" p={2} xs={12} sm={10} md={8}>
                 <Alert severity="warning">

@@ -2,7 +2,7 @@ import axios, { AxiosResponse, AxiosError } from 'axios';
 
 import {
     ApiError, ChangedParams, CompanyFrame, CompanyFrameOptions, CompanyProperty,
-    LoginInfo, LoginRequest, LogoutInfo, UserCredentials, UserInfo
+    LoginInfo, LoginRequest, LogoutInfo, SurveyValues, UserCredentials, UserInfo
 } from '~/types';
 
 const api = axios.create({
@@ -119,6 +119,36 @@ export async function getCompanyFrameOptions(): Promise<CompanyFrameOptions> {
 export async function changeCompanyFrame(newFrame: CompanyFrame): Promise<any> {
     try {
         const { data } = await api.post('/company/frame', newFrame);
+
+        return data;
+    }  catch (e) {
+        throw new Error((e as AxiosError<ApiError>)?.response?.data.message);
+    }
+}
+
+export async function getQuestions(): Promise<string[]> {
+    try {
+        const { data } = await api.get('/quest');
+
+        return data;
+    }  catch (e) {
+        throw new Error((e as AxiosError<ApiError>)?.response?.data.message);
+    }
+}
+
+export async function sendSurvey(values: SurveyValues): Promise<any> {
+    try {
+        const { data } = await api.post('/quest', values);
+
+        return data;
+    }  catch (e) {
+        throw new Error((e as AxiosError<ApiError>)?.response?.data.message);
+    }
+}
+
+export async function getAlgorithmResult(): Promise<string[]> {
+    try {
+        const { data } = await api.get('/findserv');
 
         return data;
     }  catch (e) {

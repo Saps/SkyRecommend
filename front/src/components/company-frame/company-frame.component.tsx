@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Redirect } from 'react-router-dom';
+import { Redirect, useHistory } from 'react-router-dom';
 import { Alert, Box, Button, Chip, FormControl, Grid, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import { Formik, FormikState } from 'formik';
-import { changeCompanyFrame, getCompanyFrame, getCompanyFrameOptions } from '~/api';
+import {changeCompanyFrame, getAlgorithmResult, getCompanyFrame, getCompanyFrameOptions, sendSurvey} from '~/api';
 import { RootState } from "~/store/rootReducer";
-import { CompanyFrame, CompanyFrameOptions } from '~/types';
-import { CompanyPropertiesComponent } from '../index';
+import { CompanyFrame, CompanyFrameOptions, SurveyValues } from '~/types';
+import { CompanyPropertiesComponent, SurveyModalComponent } from '../index';
 
 import './company-frame.component.scss';
 
@@ -31,11 +31,19 @@ const defaultFrameOptions: CompanyFrameOptions = {
 export const CompanyFrameComponent = (): JSX.Element => {
     const [frame, setFrame] = useState<CompanyFrame>(defaultFrame);
     const [frameOptions, setFrameOptions] = useState<CompanyFrameOptions>(defaultFrameOptions);
+    const [isOpen, setIsOpen] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(true);
+    const [showServices, setShowServices] = useState<boolean>();
+    const history = useHistory();
     const user = useSelector((state: RootState) => state.user);
+
+    function getUniqueValues(array: string[]): string[] {
+        return array.filter((item: string, index: number, self: string[]) => self.indexOf(item) === index);
+    }
 
     const getData = async () => {
         try {
+            setShowServices(false);
             if (user.id > -1 && user.role !== 'admin') {
                 setLoading(true);
                 const [frame, frameOptions] = await Promise.all([
@@ -44,6 +52,7 @@ export const CompanyFrameComponent = (): JSX.Element => {
                 ]);
                 setFrame(frame);
                 setFrameOptions(frameOptions);
+                setShowServices(frame.srvs.length > 0);
             }
         } catch (err) {
             console.error(err);
@@ -64,6 +73,28 @@ export const CompanyFrameComponent = (): JSX.Element => {
     const onFormReset = async (resetForm: (nextState?: Partial<FormikState<CompanyFrame>>) => void) => {
         await getData();
         resetForm({ values: frame });
+    };
+
+    const onSurveySubmit = async (values: SurveyValues) => {
+        try {
+            const result = await sendSurvey(values);
+            const srvs = getUniqueValues(frame.srvs.concat(result));
+            setFrame({ ...frame, srvs });
+            setShowServices(true);
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
+    const getAlgoResult = async () => {
+        try {
+            const result = await getAlgorithmResult();
+            const srvs = getUniqueValues(frame.srvs.concat(result));
+            setFrame({ ...frame, srvs });
+            setShowServices(true);
+        } catch (err) {
+            console.error(err);
+        }
     };
 
     useEffect(() => {
@@ -181,7 +212,7 @@ export const CompanyFrameComponent = (): JSX.Element => {
                                             </FormControl>
                                         </Grid>
                                         {
-                                            frameOptions.srvs.length > 0 && (
+                                            showServices && (
                                                 <Grid item key="srvs">
                                                     <FormControl fullWidth variant="standard">
                                                         <InputLabel>Сервисы</InputLabel>
@@ -233,14 +264,32 @@ export const CompanyFrameComponent = (): JSX.Element => {
                                             </FormControl>
                                         </Grid>
                                         <div className="form-options" key="submit">
-                                            <Button color="primary" disabled={!!props.errors.srvs} type="submit" variant="contained">
+                                            <Button color="primary" type="submit" variant="contained">
                                                 Сохранить
                                             </Button>
                                             <Button color="info" type="button" variant="contained" onClick={() => onFormReset(props.resetForm)}>
                                                 Сбросить
                                             </Button>
+                                            <Button color="secondary" type="button" variant="contained" onClick={() => setIsOpen(true)}>
+                                                Пройти опрос
+                                            </Button>
+                                            <Button color="secondary" type="button" variant="contained" onClick={() => getAlgoResult()}>
+                                                Пройти алгоритм
+                                            </Button>
+                                            {
+                                                showServices && (
+                                                    <Button color="info" type="button" variant="contained" onClick={() => history.push('/services')}>
+                                                        Продолжить
+                                                    </Button>
+                                                )
+                                            }
                                         </div>
                                     </Grid>
+                                    <SurveyModalComponent
+                                        onSubmit={onSurveySubmit}
+                                        open={isOpen}
+                                        setOpen={setIsOpen}
+                                    />
                                 </form>
                             }
                         </Formik>

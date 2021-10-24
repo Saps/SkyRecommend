@@ -76,3 +76,7 @@ export interface CompanyFrameOptions {
     study: string[];
     techs: string[];
 }
+
+export interface SurveyValues {
+    [key: string]: number;
+}

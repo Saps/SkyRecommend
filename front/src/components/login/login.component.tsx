@@ -7,7 +7,6 @@ import { Avatar, Box, Button, Paper, TextField, Typography } from '@mui/material
 import { ThunkDispatch } from 'redux-thunk';
 import { AnyAction } from '@reduxjs/toolkit';
 import { Redirect, useHistory } from 'react-router-dom';
-import { getToken } from '~/api';
 import { loginAction } from '~/store/user/actions';
 import { RootState } from '~/store/rootReducer';
 import { CommonError } from '~/types';
@@ -37,7 +36,7 @@ export const LoginComponent = (): JSX.Element => {
         }
     });
 
-    if (user.id > -1 || getToken) {
+    if (user.id > -1) {
         return <Redirect to="/" />
     }
 
@@ -48,7 +47,7 @@ export const LoginComponent = (): JSX.Element => {
                     <LockOutlined/>
                 </Avatar>
                 <Typography component="h1" variant="h5">
-                    Sign in
+                    Вход в Startup Guide
                 </Typography>
                 <Box component="form" onSubmit={handleSubmit} noValidate>
                     <TextField
@@ -57,7 +56,7 @@ export const LoginComponent = (): JSX.Element => {
                         fullWidth
                         helperText={touched.username && !!errors.username ? errors.username : ''}
                         id="username"
-                        label="Username"
+                        label="Логин"
                         name="username"
                         onBlur={handleBlur}
                         onChange={handleChange}
@@ -71,7 +70,7 @@ export const LoginComponent = (): JSX.Element => {
                         id="password"
                         fullWidth
                         helperText={touched.password && !!errors.password ? errors.password : ''}
-                        label="Password"
+                        label="Пароль"
                         name="password"
                         onBlur={handleBlur}
                         onChange={handleChange}
@@ -81,7 +80,7 @@ export const LoginComponent = (): JSX.Element => {
                         variant="standard"
                     />
                     <Button disabled={!!errors.username || !!errors.password} type="submit" variant="contained">
-                        Sign In
+                        Войти
                     </Button>
                 </Box>
             </Paper>

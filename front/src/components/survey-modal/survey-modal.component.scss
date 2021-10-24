@@ -12,33 +12,31 @@
         0px 9px 46px 8px rgba(0,0,0,0.12);
     padding: 24px;
 
+    &__questions {
+        max-height: 60vh;
+        overflow-y: auto;
+
+        .question-item {
+            display: flex;
+            flex-flow: row nowrap;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+
+            &__left {
+                width: calc(100% - 165px);
+            }
+
+            &__right {
+                flex-direction: row;
+                width: 150px;
+            }
+        }
+    }
+
     &__options {
         display: flex;
         justify-content: center;
         margin-top: 16px;
-
-        button {
-            width: 100%;
-
-            &:not(:last-child) {
-                margin-right: 16px;
-                margin-bottom: 0px;
-            }
-        }
-    }
-}
-
-@media (max-width: 700px) {
-    .survey-modal__options {
-        flex-direction: column;
-
-        button {
-            word-break: break-word;
-
-            &:not(:last-child) {
-                margin-right: 0px;
-                margin-bottom: 16px;
-            }
-        }
     }
 }
