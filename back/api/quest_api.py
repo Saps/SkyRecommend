@@ -31,9 +31,12 @@ class QuestApi:
             for ws in wset:
                 if ws not in res1_set.keys():
                     res1_set[ws] = 0
-                res1_set[ws] = res1_set[ws]
-
-        pass
+                res1_set[ws] = res1_set[ws] + json_in[m[0]]*wset[ws]
+        result = []
+        for r in res1_set:
+            if res1_set[r]>1.0:
+                result.append(r)
+        return result
 
 
     def performToResult(self, sql_str):
