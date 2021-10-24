@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { styled } from '@mui/material/styles';
+import React, { useState } from 'react';
 
 import {
     Alert, Button, Card, CardContent, Grid, Typography,
-    FormControl, InputLabel, MenuItem, Select, Box
+    FormControl, InputLabel, MenuItem, Select, Box, SelectChangeEvent
 } from '@mui/material';
 
 import { findServices } from "~/api";
@@ -14,6 +13,7 @@ import './service-list.component.scss';
 export const ServiceListComponent = (): JSX.Element => {
     const [error, setError] = useState<string>();
     const [services, setServices] = useState<string[]>([]);
+    const [searchType, setSearchType] = useState<string>('active');
 
     const onSearch = async () => {
         try {
@@ -24,6 +24,12 @@ export const ServiceListComponent = (): JSX.Element => {
             console.error(e);
             setError((e as CommonError).message);
         }
+    };
+
+    const handleSearchTypeChange = async (e: SelectChangeEvent<string>) => {
+        const value: string = (e.target as HTMLSelectElement).value;
+
+        setSearchType(value);
     };
 
     const renderMark = (index: number): JSX.Element => {
@@ -62,103 +68,68 @@ export const ServiceListComponent = (): JSX.Element => {
         }
     };
 
-    const BottomBox = styled(Box)(({ theme }) => ({
-        padding: 2,
-        [theme.breakpoints.up('lg')]: {
-            width: '50%',
-        },
-    }));
-
     const renderService = (item: string, index: number): JSX.Element => {
         return (
-            <Grid item container alignItems="center" spacing={2} key={`${item} ${index}`}>
-                <Grid item xs={12} lg={8}>
-                    <Card>
-                        <CardContent>
-                            <Grid container alignItems="center" columnSpacing={2} className="card-content">
-                                <Grid item className="card-content__item">
-                                    <Typography variant="h6">
-                                        {item}
-                                    </Typography>
-                                    <Typography variant="body1">
-                                        Описание
-                                    </Typography>
-                                </Grid>
-                                <Grid item className="card-content__item">
-                                    {renderMark(index)}
-                                </Grid>
+            <Grid item key={`${item} ${index}`}>
+                <Card>
+                    <CardContent>
+                        <Grid container alignItems="center" columnSpacing={2} className="card-content">
+                            <Grid item className="card-content__item">
+                                <Typography variant="h6">
+                                    {item}
+                                </Typography>
+                                <Typography variant="body1">
+                                    Описание
+                                </Typography>
                             </Grid>
-                        </CardContent>
-                    </Card>
-                </Grid>
-                <Grid item container xs={12} lg={2}>
-                    <Button fullWidth variant="contained" color="primary">Подобрать партнера</Button>
-                </Grid>
-                <Grid item xs={12} lg={2}>
-                    <FormControl fullWidth>
-                        <InputLabel id="searchType">Тип поиска</InputLabel>
-                        <Select labelId="searchType" label="Тип поиска" value={'active'}>
-                            <MenuItem value={'active'}>Действующие программы</MenuItem>
-                            <MenuItem value={'opt2'}>Опция 2</MenuItem>
-                            <MenuItem value={'opt3'}>Опция 3</MenuItem>
-                        </Select>
-                    </FormControl>
-                </Grid>
+                            <Grid item className="card-content__item">
+                                {renderMark(index)}
+                            </Grid>
+                        </Grid>
+                    </CardContent>
+                </Card>
             </Grid>
         );
     }
 
     return (
         <Grid container item direction="column" p={2} xs={12} sm={10} md={8}>
-            <Grid container item justifyContent="center" spacing={2} mb={3}>
-                <Grid item key="search-button">
-                    <Button variant="contained" color="primary" onClick={onSearch}>Подобрать сервисы</Button>
+            {error
+            ? <Alert severity="error">{error}</Alert>
+            : <Grid item container direction="column" spacing={2}>
+                <Grid item>
+                    <Box component="h3">Рекомендованные сервисы</Box>
                 </Grid>
-            </Grid>
-            {
-                error ? (
-                    <Alert severity="error">{error}</Alert>
-                ) : services.length > 0 ? (
-                    <>
-                        <Grid item container direction="column" rowSpacing={{ xs: 6, lg: 3 }} columnSpacing={2}>
-                            <Grid item>
-                                <Typography variant="h3">Рекомендованные сервисы</Typography>
-                            </Grid>
-                            {services.map(renderService)}
-                            <Grid item container direction="column" rowSpacing={{ xs: 6, lg: 3 }} columnSpacing={2}>
-                                <Grid item>
-                                    <BottomBox>
-                                        <Typography color="primary" fontSize={24} fontWeight="bold" mb={3}>
-                                            Чтобы наиболее точно подобрать сервисы, подходящие вашей ситуации, пожалуйста, пройдите опрос
-                                        </Typography>
-                                        <Grid item container spacing={2}>
-                                            <Grid item>
-                                                <Button variant="contained" color="primary">Пройти опрос</Button>
-                                            </Grid>
-                                            <Grid item>
-                                                <Button variant="contained" color="primary">Продолжить самостоятельно</Button>
-                                            </Grid>
-                                        </Grid>
-                                    </BottomBox>
-                                    
-                                </Grid>
-                                {/* <Grid item container spacing={2}>
-                                    <Grid item>
-                                        <Button variant="contained" color="primary">Пройти опрос</Button>
-                                    </Grid>
-                                    <Grid item>
-                                        <Button variant="contained" color="primary">Продолжить самостоятельно</Button>
-                                    </Grid>
-                                </Grid> */}
-                            </Grid>
-                        </Grid>
-                    </>
-
-                ) : (
+                <Grid item container alignItems="center" justifyContent="center" spacing={2}>
+                    <Grid item>
+                        <Button variant="contained" color="primary" onClick={onSearch}>
+                            Подобрать компании
+                        </Button>
+                    </Grid>
+                    <Grid item>
+                        <FormControl>
+                            <InputLabel id="searchType">Тип поиска</InputLabel>
+                            <Select
+                                labelId="searchType"
+                                label="Тип поиска"
+                                value={searchType}
+                                onChange={handleSearchTypeChange}
+                            >
+                                <MenuItem value={'active'}>Действующие программы</MenuItem>
+                                <MenuItem value={'all'}>Все программы</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </Grid>
+                </Grid>
+                {services.length > 0
+                ? services.map(renderService)
+                : <Grid item>
                     <Alert severity="info">
-                        После нажатия на кнопку "Подобрать сервисы" здесь отобразятся результаты поиска.
+                        После нажатия на кнопку "Подобрать компании" здесь отобразятся результаты поиска.
                     </Alert>
-                )
+                </Grid>
+                }
+            </Grid>
             }
         </Grid>
     );
