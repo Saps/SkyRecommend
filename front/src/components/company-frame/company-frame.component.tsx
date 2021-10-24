@@ -181,7 +181,7 @@ export const CompanyFrameComponent = (): JSX.Element => {
                                             </FormControl>
                                         </Grid>
                                         {
-                                            props.values.srvs.length > 0 && (
+                                            frameOptions.srvs.length > 0 && (
                                                 <Grid item key="srvs">
                                                     <FormControl fullWidth variant="standard">
                                                         <InputLabel>Сервисы</InputLabel>
@@ -199,7 +199,6 @@ export const CompanyFrameComponent = (): JSX.Element => {
                                                                     ))}
                                                                 </Box>
                                                             )}
-                                                            required
                                                         >
                                                             {frameOptions.srvs.map(option =>
                                                                 <MenuItem key={option} value={option}>{option}</MenuItem>)
