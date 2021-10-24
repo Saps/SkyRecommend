@@ -39,7 +39,7 @@ export const SurveyModalComponent = ({ onSubmit, open, setOpen }: SurveyModalCom
     }, []);
 
     return (
-        <Modal open={open} onClick={setOpen.bind(this, false)}>
+        <Modal open={open} onClose={setOpen.bind(this, false)}>
             <div className="survey-modal">
                 <Typography variant="h6" component="h2">
                     Подбор сервисов
