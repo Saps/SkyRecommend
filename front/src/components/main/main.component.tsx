@@ -17,7 +17,7 @@ export const MainComponent = (): JSX.Element => {
     const history = useHistory();
 
     const getUser = async () => {
-        if (getToken) {
+        if (user.id < 0 && getToken) {
             try {
                 setLoading(true);
                 await dispatch(getCurrentUserAction());
@@ -32,7 +32,7 @@ export const MainComponent = (): JSX.Element => {
         getUser();
     }, [dispatch, history]);
 
-    if (!getToken) {
+    if (user.id < 0 && !getToken) {
         return <Redirect to="/login" />;
     } else if (loading) {
         return (

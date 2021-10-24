@@ -7,6 +7,7 @@ import { Avatar, Box, Button, Paper, TextField, Typography } from '@mui/material
 import { ThunkDispatch } from 'redux-thunk';
 import { AnyAction } from '@reduxjs/toolkit';
 import { Redirect, useHistory } from 'react-router-dom';
+import { getToken } from '~/api';
 import { loginAction } from '~/store/user/actions';
 import { RootState } from '~/store/rootReducer';
 import { CommonError } from '~/types';
@@ -36,7 +37,7 @@ export const LoginComponent = (): JSX.Element => {
         }
     });
 
-    if (user.id > -1) {
+    if (user.id > -1 || getToken) {
         return <Redirect to="/" />
     }
 
