@@ -1,6 +1,6 @@
 {
-    "name": "sky-recommend-front",
-    "version": "1.0.0",
+    "name": "front",
+    "version": "0.1.0",
     "private": true,
     "scripts": {
         "start": "craco start",
