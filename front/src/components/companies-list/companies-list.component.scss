@@ -1,16 +1,32 @@
 .card-content {
     &__item {
-        width: 33%;
+        width: 50%;
+
+        button {
+            padding: 0px;
+        }
     }
 }
 
-@media (max-width: 550px) {
+.company-info-modal {
+    width: 60%;
+    min-width: 250px;
+    max-Width: 600px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #ffffff;
+    padding: 24px;
+}
+
+@media (max-width: 700px) {
     .MuiGrid-root .MuiGrid-container .card-content {
         flex-direction: column;
-        text-align: center;
 
         &__item {
             width: 100%;
+            text-align: center;
         }
     }
 }

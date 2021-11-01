@@ -1,9 +1,8 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { Formik, FormikProps, FormikState } from 'formik';
+import React, { useEffect, useState } from 'react';
+import { useFormik } from 'formik';
 import { ExpandMore } from '@mui/icons-material';
 import {
-    Accordion, AccordionDetails, AccordionSummary, Alert, Button,
-    FormControl, InputLabel, MenuItem, Select, TextField
+    Accordion, AccordionDetails, AccordionSummary, Alert, Button, FormControl, InputLabel, MenuItem, Select, TextField
 } from '@mui/material';
 import { changeCompanyProperties, getCompanyProperties } from '~/api';
 import { CompanyProperty, FieldValues, Value } from '~/types';
@@ -15,31 +14,32 @@ export const CompanyPropertiesComponent = (): JSX.Element | null => {
     const [loading, setLoading] = useState<boolean>(true);
     const [companyProperties, setCompanyProperties] = useState<CompanyProperty[]>([]);
 
-    const initialValues = useMemo(() => {
-        return companyProperties
-            .reduce((acc: Value[], item: CompanyProperty) => acc.concat(...item.params.map(e => ({ id: e.id, value: e.value }))), [])
-            .reduce((acc: FieldValues, item: Value) => ({ ...acc, [item.id]: item.value }), {});
-    }, [companyProperties]);
+    const { handleBlur, handleChange, handleSubmit, setValues, values } = useFormik({
+        initialValues: {} as FieldValues,
+        onSubmit: async (fieldValues: FieldValues) => {
+            const changedParams = {
+                changed_params: Object.entries(fieldValues).map(([key, value]) => ({ id: key, value: value === '' ? null : value }))
+            };
+            try {
+                await changeCompanyProperties(changedParams);
+            } catch (err) {
+                console.log(err);
+            }
+        },
+    });
 
-    const handleChange = (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
+    const expandedChange = (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
         setExpanded(isExpanded ? panel : '');
-    };
-
-    const onFormSubmit = async (values: FieldValues) => {
-        const changedParams = {
-            changed_params: Object.entries(values).map(([key, value]) => ({ id: key, value: value === '' ? null : value }))
-        };
-        try {
-            await changeCompanyProperties(changedParams);
-        } catch (err) {
-            console.log(err);
-        }
     };
 
     const handleGetCompanyProperties = async () => {
         try {
             const properties = await getCompanyProperties();
+            const fieldValues = properties
+                .reduce((acc: Value[], item: CompanyProperty) => acc.concat(...item.params.map(e => ({ id: e.id, value: e.value }))), [])
+                .reduce((acc: FieldValues, item: Value) => ({ ...acc, [item.id]: item.value }), {});
             setCompanyProperties(properties);
+            await setValues(fieldValues);
         } catch (err) {
             console.error(err);
         } finally {
@@ -47,19 +47,14 @@ export const CompanyPropertiesComponent = (): JSX.Element | null => {
         }
     };
 
-    const onFormReset = async (resetForm: (nextState?: Partial<FormikState<FieldValues>>) => void) => {
-        await handleGetCompanyProperties();
-        resetForm({ values: initialValues });
-    };
-
     useEffect(() => {
         handleGetCompanyProperties();
     }, []);
 
-    const renderAccordion = (property: CompanyProperty, props: FormikProps<FieldValues>): JSX.Element => {
+    const renderAccordion = (property: CompanyProperty): JSX.Element => {
         const { group_name: key, params } = property;
         return (
-            <Accordion className="accordion-item" expanded={expanded === key} key={key} onChange={handleChange(key)}>
+            <Accordion className="accordion-item" expanded={expanded === key} key={key} onChange={expandedChange(key)}>
                 <AccordionSummary expandIcon={<ExpandMore />}>
                     <h3>{key}</h3>
                 </AccordionSummary>
@@ -71,9 +66,9 @@ export const CompanyPropertiesComponent = (): JSX.Element | null => {
                                     <TextField
                                         label={param.name}
                                         name={`${param.id}`}
-                                        onBlur={props.handleBlur}
-                                        onChange={props.handleChange}
-                                        value={props.values[param.id] ?? ''}
+                                        onBlur={handleBlur}
+                                        onChange={handleChange}
+                                        value={values[param.id] ?? ''}
                                         variant="standard"
                                     />
                                 </FormControl>
@@ -84,9 +79,9 @@ export const CompanyPropertiesComponent = (): JSX.Element | null => {
                                     <Select
                                         label={param.name}
                                         name={`${param.id}`}
-                                        onBlur={props.handleBlur}
-                                        onChange={props.handleChange}
-                                        value={props.values[param.id] ?? ''}>
+                                        onBlur={handleBlur}
+                                        onChange={handleChange}
+                                        value={values[param.id] ?? ''}>
                                         <MenuItem key={key + 'null'} value="">Не выбрано</MenuItem>
                                         {
                                             param.list_of_values.map(item => (
@@ -108,22 +103,18 @@ export const CompanyPropertiesComponent = (): JSX.Element | null => {
     return loading ? (
         <Alert severity="warning">Информация загружается.</Alert>
     ) : companyProperties.length > 0 ? (
-        <Formik initialValues={initialValues} onSubmit={onFormSubmit}>
-            {props => (
-                <form className="company-properties-form" onSubmit={props.handleSubmit} noValidate>
-                    <h3 className="form-header">Дополнительная информация о компании</h3>
-                    {companyProperties.map(property => renderAccordion(property, props))}
-                    <div className="form-options">
-                        <Button color="primary" type="submit" variant="contained">
-                            Сохранить
-                        </Button>
-                        <Button color="info" type="button" variant="contained" onClick={() => onFormReset(props.resetForm)}>
-                            Сбросить
-                        </Button>
-                    </div>
-                </form>
-            )}
-        </Formik>
+        <form className="company-properties-form" onSubmit={handleSubmit} noValidate>
+            <h3 className="form-header">Дополнительная информация о компании</h3>
+            {companyProperties.map(renderAccordion)}
+            <div className="form-options">
+                <Button color="primary" type="submit" variant="contained">
+                    Сохранить
+                </Button>
+                <Button color="info" type="button" variant="contained" onClick={handleGetCompanyProperties}>
+                    Сбросить
+                </Button>
+            </div>
+        </form>
     ) : (
         <Alert severity="error">Дополнительная информация о компании отсутствует.</Alert>
     );

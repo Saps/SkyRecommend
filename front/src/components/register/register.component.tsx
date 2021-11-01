@@ -1,6 +1,6 @@
 import React from 'react';
-import {LockOutlined} from '@mui/icons-material';
-import {Avatar, Box, Link, Paper, Typography} from '@mui/material';
+import { LockOutlined } from '@mui/icons-material';
+import { Avatar, Box, Link, Paper, Typography } from '@mui/material';
 
 export const RegisterComponent = (): JSX.Element => {
     return (
@@ -10,10 +10,10 @@ export const RegisterComponent = (): JSX.Element => {
                     <LockOutlined/>
                 </Avatar>
                 <Typography component="h1" variant="h5">
-                    Register
+                    Регистрация
                 </Typography>
                 <span>
-                    Already signed up?&nbsp;<Link href="/login">Login</Link>
+                    Уже зарегистрированы в системе?&nbsp;<Link href="/login">Войти</Link>
                 </span>
             </Paper>
         </Box>

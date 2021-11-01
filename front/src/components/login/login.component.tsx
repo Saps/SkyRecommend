@@ -23,8 +23,8 @@ export const LoginComponent = (): JSX.Element => {
             password: '',
         },
         validationSchema: Yup.object({
-            username: Yup.string().required('Username is required'),
-            password: Yup.string().required('Password is required'),
+            username: Yup.string().required('Введите логин'),
+            password: Yup.string().required('Введите пароль'),
         }),
         onSubmit: async values => {
             try {

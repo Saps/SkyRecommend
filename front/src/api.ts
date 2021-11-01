@@ -1,8 +1,8 @@
 import axios, { AxiosResponse, AxiosError } from 'axios';
-
+import Cookies from 'js-cookie';
 import {
-    ApiError, ChangedParams, CompanyFrame, CompanyFrameOptions, CompanyProperty,
-    LoginInfo, LoginRequest, LogoutInfo, SurveyValues, UserCredentials, UserInfo, CompanyCandidate,
+    ApiError, ChangedParams, CompanyCandidate, CompanyFrame, CompanyFrameOptions, CompanyProperty,
+    LoginInfo, LoginRequest, LogoutInfo, SurveyValues, UserCredentials, UserInfo,
 } from '~/types';
 
 const api = axios.create({
@@ -13,18 +13,18 @@ const api = axios.create({
 });
 
 const apiSetHeader = (name: string, value: string) => {
-    if (api.defaults.headers && value) {
-        api.defaults.headers[name] = value;
+    if (api.defaults.headers.common && value) {
+        api.defaults.headers.common[name] = value;
     }
 };
 
 const apiDeleteHeader = (name: string) => {
-    if (api.defaults.headers) {
-        delete api.defaults.headers[name];
+    if (api.defaults.headers.common) {
+        delete api.defaults.headers.common[name];
     }
 };
 
-export const getToken = localStorage.getItem('Authorization');
+const getToken = Cookies.get('Authorization');
 
 if (getToken) {
     apiSetHeader('Authorization', `Bearer ${getToken}`);
@@ -33,7 +33,7 @@ if (getToken) {
 export async function login(credentials: UserCredentials): Promise<LoginInfo> {
     try {
         const { data } = await api.post<LoginRequest, AxiosResponse<LoginInfo>>('/user/login', credentials);
-        localStorage.setItem('Authorization', data.access_token);
+        Cookies.set('Authorization', data.access_token, {expires: 1});
         apiSetHeader('Authorization', `Bearer ${data.access_token}`);
         return data;
     } catch (e) {
@@ -44,7 +44,7 @@ export async function login(credentials: UserCredentials): Promise<LoginInfo> {
 export async function logout(): Promise<LogoutInfo> {
     try {
         const { data } = await api.get('/user/logout');
-        localStorage.removeItem('Authorization');
+        Cookies.remove('Authorization');
         apiDeleteHeader('Authorization');
         return data as LogoutInfo;
     } catch (e) {
@@ -73,7 +73,6 @@ export async function findServices(): Promise<string[]> {
 export async function getCompanyProperties(): Promise<CompanyProperty[]> {
     try {
         const { data } = await api.get('/company/props');
-
         return data as CompanyProperty[];
     } catch (e) {
         throw new Error((e as AxiosError<ApiError>)?.response?.data.message);
@@ -92,7 +91,6 @@ export async function changeCompanyProperties(values: ChangedParams): Promise<an
 export async function getCompanyFrame(): Promise<CompanyFrame> {
     try {
         const { data } = await api.get('/company/frame');
-
         return data as CompanyFrame;
     } catch (e) {
         throw new Error((e as AxiosError<ApiError>)?.response?.data.message);
@@ -102,14 +100,12 @@ export async function getCompanyFrame(): Promise<CompanyFrame> {
 export async function getCompanyFrameOptions(): Promise<CompanyFrameOptions> {
     const getOptions = async (key: string): Promise<string[]> => {
         const { data } = await api.get(`ref/${key}`);
-
         return data as string[];
     };
 
     try {
         const keys = ['study', 'markets', 'services', 'techs'];
         const [study, markets, srvs, techs] = await Promise.all(keys.map(key => getOptions(key)));
-
         return { study, markets, srvs, techs };
     } catch (e) {
         throw new Error((e as AxiosError<ApiError>)?.response?.data.message);
@@ -119,7 +115,6 @@ export async function getCompanyFrameOptions(): Promise<CompanyFrameOptions> {
 export async function changeCompanyFrame(newFrame: CompanyFrame): Promise<any> {
     try {
         const { data } = await api.post('/company/frame', newFrame);
-
         return data;
     }  catch (e) {
         throw new Error((e as AxiosError<ApiError>)?.response?.data.message);
@@ -129,7 +124,6 @@ export async function changeCompanyFrame(newFrame: CompanyFrame): Promise<any> {
 export async function getQuestions(): Promise<string[]> {
     try {
         const { data } = await api.get('/quest');
-
         return data;
     }  catch (e) {
         throw new Error((e as AxiosError<ApiError>)?.response?.data.message);
@@ -139,18 +133,16 @@ export async function getQuestions(): Promise<string[]> {
 export async function sendSurvey(values: SurveyValues): Promise<any> {
     try {
         const { data } = await api.post('/quest', values);
-
         return data;
     }  catch (e) {
         throw new Error((e as AxiosError<ApiError>)?.response?.data.message);
     }
 }
 
-export async function findCompanies(isActive: boolean = false): Promise<CompanyCandidate[]> {
+export async function findCompanies(isActive: boolean): Promise<CompanyCandidate[]> {
     try {
         const url = isActive ? '/candapi/algor' : '/candapi/algor/all';
         const { data } = await api.get(url);
-
         return data;
     }  catch (e) {
         throw new Error((e as AxiosError<ApiError>)?.response?.data.message);
