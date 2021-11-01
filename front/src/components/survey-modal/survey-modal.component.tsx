@@ -1,37 +1,33 @@
-import React, {useEffect, useMemo, useState} from 'react';
-import { Formik } from 'formik';
-import { Button, FormControl, FormControlLabel, FormLabel, Modal, Radio, RadioGroup, Typography } from '@mui/material';
+import React, { useEffect } from 'react';
+import { useFormik } from 'formik';
+import { Button, Checkbox, FormControl, FormControlLabel, Modal, Typography } from '@mui/material';
 import { getQuestions } from '~/api';
 import { SurveyValues } from "~/types";
+
 import './survey-modal.component.scss';
 
 interface SurveyModalComponentProps {
     onSubmit: (values: SurveyValues) => void;
-    open: boolean;
     setOpen: (value: boolean) => void;
 }
 
-export const SurveyModalComponent = ({ onSubmit, open, setOpen }: SurveyModalComponentProps): JSX.Element => {
-    const [questions, setQuestions] = useState<string[]>([]);
-
-    const initialValues = useMemo((): { [key: string]: string } => {
-        return questions.reduce((acc, item) => Object.assign(acc, { [item]: '0' }), {});
-    }, [questions]);
+export const SurveyModalComponent = ({ onSubmit, setOpen }: SurveyModalComponentProps): JSX.Element => {
+    const { handleChange, handleSubmit, setValues, values } = useFormik({
+        initialValues: {} as { [key: string]: boolean },
+        onSubmit: async (values: { [key: string]: boolean }) => {
+            setOpen(false);
+            const result = Object.entries(values).reduce((acc, [key, value]) => ({ ...acc, [key]: +value }), {});
+            onSubmit(result);
+        }
+    });
 
     const handleGetQuestions = async () => {
         try {
-            const questions = await getQuestions();
-            setQuestions(questions);
+            const formValues = (await getQuestions()).reduce((acc, item) => ({ ...acc, [item]: false }), {});
+            await setValues(formValues);
         } catch (err) {
             console.error(err);
         }
-    };
-
-    const onFormSubmit = async (values: { [key: string]: string }) => {
-        setOpen(false);
-        const result = Object.entries(values)
-            .reduce((acc, [key, value]) => Object.assign(acc, { [key]: +value }), {});
-        onSubmit(result);
     };
 
     useEffect(() => {
@@ -39,45 +35,33 @@ export const SurveyModalComponent = ({ onSubmit, open, setOpen }: SurveyModalCom
     }, []);
 
     return (
-        <Modal open={open} onClose={setOpen.bind(this, false)}>
+        <Modal open onClose={setOpen.bind(null, false)}>
             <div className="survey-modal">
                 <Typography variant="h6" component="h2">
                     Подбор сервисов
                 </Typography>
-                <Formik initialValues={initialValues} onSubmit={onFormSubmit}>
-                    {props => (
-                        <form onSubmit={props.handleSubmit} noValidate>
-                            <div className="survey-modal__questions">
-                                {
-                                    questions.map(question => (
-                                        <FormControl className="question-item" key={question}>
-                                            <FormLabel className="question-item__left">
-                                                {question}
-                                            </FormLabel>
-                                            <RadioGroup
-                                                className="question-item__right"
-                                                name={question}
-                                                onChange={props.handleChange}
-                                                value={props.values[question]}
-                                            >
-                                                <FormControlLabel value="1" label="Да" control={<Radio />} />
-                                                <FormControlLabel value="0" label="Нет" control={<Radio />} />
-                                            </RadioGroup>
-                                        </FormControl>
-                                    ))
-                                }
-                            </div>
-                            <div className="survey-modal__options">
-                                <Button color="primary" type="submit" variant="contained">
-                                    Сохранить
-                                </Button>
-                                <Button color="info" type="button" variant="contained" onClick={setOpen.bind(this, false)}>
-                                    Отменить
-                                </Button>
-                            </div>
-                        </form>
-                    )}
-                </Formik>
+                <form onSubmit={handleSubmit} noValidate>
+                    <div className="survey-modal__questions">
+                        {
+                            Object.entries(values).map(([key, value]) => (
+                                <FormControl className="question-item" key={key}>
+                                    <FormControlLabel
+                                        control={<Checkbox checked={value} name={key} onChange={handleChange} value={value} />}
+                                        label={key}
+                                    />
+                                </FormControl>
+                            ))
+                        }
+                    </div>
+                    <div className="survey-modal__options">
+                        <Button color="primary" type="submit" variant="contained">
+                            Сохранить
+                        </Button>
+                        <Button color="info" type="button" variant="contained" onClick={setOpen.bind(null, false)}>
+                            Отменить
+                        </Button>
+                    </div>
+                </form>
             </div>
         </Modal>
     )

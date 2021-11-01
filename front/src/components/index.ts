@@ -3,6 +3,7 @@ export * from './admin-page/admin-page.component';
 export * from './companies-list/companies-list.component';
 export * from './company-properties/company-properties.component';
 export * from './company-frame/company-frame.component';
+export * from './confirm-modal/confirm-modal.component';
 export * from './login/login.component';
 export * from './main/main.component';
 export * from './not-found/not-found.component';

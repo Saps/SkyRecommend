@@ -1,6 +1,6 @@
-.success-modal {
+.confirm-modal {
     width: 60%;
-    max-width: 700px;
+    max-width: 600px;
     min-width: 250px;
     position: absolute;
     top: 50%;
@@ -14,8 +14,6 @@
 
     &__info {
         margin-bottom: 8px;
-        max-height: 60vh;
-        overflow-y: auto;
     }
 
     &__options {
@@ -23,5 +21,9 @@
         justify-content: center;
         grid-gap: 16px;
         margin-top: 16px;
+
+        @media (max-width: 500px) {
+            flex-direction: column;
+        }
     }
 }

@@ -17,44 +17,18 @@
         overflow-y: auto;
 
         .question-item {
-            display: flex;
-            flex-flow: row nowrap;
-            justify-content: space-between;
-            align-items: center;
-            width: 100%;
             margin-top: 8px;
-
-            &__left {
-                width: calc(100% - 165px);
-            }
-
-            &__right {
-                flex-direction: row;
-
-                @media (max-width: 450px) {
-                    flex-direction: column;
-                }
-            }
         }
     }
 
     &__options {
         display: flex;
         justify-content: center;
+        grid-gap: 16px;
         margin-top: 16px;
 
-        button:not(:last-child) {
-            margin-right: 16px;
-            margin-bottom: 0px;
-        }
-
-        @media (max-width: 450px) {
+        @media (max-width: 400px) {
             flex-direction: column;
-
-            button:not(:last-child) {
-                margin-right: 0px;
-                margin-bottom: 16px;
-            }
         }
     }
 }
