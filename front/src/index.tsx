@@ -7,6 +7,7 @@ import { store } from '~/store/store';
 import {
     CompaniesListComponent, FooterComponent, HeaderComponent, LoginComponent, MainComponent,
 } from './components';
+import { AuthorizationWrapper } from '~/authorization-wrapper';
 
 import './index.scss';
 
@@ -42,8 +43,10 @@ ReactDOM.render(
                     <Fragment>
                         <HeaderComponent />
                         <div className="main-container">
-                            <Route exact path="/" component={MainComponent}/>
-                            <Route exact path="/companies" component={CompaniesListComponent} />
+                            <AuthorizationWrapper>
+                                <Route exact path="/" component={MainComponent}/>
+                                <Route exact path="/companies" component={CompaniesListComponent} />
+                            </AuthorizationWrapper>
                         </div>
                         <FooterComponent />
                     </Fragment>

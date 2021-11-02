@@ -4,6 +4,7 @@ import { ExpandMore } from '@mui/icons-material';
 import {
     Accordion, AccordionDetails, AccordionSummary, Alert, Button, FormControl, InputLabel, MenuItem, Select, TextField
 } from '@mui/material';
+
 import { changeCompanyProperties, getCompanyProperties } from '~/api';
 import { CompanyProperty, FieldValues, Value } from '~/types';
 
