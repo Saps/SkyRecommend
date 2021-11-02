@@ -13,8 +13,9 @@ class CandApi:
         # сначала выбираем рамочный сет
         self.frameset = self.getAllFrame(comp_obj, is_all)
 
-        f = getattr(algo, "rangeCount")
-        f(self.frameset, self.res_frame)
+        for fname in ('rangeCount','formalCount','effCount'):
+            f = getattr(algo, fname)
+            f(self.frameset, self.res_frame)
 
         for fx, fz in enumerate(self.frameset):
             del self.frameset[fx]['ids']

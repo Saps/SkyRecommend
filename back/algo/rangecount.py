@@ -24,8 +24,8 @@ def rangeCount(tg_list, res_frame):
         o_len = len(set(ids_arr) & set(com_arr)) / (len(ids_arr) + len(com_arr))
         #w?
         alg = {
-            'a_name' : 'RangeCount: алгоритм ранжирования по близости свойств',
-            'a_message' : 'Вычислена симметричная близость свойств нужд компании и партнера, она равна '+str(o_len)
+            'a_name' : 'RangeCount: ранжирование по близости профиля',
+            'a_message' : 'Вычислена симметричная близость свойств нужд компании и партнера, s = '+str(o_len)
         }
         tg_list[tg_indx]['algos'].append(alg)
         tg_list[tg_indx]['rating'] = round(100*o_len)
