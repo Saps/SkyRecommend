@@ -11,7 +11,6 @@ export const getCurrentUserAction = () => {
     return async (dispatch: AppDispatch) => {
         try {
             const userInfo: UserInfo = await currentUser();
-            
             return dispatch(currentUserAction({ ...userInfo }));
         } catch (error) {
             throw new Error('User is unauthorized');
