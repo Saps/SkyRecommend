@@ -51,8 +51,9 @@ class FindServApi:
         add_wh = str(newlist[0]['id'])+','+str(newlist[1]['id'])+','+str(newlist[2]['id'])
         sql2 = f"""
             select c9 from kip
-            where id in (1924, 2373, 759)
+            where id in ({add_wh})
         """
+        #where id in (1924, 2373, 759)
         rt_set = []
         for n1 in self.performToResult(sql2):
             rt_set.append(n1[0])
