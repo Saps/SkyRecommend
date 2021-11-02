@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { ReactSVG } from 'react-svg';
@@ -12,7 +12,7 @@ import { logoutAction } from '~/store/user/actions';
 
 import './header.component.scss';
 
-const menuItems = [
+const adminMenuItems = [
     {
         id: 'menu-item-main',
         value: 'Основная страница',
@@ -21,10 +21,25 @@ const menuItems = [
         id: 'menu-item-logout',
         value: 'Выйти из системы',
     },
-]
+];
+
+const userMenuItems = [
+    {
+        id: 'menu-item-main',
+        value: 'Основная страница',
+    },
+    {
+        id: 'menu-item-companies',
+        value: 'Подбор партнеров',
+    },
+    {
+        id: 'menu-item-logout',
+        value: 'Выйти из системы',
+    },
+];
 
 export const HeaderComponent = (): JSX.Element => {
-    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+    const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
     const dispatch = useDispatch<ThunkDispatch<RootState, void, AnyAction>>();
     const history = useHistory();
     const user = useSelector((state: RootState) => state.user);
@@ -35,7 +50,9 @@ export const HeaderComponent = (): JSX.Element => {
         setAnchorEl(null);
         const { id } = event.currentTarget;
         if (id === 'menu-item-main') {
-            history.push('/');
+            history.replace('/');
+        } else if (id === 'menu-item-companies') {
+            history.replace('/companies');
         } else if (id === 'menu-item-logout') {
             handleLogout();
         }
@@ -60,7 +77,7 @@ export const HeaderComponent = (): JSX.Element => {
                     aria-label="more"
                     id="long-button"
                     aria-controls="long-menu"
-                    aria-expanded={!!anchorEl ? 'true' : undefined}
+                    aria-expanded={!!anchorEl}
                     aria-haspopup="true"
                     onClick={handleClickMenu}
                   >
@@ -73,7 +90,7 @@ export const HeaderComponent = (): JSX.Element => {
                         open={!!anchorEl}
                         onClose={handleCloseMenu}
                     >
-                    {menuItems.map(option => (
+                    {(user.role === 'admin' ? adminMenuItems : userMenuItems).map(option => (
                         <MenuItem id={option.id} key={option.id} onClick={handleCloseMenu}>
                             {option.value}
                         </MenuItem>

@@ -5,7 +5,7 @@ import { Provider } from 'react-redux';
 import { createTheme, ThemeProvider } from '@mui/material';
 import { store } from '~/store/store';
 import {
-    FooterComponent, HeaderComponent, LoginComponent, MainComponent, RegisterComponent, CompaniesListComponent,
+    CompaniesListComponent, FooterComponent, HeaderComponent, LoginComponent, MainComponent,
 } from './components';
 
 import './index.scss';
@@ -39,7 +39,6 @@ ReactDOM.render(
             <ThemeProvider theme={theme}>
                 <Switch>
                     <Route exact path="/login" component={LoginComponent}/>
-                    <Route exact path="/register" component={RegisterComponent}/>
                     <Fragment>
                         <HeaderComponent />
                         <div className="main-container">

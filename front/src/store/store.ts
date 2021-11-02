@@ -4,8 +4,8 @@ import thunk from 'redux-thunk';
 import { rootReducer } from './rootReducer';
 
 export const store = configureStore({
-  reducer: rootReducer,
-  middleware: [thunk],
+    reducer: rootReducer,
+    middleware: [thunk],
 });
 
 export type AppDispatch = typeof store.dispatch;

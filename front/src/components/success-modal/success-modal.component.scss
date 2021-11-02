@@ -23,5 +23,9 @@
         justify-content: center;
         grid-gap: 16px;
         margin-top: 16px;
+
+        @media (max-width: 550px) {
+            flex-direction: column;
+        }
     }
 }
