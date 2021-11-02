@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Redirect, useHistory } from 'react-router-dom';
-import { Alert, Box, Button, Chip, FormControl, Grid, InputLabel, MenuItem, Select, TextField } from '@mui/material';
+import { useHistory } from 'react-router-dom';
+import {
+    Alert, Box, Button, Checkbox, Chip, FormControl, FormHelperText,
+    Grid, InputLabel, ListItemText, MenuItem, Select, TextField
+} from '@mui/material';
 import { useFormik } from 'formik';
+import * as Yup from 'yup';
 import { changeCompanyFrame, findServices, getCompanyFrame, getCompanyFrameOptions, sendSurvey } from '~/api';
 import { RootState } from "~/store/rootReducer";
 import { CompanyFrameOptions, SurveyValues } from '~/types';
@@ -21,17 +25,26 @@ export const CompanyFrameComponent = (): JSX.Element => {
     const [isSurveyModalOpen, setIsSurveyModalOpen] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(true);
 
-    const { handleBlur, handleChange, handleSubmit, setValues, values } = useFormik({
+    const { errors, isValid, handleBlur, handleChange, handleSubmit, setFieldValue, setValues, values } = useFormik({
         initialValues: {
             company_name: '',
             inn: '',
             okved_osn: '',
             okved_dop: '',
+            study: '',
             markets: [] as string[],
             srvs: [] as string[],
-            study: '',
             techs: [] as string[],
         },
+        validationSchema: Yup.object({
+            company_name: Yup.string().required('Введите наименование компании'),
+            inn: Yup.string().required('Введите ИНН'),
+            okved_osn: Yup.string().required('Введите основной ОКВЭД'),
+            study: Yup.string().required("Выберите стадию"),
+            markets: Yup.array().min(1, 'Выберите хотя бы один рынок'),
+            srvs: Yup.array().min(1, 'Выберите хотя бы один сервис'),
+            techs: Yup.array().min(1, 'Выберите хотя бы одну технологию'),
+        }),
         onSubmit: () => setIsConfirmModalOpen(true),
     });
 
@@ -104,12 +117,6 @@ export const CompanyFrameComponent = (): JSX.Element => {
         getData();
     }, [user.id, user.role]);
 
-    if (user.id < 0) {
-        return <Redirect to="/login" />
-    } else if (user.role === 'admin') {
-        return <Redirect to="/" />;
-    }
-
     return (
         <Grid container item direction="column" p={2} xs={12} sm={10} md={8}>
             {loading
@@ -129,11 +136,14 @@ export const CompanyFrameComponent = (): JSX.Element => {
                                 <Grid item>
                                     <FormControl fullWidth variant="standard">
                                         <TextField
+                                            error={!!errors.company_name}
+                                            helperText={errors.company_name}
                                             label={'Наименование'}
                                             name={'company_name'}
                                             onBlur={handleBlur}
                                             onChange={handleChange}
-                                            value={values['company_name']}
+                                            required
+                                            value={values.company_name}
                                             variant="standard"
                                         />
                                     </FormControl>
@@ -141,11 +151,14 @@ export const CompanyFrameComponent = (): JSX.Element => {
                                 <Grid item>
                                     <FormControl fullWidth variant="standard">
                                         <TextField
+                                            error={!!errors.inn}
+                                            helperText={errors.inn}
                                             label={'ИНН'}
                                             name={'inn'}
                                             onBlur={handleBlur}
                                             onChange={handleChange}
-                                            value={values['inn']}
+                                            required
+                                            value={values.inn}
                                             variant="standard"
                                         />
                                     </FormControl>
@@ -153,11 +166,14 @@ export const CompanyFrameComponent = (): JSX.Element => {
                                 <Grid item>
                                     <FormControl fullWidth variant="standard">
                                         <TextField
-                                            label={'ОКВД основной'}
+                                            error={!!errors.okved_osn}
+                                            helperText={errors.okved_osn}
+                                            label={'ОКВЭД основной'}
                                             name={'okved_osn'}
                                             onBlur={handleBlur}
                                             onChange={handleChange}
-                                            value={values['okved_osn']}
+                                            required
+                                            value={values.okved_osn}
                                             variant="standard"
                                         />
                                     </FormControl>
@@ -165,23 +181,25 @@ export const CompanyFrameComponent = (): JSX.Element => {
                                 <Grid item>
                                     <FormControl fullWidth variant="standard">
                                         <TextField
-                                            label={'ОКВД дополнительные'}
+                                            label={'ОКВЭД дополнительные'}
                                             name={'okved_dop'}
                                             onBlur={handleBlur}
                                             onChange={handleChange}
-                                            value={values['okved_dop']}
+                                            value={values.okved_dop}
                                             variant="standard"
                                         />
                                     </FormControl>
                                 </Grid>
                                 <Grid item key="study">
-                                    <FormControl fullWidth variant="standard">
+                                    <FormControl error={!!errors.study} fullWidth variant="standard">
                                         <InputLabel>Стадия</InputLabel>
                                         <Select
                                             label="Стадия"
+                                            MenuProps={{ PaperProps: { sx: { maxHeight: 200 } } }}
                                             name="study"
                                             onBlur={handleBlur}
                                             onChange={handleChange}
+                                            required
                                             value={values.study}
                                         >
                                             <MenuItem key="null" value={''}>Не выбрано</MenuItem>
@@ -189,66 +207,104 @@ export const CompanyFrameComponent = (): JSX.Element => {
                                                 <MenuItem key={option} value={option}>{option}</MenuItem>
                                             ))}
                                         </Select>
+                                        {errors.study && <FormHelperText>{errors.study}</FormHelperText>}
                                     </FormControl>
                                 </Grid>
                                 <Grid item key="markets">
-                                    <FormControl fullWidth variant="standard">
+                                    <FormControl error={!!errors.markets} fullWidth variant="standard">
                                         <InputLabel>Рынки</InputLabel>
                                         <Select
-                                            multiple
                                             label="Рынки"
+                                            MenuProps={{ PaperProps: { sx: { maxHeight: 250 } } }}
+                                            multiple
                                             name="markets"
                                             onBlur={handleBlur}
-                                            onChange={handleChange}
-                                            value={values.markets || []}
+                                            onChange={event => {
+                                                handleChange(event);
+                                                event.target.value.slice(-1)[0] === 'All' && setFieldValue('markets',
+                                                    values.markets.length < frameOptions.markets.length ? frameOptions.markets.slice() : []
+                                                );
+                                            }}
                                             renderValue={(selected) => (
                                                 <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                                                    {selected.map((value) => (
-                                                        <Chip key={value} label={value} />
-                                                    ))}
+                                                    {selected.map((value) => <Chip key={value} label={value} />)}
                                                 </Box>
                                             )}
+                                            required
+                                            value={values.markets || []}
                                         >
+                                            <MenuItem key={'All markets'} value={'All'}>
+                                                <Checkbox
+                                                    checked={frameOptions.markets.length > 0 && values.markets.length === frameOptions.markets.length}
+                                                    indeterminate={values.markets.length > 0 && values.markets.length < frameOptions.markets.length}
+                                                />
+                                                <ListItemText primary={'Выбрать все'} />
+                                            </MenuItem>
                                             {frameOptions.markets.map(option => (
-                                                <MenuItem key={option} value={option}>{option}</MenuItem>
+                                                <MenuItem key={option} value={option}>
+                                                    <Checkbox checked={values.markets.indexOf(option) > -1} />
+                                                    <ListItemText primary={option} />
+                                                </MenuItem>
                                             ))}
                                         </Select>
+                                        {errors.markets && <FormHelperText>{errors.markets}</FormHelperText>}
                                     </FormControl>
                                 </Grid>
                                 <Grid item key="srvs">
-                                    <FormControl fullWidth variant="standard">
+                                    <FormControl error={!!errors.srvs} fullWidth variant="standard">
                                         <InputLabel>Сервисы</InputLabel>
                                         <Select
-                                            multiple
                                             label="Сервисы"
+                                            MenuProps={{ PaperProps: { sx: { maxHeight: 250 } } }}
+                                            multiple
                                             name="srvs"
                                             onBlur={handleBlur}
-                                            onChange={handleChange}
-                                            value={values.srvs || []}
+                                            onChange={event => {
+                                                handleChange(event);
+                                                event.target.value.slice(-1)[0] === 'All' && setFieldValue('srvs',
+                                                    values.srvs.length < frameOptions.srvs.length ? frameOptions.srvs.slice() : []
+                                                );
+                                            }}
                                             renderValue={(selected) => (
                                                 <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                                                    {selected.map((value) => (
-                                                        <Chip key={value} label={value} />
-                                                    ))}
+                                                    {selected.map((value) => <Chip key={value} label={value} />)}
                                                 </Box>
                                             )}
+                                            required
+                                            value={values.srvs || []}
                                         >
+                                            <MenuItem key={'All srvs'} value={'All'}>
+                                                <Checkbox
+                                                    checked={frameOptions.srvs.length > 0 && values.srvs.length === frameOptions.srvs.length}
+                                                    indeterminate={values.srvs.length > 0 && values.srvs.length < frameOptions.srvs.length}
+                                                />
+                                                <ListItemText primary={'Выбрать все'} />
+                                            </MenuItem>
                                             {frameOptions.srvs.map(option =>
-                                                <MenuItem key={option} value={option}>{option}</MenuItem>)
-                                            }
+                                                <MenuItem key={option} value={option}>
+                                                    <Checkbox checked={values.srvs.indexOf(option) > -1} />
+                                                    <ListItemText primary={option} />
+                                                </MenuItem>
+                                            )}
                                         </Select>
+                                        {errors.srvs && <FormHelperText>{errors.srvs}</FormHelperText>}
                                     </FormControl>
                                 </Grid>
                                 <Grid item key="techs">
-                                    <FormControl fullWidth variant="standard">
+                                    <FormControl error={!!errors.techs} fullWidth variant="standard">
                                         <InputLabel>Технологии</InputLabel>
                                         <Select
-                                            multiple
                                             label="Технологии"
+                                            MenuProps={{ PaperProps: { sx: { maxHeight: 250 } } }}
+                                            multiple
                                             name="techs"
                                             onBlur={handleBlur}
-                                            onChange={handleChange}
-                                            value={values.techs || []}
+                                            onChange={event => {
+                                                handleChange(event);
+                                                event.target.value.slice(-1)[0] === 'All' && setFieldValue('techs',
+                                                    values.techs.length < frameOptions.techs.length ? frameOptions.techs.slice() : []
+                                                );
+                                            }}
                                             renderValue={(selected) => (
                                                 <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
                                                     {selected.map((value) => (
@@ -256,25 +312,37 @@ export const CompanyFrameComponent = (): JSX.Element => {
                                                     ))}
                                                 </Box>
                                             )}
+                                            value={values.techs || []}
                                         >
+                                            <MenuItem key={'All techs'} value={'All'}>
+                                                <Checkbox
+                                                    checked={frameOptions.techs.length > 0 && values.techs.length === frameOptions.techs.length}
+                                                    indeterminate={values.techs.length > 0 && values.techs.length < frameOptions.techs.length}
+                                                />
+                                                <ListItemText primary={'Выбрать все'} />
+                                            </MenuItem>
                                             {frameOptions.techs.map(option => (
-                                                <MenuItem key={option} value={option}>{option}</MenuItem>
+                                                <MenuItem key={option} value={option}>
+                                                    <Checkbox checked={values.techs.indexOf(option) > -1} />
+                                                    <ListItemText primary={option} />
+                                                </MenuItem>
                                             ))}
                                         </Select>
+                                        {errors.techs && <FormHelperText>{errors.techs}</FormHelperText>}
                                     </FormControl>
                                 </Grid>
                                 <div className="form-options" key="submit">
-                                    <Button color="primary" type="submit" variant="contained">
-                                        Сохранить
-                                    </Button>
                                     <Button color="info" type="button" variant="contained" onClick={getData}>
-                                        Сбросить
+                                        Сброс
                                     </Button>
                                     <Button color="secondary" type="button" variant="contained" onClick={() => setIsSurveyModalOpen(true)}>
                                         Уточнить детали
                                     </Button>
-                                    <Button color="secondary" type="button" variant="contained" onClick={() => getAlgorithmResult()}>
+                                    <Button color="secondary" type="button" variant="contained" onClick={getAlgorithmResult}>
                                         Подобрать сервисы
+                                    </Button>
+                                    <Button color="primary" disabled={!isValid} type="submit" variant="contained">
+                                        Далее
                                     </Button>
                                 </div>
                             </Grid>
