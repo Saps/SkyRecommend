@@ -37,7 +37,8 @@ class CandApi:
                 "type": s[1],
                 "rating": 0,
                 "ids" : s[4],
-                "algos" : []
+                "algos" : [],
+                "ratings" : []
             }
             res.append(rs)
         return res
@@ -56,13 +57,13 @@ class CandApi:
         dm.initLOV()
         res_tech_ids = []
         res_mark_ids = []
-        #res_srvs_ids = []
+        res_srvs_ids = []
         for id_d in self.res_frame['techs']:
             res_tech_ids.append(str(dm.getId(id_d)))
         for id_d2 in self.res_frame['markets']:
             res_mark_ids.append(str(dm.getId(id_d2)))
-        #for id_d3 in self.res_frame['srvs']:
-        #    res_srvs_ids.append(str(dm.getId(id_d3)))
+        for id_d3 in self.res_frame['srvs']:
+            res_srvs_ids.append(str(dm.getId(id_d3)))
 
         dom_study = comp_obj.d_study
         dom_tech_ids =  ','.join(res_tech_ids)
@@ -71,7 +72,7 @@ class CandApi:
         dom_mark_ids = ','.join(res_mark_ids)
         if len(dom_mark_ids) < 1:
             dom_mark_ids = '0'
-        #dom_srvs_ids = ','.join(res_srvs_ids)
+        dom_srvs_ids = ','.join(res_srvs_ids)
         add_act = ' and rs.is_active = 1'
         if is_all:
             add_act = ''
@@ -85,7 +86,8 @@ class CandApi:
             where
                 rs.id in (select serv_id from rs_service_doms where dom_id = {dom_study}) and
                 rs.id in (select serv_id from rs_service_doms where dom_id in ({dom_tech_ids})) and 
-                rs.id in (select serv_id from rs_service_doms where dom_id in ({dom_mark_ids}))  
+                rs.id in (select serv_id from rs_service_doms where dom_id in ({dom_mark_ids})) and 
+                rs.id in (select serv_id from rs_service_doms where dom_id in ({dom_srvs_ids}))
                 {add_act}
         """
         cand_list = self.performToResult(sql)
