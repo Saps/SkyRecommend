@@ -24,7 +24,7 @@ const apiDeleteHeader = (name: string) => {
     }
 };
 
-export const getToken = Cookies.get('Authorization');
+const getToken = Cookies.get('Authorization');
 
 if (getToken) {
     apiSetHeader('Authorization', `Bearer ${getToken}`);

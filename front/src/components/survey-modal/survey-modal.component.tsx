@@ -38,7 +38,7 @@ export const SurveyModalComponent = ({ onSubmit, setOpen }: SurveyModalComponent
         <Modal open onClose={setOpen.bind(null, false)}>
             <div className="survey-modal">
                 <Typography variant="h6" component="h2">
-                    Подбор сервисов
+                    Пожалуйста, отметьте галочками вопросы, на которые Вы хотите ответить "Да"
                 </Typography>
                 <form onSubmit={handleSubmit} noValidate>
                     <div className="survey-modal__questions">
