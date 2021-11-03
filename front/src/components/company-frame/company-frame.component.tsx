@@ -325,7 +325,7 @@ export const CompanyFrameComponent = (): JSX.Element => {
                                 </Grid>
                                 <div className="form-options" key="submit">
                                     <Button color="info" type="button" variant="contained" onClick={getData}>
-                                        Сброс
+                                        Отменить
                                     </Button>
                                     <Button color="secondary" type="button" variant="contained" onClick={() => setIsSurveyModalOpen(true)}>
                                         Уточнить детали

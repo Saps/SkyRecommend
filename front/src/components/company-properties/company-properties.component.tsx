@@ -108,11 +108,11 @@ export const CompanyPropertiesComponent = (): JSX.Element | null => {
             <h3 className="form-header">Дополнительная информация о компании</h3>
             {companyProperties.map(renderAccordion)}
             <div className="form-options">
+                <Button color="info" type="button" variant="contained" onClick={handleGetCompanyProperties}>
+                    Отменить
+                </Button>
                 <Button color="primary" type="submit" variant="contained">
                     Сохранить
-                </Button>
-                <Button color="info" type="button" variant="contained" onClick={handleGetCompanyProperties}>
-                    Сбросить
                 </Button>
             </div>
         </form>
