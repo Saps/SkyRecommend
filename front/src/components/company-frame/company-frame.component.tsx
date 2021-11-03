@@ -67,8 +67,7 @@ export const CompanyFrameComponent = (): JSX.Element => {
 
     const onFormSubmit = async () => {
         try {
-            const result = await changeCompanyFrame(values);
-            console.log('result is', result);
+            await changeCompanyFrame(values);
             history.push('/companies');
         } catch (err) {
             console.error(err);
@@ -98,7 +97,7 @@ export const CompanyFrameComponent = (): JSX.Element => {
     };
 
     const onSuccessModalSubmit = async () => {
-        await setValues({ ...values, srvs: getUniqueValues(values.srvs.concat(foundServices)) });
+        await setFieldValue('srvs', getUniqueValues(values.srvs.concat(foundServices)));
         onSuccessModalCancel();
     };
 
