@@ -80,16 +80,16 @@ export const HeaderComponent = (): JSX.Element => {
                     aria-expanded={!!anchorEl}
                     aria-haspopup="true"
                     onClick={handleClickMenu}
-                  >
+                >
                     <MoreVert />
-               </IconButton>
-                    <Menu
-                        id="long-menu"
-                        MenuListProps={{ 'aria-labelledby': 'long-button' }}
-                        anchorEl={anchorEl}
-                        open={!!anchorEl}
-                        onClose={handleCloseMenu}
-                    >
+                </IconButton>
+                <Menu
+                    id="long-menu"
+                    MenuListProps={{ 'aria-labelledby': 'long-button' }}
+                    anchorEl={anchorEl}
+                    open={!!anchorEl}
+                    onClose={handleCloseMenu}
+                >
                     {(user.role === 'admin' ? adminMenuItems : userMenuItems).map(option => (
                         <MenuItem id={option.id} key={option.id} onClick={handleCloseMenu}>
                             {option.value}

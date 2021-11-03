@@ -1,5 +1,5 @@
 import { PayloadAction } from '@reduxjs/toolkit';
-import { CURRENT_USER } from './actions';
+import { CURRENT_USER } from '~/store/user/actions';
 import { UserInfo } from '~/types';
 
 export const initialState = {
