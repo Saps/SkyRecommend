@@ -6,11 +6,18 @@ import './success-modal.component.scss';
 interface SurveyModalComponentProps {
     algorithmName: string;
     foundServices: string[];
+    foundTasks: string[];
     onCancel: () => void;
     onSubmit: () => void;
 }
 
-export const SuccessModalComponent = ({ algorithmName, foundServices, onCancel, onSubmit }: SurveyModalComponentProps): JSX.Element => {
+export const SuccessModalComponent = ({
+    algorithmName,
+    foundServices,
+    foundTasks,
+    onCancel,
+    onSubmit
+}: SurveyModalComponentProps): JSX.Element => {
     return (
         <Modal open onClose={onCancel.bind(null)}>
             <div className="success-modal">
@@ -18,13 +25,26 @@ export const SuccessModalComponent = ({ algorithmName, foundServices, onCancel, 
                     Сервисы были успешно подобраны
                 </Typography>
                 <div className="success-modal__info">
-                    <u><i>{algorithmName}</i></u> успешно отработал. Были подобраны следующие сервисы:
-                    {foundServices.map((service: string) => <p><strong>{service}</strong></p>)}
+                    <p><u><i>{algorithmName}</i></u> успешно отработал.</p>
+                    <div className="success-modal__container">
+                        {
+                            foundTasks.length > 0 && (
+                                <div>
+                                    <p><strong>На основе ответов были выявлены актуальные для Вашей компании бизнес-задачи:</strong></p>
+                                    {foundTasks.map((task: string) => <p>{task}</p>)}
+                                </div>
+                            )
+                        }
+                        <div>
+                            <p><strong>Наиболее эффективными для решения указанных задач являются следующие сервисы:</strong></p>
+                            {foundServices.map((service: string) => <p>{service}</p>)}
+                        </div>
+                    </div>
+                    <p>
+                        Потребности, с которыми Вы согласны, необходимо внести в поле "сервисы"
+                        и сохранить профиль компании. После этого Вы сможете подобрать партнеров.
+                    </p>
                 </div>
-                <p>
-                    Потребности, с которыми Вы согласны, необходимо внести в поле "сервисы"
-                    и сохранить профиль компании. После этого Вы сможете подобрать партнеров.
-                </p>
                 <div className="success-modal__options">
                     <Button color="primary" type="submit" variant="contained" onClick={onSubmit.bind(null)}>
                         Добавить в сервисы

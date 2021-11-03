@@ -16,6 +16,7 @@ export const CompanyFrameComponent = (): JSX.Element => {
     const history = useHistory();
     const [algorithmName, setAlgorithmName] = useState<string>('');
     const [foundServices, setFoundServices] = useState<string[]>([]);
+    const [foundTasks, setFoundTasks] = useState<string[]>([]);
     const [frameOptions, setFrameOptions] = useState<CompanyFrameOptions>({ markets: [], srvs: [], study: [], techs: [] });
     const [isConfirmModalOpen, setIsConfirmModalOpen] = useState<boolean>(false);
     const [isSuccessModalOpen, setIsSuccessModalOpen] = useState<boolean>(false);
@@ -79,6 +80,7 @@ export const CompanyFrameComponent = (): JSX.Element => {
             const result = await sendSurvey(surveyValues);
             setAlgorithmName('Алгоритм поиска на основе опроса');
             setFoundServices(result);
+            setFoundTasks([]);
             setIsSuccessModalOpen(true);
         } catch (err) {
             console.error(err);
@@ -90,6 +92,7 @@ export const CompanyFrameComponent = (): JSX.Element => {
             const result = await findServices();
             setAlgorithmName('Алгоритм поиска на основе исторической информации');
             setFoundServices(result);
+            setFoundTasks([]);
             setIsSuccessModalOpen(true);
         } catch (err) {
             console.error(err);
@@ -328,7 +331,7 @@ export const CompanyFrameComponent = (): JSX.Element => {
                                         Отменить
                                     </Button>
                                     <Button color="secondary" type="button" variant="contained" onClick={() => setIsSurveyModalOpen(true)}>
-                                        Уточнить детали
+                                        Повысить эффективность
                                     </Button>
                                     <Button color="secondary" type="button" variant="contained" onClick={getAlgorithmResult}>
                                         Подобрать сервисы
@@ -345,6 +348,7 @@ export const CompanyFrameComponent = (): JSX.Element => {
                                 <SuccessModalComponent
                                     algorithmName={algorithmName}
                                     foundServices={foundServices}
+                                    foundTasks={foundTasks}
                                     onCancel={onSuccessModalCancel}
                                     onSubmit={onSuccessModalSubmit}
                                 />
@@ -357,7 +361,7 @@ export const CompanyFrameComponent = (): JSX.Element => {
                                 />
                             )}
                         </form>
-                        <CompanyPropertiesComponent />
+                        {/*<CompanyPropertiesComponent />*/}
                     </>
                 )
             }

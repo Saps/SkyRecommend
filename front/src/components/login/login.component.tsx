@@ -1,13 +1,12 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { Redirect, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { ThunkDispatch } from 'redux-thunk';
 import { AnyAction } from '@reduxjs/toolkit';
 import { LockOutlined } from '@mui/icons-material';
 import { Avatar, Box, Button, Paper, TextField, Typography } from '@mui/material';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { getToken } from '~/api';
 import { loginAction } from '~/store/user/actions';
 import { RootState } from '~/store/rootReducer';
 import { CommonError } from '~/types';
@@ -35,10 +34,6 @@ export const LoginComponent = (): JSX.Element => {
             }
         }
     });
-
-    if (getToken) {
-        return <Redirect to="/" />
-    }
 
     return (
         <Box className="login-page">

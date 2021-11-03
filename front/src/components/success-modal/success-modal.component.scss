@@ -1,6 +1,6 @@
 .success-modal {
-    width: 60%;
-    max-width: 700px;
+    width: 80%;
+    max-width: 800px;
     min-width: 250px;
     position: absolute;
     top: 50%;
@@ -13,9 +13,19 @@
     padding: 24px;
 
     &__info {
-        margin-bottom: 8px;
         max-height: 60vh;
         overflow-y: auto;
+        padding: 8px 0px;
+    }
+
+    &__container {
+        display: flex;
+        grid-gap: 8px;
+        padding: 8px 0px;
+
+        @media (max-width: 550px) {
+            flex-direction: column;
+        }
     }
 
     &__options {

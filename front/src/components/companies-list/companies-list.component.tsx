@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Redirect } from 'react-router-dom';
+import { Redirect, useHistory } from 'react-router-dom';
 import {
     Alert, Box, Button, Card, CardContent, FormControl, Grid, InputLabel, MenuItem, Modal, Rating, Select, Typography
 } from '@mui/material';
@@ -11,6 +11,7 @@ import { CommonError, CompanyCandidate } from '~/types';
 import './companies-list.component.scss';
 
 export const CompaniesListComponent = (): JSX.Element => {
+    const history = useHistory();
     const user = useSelector((state: RootState) => state.user);
     const [error, setError] = useState<string>();
     const [moreItem, setMoreItem] = useState<CompanyCandidate | null>(null);
@@ -95,6 +96,11 @@ export const CompaniesListComponent = (): JSX.Element => {
                                         <MenuItem value={'all'}>Все компании</MenuItem>
                                     </Select>
                                 </FormControl>
+                            </Grid>
+                            <Grid item>
+                                <Button variant="contained" color="error" onClick={() => history.push('/')}>
+                                    Назад
+                                </Button>
                             </Grid>
                         </Grid>
                         {services.length > 0 ? services.map(renderService) : (
