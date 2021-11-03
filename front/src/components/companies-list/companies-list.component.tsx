@@ -1,13 +1,17 @@
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { Redirect } from 'react-router-dom';
 import {
     Alert, Box, Button, Card, CardContent, FormControl, Grid, InputLabel, MenuItem, Modal, Rating, Select, Typography
 } from '@mui/material';
 import { findCompanies } from '~/api';
+import { RootState } from '~/store/rootReducer';
 import { CommonError, CompanyCandidate } from '~/types';
 
 import './companies-list.component.scss';
 
 export const CompaniesListComponent = (): JSX.Element => {
+    const user = useSelector((state: RootState) => state.user);
     const [error, setError] = useState<string>();
     const [moreItem, setMoreItem] = useState<CompanyCandidate | null>(null);
     const [services, setServices] = useState<CompanyCandidate[]>([]);
@@ -56,6 +60,10 @@ export const CompaniesListComponent = (): JSX.Element => {
                 </CardContent>
             </Card>
         );
+    }
+
+    if (user.role === 'admin') {
+        return <Redirect to="/" />
     }
 
     return (
