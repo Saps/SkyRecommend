@@ -1,5 +1,5 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { LockOutlined } from '@mui/icons-material';
@@ -7,6 +7,7 @@ import { Avatar, Box, Button, Paper, TextField, Typography } from '@mui/material
 import { ThunkDispatch } from 'redux-thunk';
 import { AnyAction } from '@reduxjs/toolkit';
 import { Redirect, useHistory } from 'react-router-dom';
+import { getToken } from '~/api';
 import { loginAction } from '~/store/user/actions';
 import { RootState } from '~/store/rootReducer';
 import { CommonError } from '~/types';
@@ -16,7 +17,6 @@ import './login.component.scss';
 export const LoginComponent = (): JSX.Element => {
     const dispatch = useDispatch<ThunkDispatch<RootState, void, AnyAction>>();
     const history = useHistory();
-    const user = useSelector((state: RootState) => state.user);
     const { errors, handleBlur, handleChange, handleSubmit, touched, values } = useFormik({
         initialValues: {
             username: '',
@@ -36,7 +36,7 @@ export const LoginComponent = (): JSX.Element => {
         }
     });
 
-    if (user.id > -1) {
+    if (getToken) {
         return <Redirect to="/" />
     }
 

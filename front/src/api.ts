@@ -24,7 +24,7 @@ const apiDeleteHeader = (name: string) => {
     }
 };
 
-const getToken = Cookies.get('Authorization');
+export const getToken = Cookies.get('Authorization');
 
 if (getToken) {
     apiSetHeader('Authorization', `Bearer ${getToken}`);
@@ -157,7 +157,7 @@ export async function findCompanies(isActive: boolean): Promise<CompanyCandidate
     try {
         const url = isActive ? '/candapi/algor' : '/candapi/algor/all';
         const { data } = await api.get(url);
-        
+
         return data;
     }  catch (e) {
         throw new Error((e as AxiosError<ApiError>)?.response?.data.message);

@@ -3,11 +3,11 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { createTheme, ThemeProvider } from '@mui/material';
-import { store } from '~/store/store';
+import { AuthorizationWrapper } from '~/authorization-wrapper';
 import {
     CompaniesListComponent, FooterComponent, HeaderComponent, LoginComponent, MainComponent,
-} from './components';
-import { AuthorizationWrapper } from '~/authorization-wrapper';
+} from '~/components';
+import { store } from '~/store/store';
 
 import './index.scss';
 

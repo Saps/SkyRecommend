@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import {
     Alert, Box, Button, Checkbox, Chip, FormControl, FormHelperText,
@@ -8,7 +7,6 @@ import {
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { changeCompanyFrame, findServices, getCompanyFrame, getCompanyFrameOptions, sendSurvey } from '~/api';
-import { RootState } from "~/store/rootReducer";
 import { CompanyFrameOptions, SurveyValues } from '~/types';
 import { CompanyPropertiesComponent, ConfirmModalComponent, SuccessModalComponent, SurveyModalComponent } from '../index';
 
@@ -16,7 +14,6 @@ import './company-frame.component.scss';
 
 export const CompanyFrameComponent = (): JSX.Element => {
     const history = useHistory();
-    const user = useSelector((state: RootState) => state.user);
     const [algorithmName, setAlgorithmName] = useState<string>('');
     const [foundServices, setFoundServices] = useState<string[]>([]);
     const [frameOptions, setFrameOptions] = useState<CompanyFrameOptions>({ markets: [], srvs: [], study: [], techs: [] });
@@ -54,15 +51,13 @@ export const CompanyFrameComponent = (): JSX.Element => {
 
     const getData = async () => {
         try {
-            if (user.id > -1 && user.role !== 'admin') {
-                setLoading(true);
-                const [frame, frameOptions] = await Promise.all([
-                    getCompanyFrame(),
-                    getCompanyFrameOptions()
-                ]);
-                await setValues(frame);
-                setFrameOptions(frameOptions);
-            }
+            setLoading(true);
+            const [frame, frameOptions] = await Promise.all([
+                getCompanyFrame(),
+                getCompanyFrameOptions()
+            ]);
+            await setValues(frame);
+            setFrameOptions(frameOptions);
         } catch (err) {
             console.error(err);
         } finally {
@@ -115,7 +110,7 @@ export const CompanyFrameComponent = (): JSX.Element => {
 
     useEffect(() => {
         getData();
-    }, [user.id, user.role]);
+    }, []);
 
     return (
         <Grid container item direction="column" p={2} xs={12} sm={10} md={8}>
