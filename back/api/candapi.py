@@ -1,5 +1,5 @@
 from api import db_session
-from model import companies, domains
+from model import companies, domains, algorythms
 from sqlalchemy import text
 import algo
 
@@ -13,9 +13,11 @@ class CandApi:
         # сначала выбираем рамочный сет
         self.frameset = self.getAllFrame(comp_obj, is_all)
 
-        for fname in ('rangeCount','formalCount','effCount'):
-            f = getattr(algo, fname)
-            f(self.frameset, self.res_frame)
+        algors = algorythms.RSAlgo().getActualList()
+
+        for fname in algors:
+            f = getattr(algo, fname['name'])
+            f(self.frameset, self.res_frame, fname['caption'], fname['weight'])
 
         for fx, fz in enumerate(self.frameset):
             del self.frameset[fx]['ids']

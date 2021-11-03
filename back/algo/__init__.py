@@ -1,4 +1,5 @@
 
 from .rangecount import rangeCount
-from .effcount import effCount
+from .softeffcount import softEffCount
 from .formalcount import formalCount
+from .randomcount import randomCount
