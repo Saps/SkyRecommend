@@ -4,7 +4,6 @@ import { Button, Modal, Typography } from '@mui/material';
 import './success-modal.component.scss';
 
 interface SurveyModalComponentProps {
-    algorithmName: string;
     foundServices: string[];
     foundTasks: string[];
     onCancel: () => void;
@@ -12,7 +11,6 @@ interface SurveyModalComponentProps {
 }
 
 export const SuccessModalComponent = ({
-    algorithmName,
     foundServices,
     foundTasks,
     onCancel,
@@ -25,7 +23,6 @@ export const SuccessModalComponent = ({
                     Сервисы были успешно подобраны
                 </Typography>
                 <div className="success-modal__info">
-                    {/*<p><u><i>{algorithmName}</i></u> успешно отработал.</p>*/}
                     <div className="success-modal__container">
                         {
                             foundTasks.length > 0 && (

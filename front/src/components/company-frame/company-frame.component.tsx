@@ -14,7 +14,6 @@ import './company-frame.component.scss';
 
 export const CompanyFrameComponent = (): JSX.Element => {
     const history = useHistory();
-    const [algorithmName, setAlgorithmName] = useState<string>('');
     const [foundServices, setFoundServices] = useState<string[]>([]);
     const [foundTasks, setFoundTasks] = useState<string[]>([]);
     const [frameOptions, setFrameOptions] = useState<CompanyFrameOptions>({ markets: [], srvs: [], study: [], techs: [] });
@@ -78,7 +77,6 @@ export const CompanyFrameComponent = (): JSX.Element => {
     const onSurveyModalSubmit = async (surveyValues: SurveyValues) => {
         try {
             const { needs, servs } = await sendSurvey(surveyValues);
-            setAlgorithmName('Алгоритм поиска на основе опроса');
             setFoundServices(servs);
             setFoundTasks(needs);
             setIsSuccessModalOpen(true);
@@ -90,7 +88,6 @@ export const CompanyFrameComponent = (): JSX.Element => {
     const getAlgorithmResult = async () => {
         try {
             const { servs } = await findServices();
-            setAlgorithmName('Алгоритм поиска на основе исторической информации');
             setFoundServices(servs);
             setFoundTasks([]);
             setIsSuccessModalOpen(true);
@@ -105,7 +102,6 @@ export const CompanyFrameComponent = (): JSX.Element => {
     };
 
     const onSuccessModalCancel = () => {
-        setAlgorithmName('');
         setFoundServices([]);
         setIsSuccessModalOpen(false);
     };
@@ -346,7 +342,6 @@ export const CompanyFrameComponent = (): JSX.Element => {
                             )}
                             {isSuccessModalOpen && (
                                 <SuccessModalComponent
-                                    algorithmName={algorithmName}
                                     foundServices={foundServices}
                                     foundTasks={foundTasks}
                                     onCancel={onSuccessModalCancel}
