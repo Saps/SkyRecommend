@@ -37,7 +37,7 @@ class QuestApi:
         for r in res1_set:
             if res1_set[r]>1.0:
                 result.append(r)
-        return result
+        return {"servs":result, "needs":[]}
 
 
     def performToResult(self, sql_str):
