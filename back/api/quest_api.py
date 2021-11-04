@@ -37,7 +37,19 @@ class QuestApi:
         for r in res1_set:
             if res1_set[r]>1.0:
                 result.append(r)
-        return {"servs":result, "needs":[]}
+
+        sql2 = f"""
+                    select rus_name, rus_descr
+                    from rs_domains
+                    where val_type = 'ServMatrix'
+                """
+        res2_set = []
+        myset2 = self.performToResult(sql2)
+        for m22 in myset2:
+            if (m22['rus_name'] in result) and (m22['rus_descr'] not in res2_set):
+                res2_set.append(m22['rus_descr'])
+
+        return {"servs":result, "needs":res2_set}
 
 
     def performToResult(self, sql_str):
