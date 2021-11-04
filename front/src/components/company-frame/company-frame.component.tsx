@@ -77,10 +77,10 @@ export const CompanyFrameComponent = (): JSX.Element => {
 
     const onSurveyModalSubmit = async (surveyValues: SurveyValues) => {
         try {
-            const result = await sendSurvey(surveyValues);
+            const { needs, servs } = await sendSurvey(surveyValues);
             setAlgorithmName('Алгоритм поиска на основе опроса');
-            setFoundServices(result);
-            setFoundTasks([]);
+            setFoundServices(servs);
+            setFoundTasks(needs);
             setIsSuccessModalOpen(true);
         } catch (err) {
             console.error(err);
@@ -89,9 +89,9 @@ export const CompanyFrameComponent = (): JSX.Element => {
 
     const getAlgorithmResult = async () => {
         try {
-            const result = await findServices();
+            const { servs } = await findServices();
             setAlgorithmName('Алгоритм поиска на основе исторической информации');
-            setFoundServices(result);
+            setFoundServices(servs);
             setFoundTasks([]);
             setIsSuccessModalOpen(true);
         } catch (err) {
