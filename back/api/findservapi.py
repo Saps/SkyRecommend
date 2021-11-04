@@ -73,7 +73,7 @@ class FindServApi:
             result_list.append(recode_arr[n4])
             if n4 in recode_arr2.keys():
                 result_list.append(recode_arr2[n4])
-        return result_list
+        return {'needs':rt_set, 'servs': result_list}
 
 
     def performToResult(self, sql_str):

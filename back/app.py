@@ -7,7 +7,7 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 
-app.config['SQLALCHEMY_DATABASE_URI'] =  'postgresql://recsys:recsys@185.221.152.242/recsys'
+app.config['SQLALCHEMY_DATABASE_URI'] =  'postgresql://recsys:sysrec1@185.221.152.242/postgres'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['CORS_HEADERS'] = 'Content-Type'
 

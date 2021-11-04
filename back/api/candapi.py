@@ -21,6 +21,13 @@ class CandApi:
 
         for fx, fz in enumerate(self.frameset):
             del self.frameset[fx]['ids']
+            ww = 0
+            val_ra = 0
+            for rr in self.frameset[fx]['ratings']:
+                ww = ww + rr['weight']
+                val_ra = val_ra + rr['val']*rr['weight']
+            self.frameset[fx]['rating'] = val_ra / ww
+            del self.frameset[fx]['ratings']
 
         newlist = sorted(self.frameset, key=lambda k: -k['rating'])
 
@@ -68,14 +75,23 @@ class CandApi:
         dom_study = comp_obj.d_study
         dom_tech_ids =  ','.join(res_tech_ids)
         if len(dom_tech_ids) < 1:
-            dom_tech_ids = '0'
+            dom_tech_ids = ''
+        else:
+            dom_tech_ids = 'rs.id in (select serv_id from rs_service_doms where dom_id in ('+dom_tech_ids+')) and '
         dom_mark_ids = ','.join(res_mark_ids)
         if len(dom_mark_ids) < 1:
-            dom_mark_ids = '0'
+            dom_mark_ids = ''
+        else:
+            dom_mark_ids = 'rs.id in (select serv_id from rs_service_doms where dom_id in (' + dom_mark_ids + ')) and '
         dom_srvs_ids = ','.join(res_srvs_ids)
-        add_act = ' and rs.is_active = 1'
+        if len(dom_srvs_ids) < 1:
+            dom_srvs_ids = ''
+        else:
+            dom_srvs_ids = 'rs.id in (select serv_id from rs_service_doms where dom_id in (' + dom_srvs_ids + ')) and '
+
+        add_act = ' rs.is_active = 1'
         if is_all:
-            add_act = ''
+            add_act = '1=1'
 
         sql = f"""
             select rs.id, rs.serv_type, rs.src_serv_id, rs.serv_name,
@@ -85,9 +101,9 @@ class CandApi:
             from rs_services rs
             where
                 rs.id in (select serv_id from rs_service_doms where dom_id = {dom_study}) and
-                rs.id in (select serv_id from rs_service_doms where dom_id in ({dom_tech_ids})) and 
-                rs.id in (select serv_id from rs_service_doms where dom_id in ({dom_mark_ids})) and 
-                rs.id in (select serv_id from rs_service_doms where dom_id in ({dom_srvs_ids}))
+                {dom_tech_ids}
+                {dom_mark_ids}
+                {dom_srvs_ids}
                 {add_act}
         """
         cand_list = self.performToResult(sql)
