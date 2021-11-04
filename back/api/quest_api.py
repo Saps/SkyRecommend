@@ -46,7 +46,7 @@ class QuestApi:
         res2_set = []
         myset2 = self.performToResult(sql2)
         for m22 in myset2:
-            if (m22['rus_name'] in result) and (m22['rus_descr'] not in res2_set):
+            if (m22['rus_name'] in result) and (m22['rus_descr'] not in res2_set) and (m22['rus_descr'] != None):
                 res2_set.append(m22['rus_descr'])
 
         return {"servs":result, "needs":res2_set}
