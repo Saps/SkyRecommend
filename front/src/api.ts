@@ -34,7 +34,7 @@ export async function login(credentials: UserCredentials): Promise<LoginInfo> {
     try {
         const { data } = await api.post<LoginRequest, AxiosResponse<LoginInfo>>('/user/login', credentials);
 
-        Cookies.set('Authorization', data.access_token, { expires: 1 });
+        Cookies.set('Authorization', data.access_token, { expires: 1 / 24 });
         apiSetHeader('Authorization', `Bearer ${data.access_token}`);
 
         return data;
