@@ -81,6 +81,11 @@ export interface SurveyValues {
     [key: string]: number;
 }
 
+export interface Recommendations {
+    needs: string[];
+    servs: string[];
+}
+
 interface AlgorithmInfo {
     a_message: string;
     a_name: string;

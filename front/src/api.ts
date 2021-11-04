@@ -2,7 +2,7 @@ import axios, { AxiosResponse, AxiosError } from 'axios';
 import Cookies from 'js-cookie';
 import {
     ApiError, ChangedParams, CompanyCandidate, CompanyFrame, CompanyFrameOptions, CompanyProperty,
-    LoginInfo, LoginRequest, LogoutInfo, SurveyValues, UserCredentials, UserInfo,
+    LoginInfo, LoginRequest, LogoutInfo, Recommendations, SurveyValues, UserCredentials, UserInfo,
 } from '~/types';
 
 const api = axios.create({
@@ -61,16 +61,6 @@ export async function currentUser(): Promise<UserInfo> {
         const { data } = await api.get('/user/current');
 
         return data as UserInfo;
-    } catch (e) {
-        throw new Error((e as AxiosError<ApiError>)?.response?.data.message);
-    }
-}
-
-export async function findServices(): Promise<string[]> {
-    try {
-        const { data } = await api.get('/findservs');
-
-        return data;
     } catch (e) {
         throw new Error((e as AxiosError<ApiError>)?.response?.data.message);
     }
@@ -143,12 +133,22 @@ export async function getQuestions(): Promise<string[]> {
     }
 }
 
-export async function sendSurvey(values: SurveyValues): Promise<any> {
+export async function sendSurvey(values: SurveyValues): Promise<Recommendations> {
     try {
         const { data } = await api.post('/quest', values);
 
         return data;
     }  catch (e) {
+        throw new Error((e as AxiosError<ApiError>)?.response?.data.message);
+    }
+}
+
+export async function findServices(): Promise<Recommendations> {
+    try {
+        const { data } = await api.get('/findservs');
+
+        return data;
+    } catch (e) {
         throw new Error((e as AxiosError<ApiError>)?.response?.data.message);
     }
 }
