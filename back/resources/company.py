@@ -37,3 +37,6 @@ class CompanyFrame(Resource):
         cmp = companies.RSCompany().findCompany()
         cmp.eatFrame(p2)
         return make_response(jsonify({"Message" : "OK"}), 200)
+
+
+

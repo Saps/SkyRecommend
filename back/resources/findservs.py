@@ -16,3 +16,10 @@ class FindServs(Resource):
         res1 = f.getFramed({'company' : c, 'frame' : fr})
 
         return make_response(jsonify(res1), 200)
+
+
+class ListServices(Resource):
+    def get(self):
+        p = request.values
+        res1 = 'result'
+        return make_response(jsonify(res1), 200)

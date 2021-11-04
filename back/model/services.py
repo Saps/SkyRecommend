@@ -15,3 +15,6 @@ class RSService(Base):
     eff_rating = Column(Float)
     formal_rating = Column(Float)
 
+
+    def getServices(self):
+        pass

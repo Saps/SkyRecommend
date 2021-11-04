@@ -29,7 +29,8 @@ RestApi.add_resource(algor.AlgorAllGet, '/candapi/algor/all')
 RestApi.add_resource(quest.QuestWork, '/quest')
 RestApi.add_resource(findservs.FindServs, '/findservs')
 
-
+#new
+RestApi.add_resource(findservs.ListServices, '/listserv')
 
 
 
