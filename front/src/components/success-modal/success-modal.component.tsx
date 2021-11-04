@@ -25,7 +25,7 @@ export const SuccessModalComponent = ({
                     Сервисы были успешно подобраны
                 </Typography>
                 <div className="success-modal__info">
-                    <p><u><i>{algorithmName}</i></u> успешно отработал.</p>
+                    {/*<p><u><i>{algorithmName}</i></u> успешно отработал.</p>*/}
                     <div className="success-modal__container">
                         {
                             foundTasks.length > 0 && (
