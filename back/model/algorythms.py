@@ -1,5 +1,5 @@
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, Integer, String, TIMESTAMP, Float
+from sqlalchemy import Column, Integer, String, TIMESTAMP, Float, text
 from api import db_session
 
 
@@ -29,3 +29,30 @@ class RSAlgo(Base):
             }
             res.append(r)
         return res
+
+
+    def getAlgoList(self):
+        sess = db_session()
+        vlist = sess.query(RSAlgo).order_by(RSAlgo.ordernum).all()
+        res = []
+        for v in vlist:
+            r = {
+                "id" : v.id,
+                "name": v.alg_name,
+                "caption": v.alg_caption,
+                "weight": v.weight,
+                "is_enabled": v.enabled
+            }
+            res.append(r)
+        return res
+
+
+    def setAlgors(self, p2):
+        for p in p2:
+            sql = f""" update rs_algorythms set enabled = {p['is_enabled']}, weight = {p['weight']}
+                       where id = {p['id']} 
+                    """
+            sqlx = text(sql)
+            session = db_session()
+            session.execute(sqlx)
+        pass

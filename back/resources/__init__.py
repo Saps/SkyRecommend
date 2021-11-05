@@ -31,6 +31,8 @@ RestApi.add_resource(findservs.FindServs, '/findservs')
 
 #new
 RestApi.add_resource(findservs.ListServices, '/listserv')
+RestApi.add_resource(findservs.ListServTypes, '/listservtypes')
 
+RestApi.add_resource(algor.TuneAlgor, '/tunealgor')
 
 
