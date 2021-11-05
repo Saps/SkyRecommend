@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { ThunkDispatch } from 'redux-thunk';
 import { AnyAction } from '@reduxjs/toolkit';
 import { LockOutlined } from '@mui/icons-material';
-import { Avatar, Box, Button, Paper, TextField, Typography } from '@mui/material';
+import { Avatar, Box, Button, Paper, TextField, Typography, Alert } from '@mui/material';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { loginAction } from '~/store/user/actions';
@@ -16,6 +16,7 @@ import './login.component.scss';
 export const LoginComponent = (): JSX.Element => {
     const dispatch = useDispatch<ThunkDispatch<RootState, void, AnyAction>>();
     const history = useHistory();
+    const [errorMessage, setErrorMessage] = useState<string>('');
     const { errors, isValid, handleBlur, handleChange, handleSubmit, touched, values } = useFormik({
         initialValues: {
             username: '',
@@ -30,7 +31,9 @@ export const LoginComponent = (): JSX.Element => {
                 await dispatch(loginAction(values));
                 history.replace('/');
             } catch (e) {
-                alert((e as CommonError).message);
+                const message = (e as CommonError).message || 'Произошла неизвестная ошибка!';
+
+                setErrorMessage(message);
             }
         }
     });
@@ -78,6 +81,11 @@ export const LoginComponent = (): JSX.Element => {
                         Войти
                     </Button>
                 </Box>
+                {errorMessage && (
+                    <Box sx={{ pt: 2 }}>
+                        <Alert severity="error">{errorMessage}</Alert>
+                    </Box>
+                )}
             </Paper>
         </Box>
     );

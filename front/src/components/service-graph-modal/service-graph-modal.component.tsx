@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Modal, Box, Paper } from '@mui/material';
+import { Modal, Box, Paper, CircularProgress, Alert } from '@mui/material';
 
 import ReactFlow, { Position as ReactFlowNodeHandlerPosition } from 'react-flow-renderer';
 
@@ -13,7 +13,7 @@ import type {
 import dagre from 'dagre';
 
 import { getServiceGraph } from '~/api';
-import type { ServiceGraph } from '~/types';
+import type { ServiceGraph, CommonError } from '~/types';
 
 const modalStyle = {
     position: 'absolute' as 'absolute',
@@ -65,6 +65,8 @@ const getLayoutedNodes = (nodes: ReactFlowNode[]): ReactFlowNode[] => {
 
 export const ServiceGraphModalComponent = ({ serviceId, onClose }: ServiceGraphModalComponentProps): JSX.Element => {
     const [graphElements, setGraphElements] = useState<ReactFlowElements<GraphElementData>>([]);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string>('');
 
     const getGraphData = useCallback(async () => {
         try {
@@ -86,8 +88,9 @@ export const ServiceGraphModalComponent = ({ serviceId, onClose }: ServiceGraphM
             const elements: ReactFlowElements<GraphElementData> = [...graphNodes, ...graphEdges];
 
             setGraphElements(elements);
+            setLoading(false);
         } catch (e) {
-
+            setError((e as CommonError).message);
         }
     }, [serviceId]);
 
@@ -105,7 +108,13 @@ export const ServiceGraphModalComponent = ({ serviceId, onClose }: ServiceGraphM
                 <Paper>
                     <Box sx={{ p: 2 }}>
                         <Box component="div" style={{ height: 300 }} >
-                            <ReactFlow elements={graphElements} nodesDraggable={false} onLoad={handleReactFlowOnLoad} />
+                            {loading ? (
+                                <CircularProgress />
+                            ) : error ? (
+                                <Alert severity="error">{error}</Alert>
+                            ) : (
+                                <ReactFlow elements={graphElements} nodesDraggable={false} onLoad={handleReactFlowOnLoad} />
+                            )}
                         </Box>
                     </Box>
                 </Paper>
