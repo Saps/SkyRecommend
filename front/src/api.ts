@@ -2,7 +2,7 @@ import axios, { AxiosResponse, AxiosError } from 'axios';
 import Cookies from 'js-cookie';
 import {
     ApiError, ChangedParams, CompanyCandidate, CompanyFrame, CompanyFrameOptions, CompanyProperty,
-    LoginInfo, LoginRequest, LogoutInfo, Recommendations, SurveyValues, UserCredentials, UserInfo,
+    LoginInfo, LoginRequest, LogoutInfo, Recommendations, ServiceListResponse, SurveyValues, UserCredentials, UserInfo,
 } from '~/types';
 
 const api = axios.create({
@@ -157,6 +157,30 @@ export async function findCompanies(isActive: boolean): Promise<CompanyCandidate
     try {
         const url = isActive ? '/candapi/algor' : '/candapi/algor/all';
         const { data } = await api.get(url);
+
+        return data;
+    } catch (e) {
+        throw new Error((e as AxiosError<ApiError>)?.response?.data.message);
+    }
+}
+
+export async function getServices(limit: number, offset: number, search: string, type: string): Promise<ServiceListResponse> {
+    try {
+        const queryParams = Object.entries({ limit, offset, search, type })
+            .filter(entry => entry[1])
+            .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
+            .join('&');
+        const { data } = await api.get(`/listserv?${queryParams}`);
+
+        return data;
+    } catch (e) {
+        throw new Error((e as AxiosError<ApiError>)?.response?.data.message);
+    }
+}
+
+export async function getServiceTypes(): Promise<string[]> {
+    try {
+        const { data } = await api.get('/listservtypes');
 
         return data;
     }  catch (e) {

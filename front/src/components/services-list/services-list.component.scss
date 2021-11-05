@@ -1,0 +1,11 @@
+.MuiTableHead-root {
+    .MuiTableRow-root, .MuiTableRow-head {
+        background-color: var(--secondary-color);
+        color: #ffffff;
+
+        .MuiTableCell-root, .MuiTableCell-head {
+            background-color: inherit;
+            color: inherit;
+        }
+    }
+}
