@@ -110,3 +110,20 @@ export interface ServiceItem {
     serv_name: string;
     serv_type: string;
 }
+
+export interface ServiceGraph {
+    nodes: ServiceGraphNode[];
+    edges: ServiceGraphEdge[];
+}
+
+export interface ServiceGraphNode {
+    id: number;
+    caption: string;
+    color: string;
+}
+
+export interface ServiceGraphEdge {
+    id: number;
+    from: number;
+    to: number;
+}

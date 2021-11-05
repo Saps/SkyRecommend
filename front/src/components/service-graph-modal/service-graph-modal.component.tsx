@@ -1,0 +1,114 @@
+import React, { useState, useEffect, useCallback } from 'react';
+import { Modal, Box, Paper } from '@mui/material';
+
+import ReactFlow, {
+    Node as ReactFlowNode,
+    Edge as ReactFlowEdge,
+    Elements as ReactFlowElements,
+    Position as ReactFlowNodeHandlerPosition,
+    OnLoadParams as ReactFlowInstance
+} from 'react-flow-renderer';
+
+import dagre from 'dagre';
+
+import { getServiceGraph } from '~/api';
+import { ServiceGraph } from '~/types';
+
+const modalStyle = {
+    position: 'absolute' as 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+}
+
+interface ServiceGraphModalComponentProps {
+    serviceId: number;
+    onClose: () => void;
+}
+
+interface GraphElementData {
+    label?: string;
+    color?: string;
+}
+
+const nodeWidth = 172;
+const nodeHeight = 36;
+
+const getLayoutedNodes = (nodes: ReactFlowNode[]): ReactFlowNode[] => {
+    const dagreGraph = new dagre.graphlib.Graph();
+
+    dagreGraph.setDefaultEdgeLabel(() => ({}));
+    dagreGraph.setGraph({ rankdir: 'LR' });
+
+    nodes.forEach(node => {
+        dagreGraph.setNode(node.id, { width: nodeWidth, height: nodeHeight });
+    });
+
+    dagre.layout(dagreGraph);
+
+    return nodes.map(node => {
+        const result = { ...node };
+        const positionedNode = dagreGraph.node(node.id);
+
+        result.targetPosition = ReactFlowNodeHandlerPosition.Top;
+        result.sourcePosition = ReactFlowNodeHandlerPosition.Bottom;
+        result.position = {
+            x: positionedNode.x - nodeWidth / 2 + Math.random() / 1000,
+            y: positionedNode.y - nodeHeight / 2,
+        };
+
+        return result;
+    });
+};
+
+export const ServiceGraphModalComponent = ({ serviceId, onClose }: ServiceGraphModalComponentProps): JSX.Element => {
+    const [graphElements, setGraphElements] = useState<ReactFlowElements<GraphElementData>>([]);
+
+    const getGraphData = useCallback(async () => {
+        try {
+            const data: ServiceGraph = await getServiceGraph(serviceId);
+
+            const graphNodes: ReactFlowNode[] = getLayoutedNodes(data.nodes.map(node => (
+                {
+                    id: String(node.id),
+                    data: { label: node.caption },
+                    style: { backgroundColor: node.color, width: `${nodeWidth}px`, height: `${nodeHeight}px` },
+                    position: { x: Math.round(Math.random() * 100), y : Math.round(Math.random() * 100) }
+                }
+            )));
+
+            const graphEdges: ReactFlowEdge[] = data.edges.map(edge => (
+                { id: String(edge.id), source: String(edge.from), target: String(edge.to) }
+            ));
+
+            const elements: ReactFlowElements<GraphElementData> = [...graphNodes, ...graphEdges];
+
+            setGraphElements(elements);
+        } catch (e) {
+
+        }
+    }, [serviceId]);
+
+    useEffect(() => {
+        getGraphData();
+    }, [getGraphData]);
+
+    const handleReactFlowOnLoad = (reactFlowInstance: ReactFlowInstance) => {
+        reactFlowInstance.fitView();
+    };
+
+    return (
+        <Modal open onClose={onClose}>
+            <Box sx={modalStyle}>
+                <Paper>
+                    <Box sx={{ p: 2 }}>
+                        <Box component="div" style={{ height: 300 }} >
+                            <ReactFlow elements={graphElements} nodesDraggable={false} onLoad={handleReactFlowOnLoad} />
+                        </Box>
+                    </Box>
+                </Paper>
+            </Box>
+        </Modal>
+    );
+};

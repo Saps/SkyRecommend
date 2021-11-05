@@ -10,3 +10,4 @@ export * from './register/register.component';
 export * from './services-list/services-list.component';
 export * from './success-modal/success-modal.component';
 export * from './survey-modal/survey-modal.component';
+export * from './service-graph-modal/service-graph-modal.component';

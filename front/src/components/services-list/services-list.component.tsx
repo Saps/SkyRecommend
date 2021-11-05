@@ -5,6 +5,7 @@ import {
 } from '@mui/material';
 import { getServices, getServiceTypes } from "~/api";
 import { CommonError, ServiceItem } from "~/types";
+import { ServiceGraphModalComponent } from '~/components';
 import './services-list.component.scss';
 
 export const ServicesListComponent = (): JSX.Element => {
@@ -18,6 +19,7 @@ export const ServicesListComponent = (): JSX.Element => {
     const [serviceType, setServiceType] = useState<string>('all');
     const [serviceTypes, setServiceTypes] = useState<string[]>([]);
     const [total, setTotal] = useState<number>(0);
+    const [graphModalServiceId, setGraphModalServiceId] = useState<number | null>(null);
 
     const handleChangePage = async (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
         setPage(newPage);
@@ -127,6 +129,7 @@ export const ServicesListComponent = (): JSX.Element => {
                                         <TableCell align="center">
                                             <ButtonGroup variant="text" aria-label="text button group">
                                                 <Button>Алгоритм формального соответствия</Button>
+                                                <Button onClick={() => setGraphModalServiceId(item.id)}>Граф</Button>
                                             </ButtonGroup>
                                         </TableCell>
                                     </TableRow>
@@ -156,6 +159,12 @@ export const ServicesListComponent = (): JSX.Element => {
                     </Alert>
                 )
             }
+            {graphModalServiceId && (
+                <ServiceGraphModalComponent
+                    serviceId={graphModalServiceId}
+                    onClose={() => setGraphModalServiceId(null)}
+                />
+            )}
         </Grid>
     )
 };

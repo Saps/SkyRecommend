@@ -1,8 +1,9 @@
 import axios, { AxiosResponse, AxiosError } from 'axios';
 import Cookies from 'js-cookie';
 import {
-    ApiError, ChangedParams, CompanyCandidate, CompanyFrame, CompanyFrameOptions, CompanyProperty,
-    LoginInfo, LoginRequest, LogoutInfo, Recommendations, ServiceListResponse, SurveyValues, UserCredentials, UserInfo,
+    ApiError, ChangedParams, CompanyCandidate, CompanyFrame, CompanyFrameOptions, CompanyProperty,LoginInfo,
+    LoginRequest, LogoutInfo, Recommendations, ServiceListResponse, SurveyValues, UserCredentials, UserInfo,
+    ServiceGraph,
 } from '~/types';
 
 const api = axios.create({
@@ -181,6 +182,16 @@ export async function getServices(limit: number, offset: number, search: string,
 export async function getServiceTypes(): Promise<string[]> {
     try {
         const { data } = await api.get('/listservtypes');
+
+        return data;
+    }  catch (e) {
+        throw new Error((e as AxiosError<ApiError>)?.response?.data.message);
+    }
+}
+
+export async function getServiceGraph(srvId: number): Promise<ServiceGraph> {
+    try {
+        const { data } = await api.get('/servgraph', { params: { srv_id: srvId } });
 
         return data;
     }  catch (e) {
