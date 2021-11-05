@@ -12,6 +12,11 @@
         0px 9px 46px 8px rgba(0,0,0,0.12);
     padding: 24px;
 
+    &__loader {
+        display: flex;
+        justify-content: center;
+    }
+
     &__questions {
         max-height: 60vh;
         overflow-y: auto;

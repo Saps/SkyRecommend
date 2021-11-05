@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Redirect, useHistory } from 'react-router-dom';
 import { useFormik } from 'formik';
@@ -33,7 +33,7 @@ export const AlgorithmSettingsComponent = (): JSX.Element => {
         },
     });
 
-    const getAlgorithmSettings = async () => {
+    const getAlgorithmSettings = useCallback( async () => {
         try {
             setError('');
             setLoading(true);
@@ -48,11 +48,11 @@ export const AlgorithmSettingsComponent = (): JSX.Element => {
         } finally {
             setLoading(false);
         }
-    };
+    }, [setValues]);
 
     useEffect(() => {
         getAlgorithmSettings();
-    }, []);
+    }, [getAlgorithmSettings]);
 
     return user.role !== 'admin' ? (
         <Redirect to="/" />

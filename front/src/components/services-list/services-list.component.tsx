@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import { useHistory } from 'react-router-dom';
 import {
     Alert, Box, Button, ButtonGroup, FormControl, Grid, InputLabel, MenuItem, Paper, Select,
@@ -57,7 +57,7 @@ export const ServicesListComponent = (): JSX.Element => {
         await onRefresh(rowsPerPage, 0);
     };
 
-    const loadServiceTypes = async () => {
+    const loadServiceTypes = useCallback(async () => {
         try {
             setError('');
             setServiceTypes(await getServiceTypes());
@@ -65,11 +65,11 @@ export const ServicesListComponent = (): JSX.Element => {
             console.error(e);
             setError((e as CommonError).message);
         }
-    };
+    }, [setServiceTypes]);
 
     useEffect(() => {
         loadServiceTypes();
-    }, []);
+    }, [loadServiceTypes]);
 
     return (
         <Grid container item direction="column" p={2} xs={12} sm={10} md={8}>

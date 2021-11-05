@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import { useFormik } from 'formik';
 import { ExpandMore } from '@mui/icons-material';
 import {
@@ -33,7 +33,7 @@ export const CompanyPropertiesComponent = (): JSX.Element | null => {
         setExpanded(isExpanded ? panel : '');
     };
 
-    const handleGetCompanyProperties = async () => {
+    const handleGetCompanyProperties = useCallback( async () => {
         try {
             const properties = await getCompanyProperties();
             const fieldValues = properties
@@ -46,11 +46,11 @@ export const CompanyPropertiesComponent = (): JSX.Element | null => {
         } finally {
             setLoading(false);
         }
-    };
+    }, [setValues]);
 
     useEffect(() => {
         handleGetCompanyProperties();
-    }, []);
+    }, [handleGetCompanyProperties]);
 
     const renderAccordion = (property: CompanyProperty): JSX.Element => {
         const { group_name: key, params } = property;
