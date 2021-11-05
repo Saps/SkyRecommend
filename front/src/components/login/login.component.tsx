@@ -49,7 +49,7 @@ export const LoginComponent = (): JSX.Element => {
                         autoComplete="username"
                         error={touched.username && !!errors.username}
                         fullWidth
-                        helperText={touched.username && errors.username || ''}
+                        helperText={(touched.username && errors.username) || ''}
                         id="username"
                         label="Логин"
                         name="username"
@@ -64,7 +64,7 @@ export const LoginComponent = (): JSX.Element => {
                         error={touched.password && !!errors.password}
                         id="password"
                         fullWidth
-                        helperText={touched.password && errors.password || ''}
+                        helperText={(touched.password && errors.password) || ''}
                         label="Пароль"
                         name="password"
                         onBlur={handleBlur}

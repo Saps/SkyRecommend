@@ -84,7 +84,7 @@ export const CompaniesListComponent = (): JSX.Element => {
                                 </Button>
                             </Grid>
                             <Grid item>
-                                <FormControl sx={{ minWidth: '220px' }}>
+                                <FormControl sx={{ width: '220px' }}>
                                     <InputLabel id="searchType">Тип поиска</InputLabel>
                                     <Select
                                         labelId="searchType"

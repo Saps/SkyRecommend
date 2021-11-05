@@ -97,3 +97,16 @@ export interface CompanyCandidate {
     type: string;
     algos: AlgorithmInfo[];
 }
+
+export interface ServiceListResponse {
+    result: ServiceItem[];
+    total: number;
+}
+
+export interface ServiceItem {
+    eff_rating: null;
+    formal_rating: null;
+    id: number;
+    serv_name: string;
+    serv_type: string;
+}
