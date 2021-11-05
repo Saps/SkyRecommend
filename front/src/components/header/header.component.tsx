@@ -18,6 +18,10 @@ const adminMenuItems = [
         value: 'Основная страница',
     },
     {
+        id: 'menu-item-algorithm-settings',
+        value: 'Настройка алгоритмов',
+    },
+    {
         id: 'menu-item-logout',
         value: 'Выйти из системы',
     },
@@ -51,6 +55,8 @@ export const HeaderComponent = (): JSX.Element => {
         const { id } = event.currentTarget;
         if (id === 'menu-item-main') {
             history.replace('/');
+        } else if (id === 'menu-item-algorithm-settings') {
+            history.replace('/algorithm-settings');
         } else if (id === 'menu-item-companies') {
             history.replace('/companies');
         } else if (id === 'menu-item-logout') {

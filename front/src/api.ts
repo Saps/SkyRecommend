@@ -1,9 +1,9 @@
 import axios, { AxiosResponse, AxiosError } from 'axios';
 import Cookies from 'js-cookie';
 import {
-    ApiError, ChangedParams, CompanyCandidate, CompanyFrame, CompanyFrameOptions, CompanyProperty,LoginInfo,
-    LoginRequest, LogoutInfo, Recommendations, ServiceListResponse, SurveyValues, UserCredentials, UserInfo,
-    ServiceGraph,
+    AlgorithmData, ApiError, ChangedParams, CompanyCandidate, CompanyFrame, CompanyFrameOptions,
+    CompanyProperty, ExtendedAlgorithmData, LoginInfo, LoginRequest, LogoutInfo, Recommendations,
+    ServiceGraph, ServiceListResponse, SurveyValues, UserCredentials, UserInfo,
 } from '~/types';
 
 const api = axios.create({
@@ -192,6 +192,26 @@ export async function getServiceTypes(): Promise<string[]> {
 export async function getServiceGraph(srvId: number): Promise<ServiceGraph> {
     try {
         const { data } = await api.get('/servgraph', { params: { srv_id: srvId } });
+
+        return data;
+    }  catch (e) {
+        throw new Error((e as AxiosError<ApiError>)?.response?.data.message);
+    }
+}
+
+export async function getTuneAlgorithms(): Promise<ExtendedAlgorithmData[]> {
+    try {
+        const { data } = await api.get('/tunealgor');
+
+        return data;
+    }  catch (e) {
+        throw new Error((e as AxiosError<ApiError>)?.response?.data.message);
+    }
+}
+
+export async function updateTuneAlgorithms(values: AlgorithmData[]): Promise<any> {
+    try {
+        const { data } = await api.post('/tunealgor', values);
 
         return data;
     }  catch (e) {

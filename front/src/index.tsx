@@ -5,7 +5,7 @@ import { Provider } from 'react-redux';
 import { createTheme, ThemeProvider } from '@mui/material';
 import { AuthorizationWrapper } from '~/authorization-wrapper';
 import {
-    CompaniesListComponent, FooterComponent, HeaderComponent, LoginComponent, MainComponent,
+    AlgorithmSettingsComponent, CompaniesListComponent, FooterComponent, HeaderComponent, LoginComponent, MainComponent,
 } from '~/components';
 import { store } from '~/store/store';
 
@@ -45,6 +45,7 @@ ReactDOM.render(
                         <div className="main-container">
                             <AuthorizationWrapper>
                                 <Route exact path="/" component={MainComponent}/>
+                                <Route exact path="/algorithm-settings" component={AlgorithmSettingsComponent} />
                                 <Route exact path="/companies" component={CompaniesListComponent} />
                             </AuthorizationWrapper>
                         </div>

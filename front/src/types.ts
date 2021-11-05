@@ -111,6 +111,17 @@ export interface ServiceItem {
     serv_type: string;
 }
 
+export interface AlgorithmData {
+    id: number;
+    is_enabled: number;
+    weight: number;
+}
+
+export interface ExtendedAlgorithmData extends AlgorithmData {
+    caption: string;
+    name: string;
+}
+
 export interface ServiceGraph {
     nodes: ServiceGraphNode[];
     edges: ServiceGraphEdge[];
