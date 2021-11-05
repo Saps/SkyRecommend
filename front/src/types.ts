@@ -1,3 +1,5 @@
+import type { CSSProperties } from 'react';
+
 export interface UserCredentials {
     username: string;
     password: string;
@@ -131,10 +133,12 @@ export interface ServiceGraphNode {
     id: number;
     caption: string;
     color: string;
+    style?: CSSProperties;
 }
 
 export interface ServiceGraphEdge {
     id: number;
     from: number;
     to: number;
+    style?: CSSProperties;
 }

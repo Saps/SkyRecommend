@@ -33,8 +33,8 @@ interface GraphElementData {
     color?: string;
 }
 
-const nodeWidth = 172;
-const nodeHeight = 36;
+const nodeWidth = 50;
+const nodeHeight = 50;
 
 const getLayoutedNodes = (nodes: ReactFlowNode[]): ReactFlowNode[] => {
     const dagreGraph = new dagre.graphlib.Graph();
@@ -76,21 +76,28 @@ export const ServiceGraphModalComponent = ({ serviceId, onClose }: ServiceGraphM
                 {
                     id: String(node.id),
                     data: { label: node.caption },
-                    style: { backgroundColor: node.color, width: `${nodeWidth}px`, height: `${nodeHeight}px` },
+                    style: {
+                        backgroundColor: node.color,
+                        width: `${nodeWidth}px`,
+                        height: `${nodeHeight}px`,
+                        borderRadius: '100%',
+                        ...(node.style || {}),
+                    },
                     position: { x: Math.round(Math.random() * 100), y : Math.round(Math.random() * 100) }
                 }
             )));
 
             const graphEdges: ReactFlowEdge[] = data.edges.map(edge => (
-                { id: String(edge.id), source: String(edge.from), target: String(edge.to) }
+                { id: String(edge.id), source: String(edge.from), target: String(edge.to), style: edge.style || {} }
             ));
 
             const elements: ReactFlowElements<GraphElementData> = [...graphNodes, ...graphEdges];
 
             setGraphElements(elements);
-            setLoading(false);
         } catch (e) {
             setError((e as CommonError).message);
+        } finally {
+            setLoading(false);
         }
     }, [serviceId]);
 
@@ -107,7 +114,7 @@ export const ServiceGraphModalComponent = ({ serviceId, onClose }: ServiceGraphM
             <Box sx={modalStyle}>
                 <Paper>
                     <Box sx={{ p: 2 }}>
-                        <Box component="div" style={{ height: 300 }} >
+                        <Box component="div" style={{ height: 300, display: 'flex', justifyContent: 'center', alignItems: 'center' }} >
                             {loading ? (
                                 <CircularProgress />
                             ) : error ? (
