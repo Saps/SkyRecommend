@@ -36,3 +36,7 @@ RestApi.add_resource(findservs.ListServTypes, '/listservtypes')
 RestApi.add_resource(algor.TuneAlgor, '/tunealgor')
 
 
+RestApi.add_resource(findservs.ServTextList, '/servtext')
+RestApi.add_resource(findservs.ServCondition, '/servcond')
+RestApi.add_resource(findservs.ServGraph, '/servgraph')
+RestApi.add_resource(findservs.UpdateRating, '/updater')

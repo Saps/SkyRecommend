@@ -67,3 +67,16 @@ class RSService(Base):
         session = db_session()
         res = session.execute(sql).fetchall()
         return res
+
+    def getTextList(self, srv_id):
+        sql = f"""
+                        select descr
+                        from rs_service_texts
+                        where serv_id = {srv_id}
+                        order by pub_date desc
+                        """
+        myset = list(self.performToResult(sql))
+        resset = []
+        for m in myset:
+            resset.append(m[0])
+        return resset
