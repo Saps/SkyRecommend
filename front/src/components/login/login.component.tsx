@@ -28,11 +28,11 @@ export const LoginComponent = (): JSX.Element => {
         }),
         onSubmit: async values => {
             try {
+                setErrorMessage('');
                 await dispatch(loginAction(values));
                 history.replace('/');
             } catch (e) {
                 const message = (e as CommonError).message || 'Произошла неизвестная ошибка!';
-
                 setErrorMessage(message);
             }
         }
