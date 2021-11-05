@@ -1,13 +1,12 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Modal, Box, Paper } from '@mui/material';
 
-import ReactFlow from 'react-flow-renderer';
+import ReactFlow, { Position as ReactFlowNodeHandlerPosition } from 'react-flow-renderer';
 
 import type {
     Node as ReactFlowNode,
     Edge as ReactFlowEdge,
     Elements as ReactFlowElements,
-    Position as ReactFlowNodeHandlerPosition,
     OnLoadParams as ReactFlowInstance
 } from 'react-flow-renderer';
 
