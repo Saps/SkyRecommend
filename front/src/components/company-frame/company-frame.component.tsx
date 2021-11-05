@@ -333,7 +333,7 @@ export const CompanyFrameComponent = (): JSX.Element => {
                                         Подобрать сервисы
                                     </Button>
                                     <Button color="primary" disabled={!isValid} type="submit" variant="contained">
-                                        Далее
+                                        Сохранить
                                     </Button>
                                 </div>
                             </Grid>

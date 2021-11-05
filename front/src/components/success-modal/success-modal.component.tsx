@@ -10,12 +10,7 @@ interface SurveyModalComponentProps {
     onSubmit: () => void;
 }
 
-export const SuccessModalComponent = ({
-    foundServices,
-    foundTasks,
-    onCancel,
-    onSubmit
-}: SurveyModalComponentProps): JSX.Element => {
+export const SuccessModalComponent = ({ foundServices, foundTasks, onCancel, onSubmit }: SurveyModalComponentProps): JSX.Element => {
     return (
         <Modal open onClose={onCancel.bind(null)}>
             <div className="success-modal">
@@ -33,7 +28,13 @@ export const SuccessModalComponent = ({
                             )
                         }
                         <div>
-                            <p><strong>Наиболее эффективными для решения указанных задач являются следующие сервисы:</strong></p>
+                            <p><strong>
+                                {
+                                    foundTasks.length > 0
+                                        ? 'Наиболее эффективными для решения указанных задач являются следующие сервисы:'
+                                        : 'Были подобраны следующие сервисы:'
+                                }
+                            </strong></p>
                             {foundServices.map((service: string) => <p>{service}</p>)}
                         </div>
                     </div>

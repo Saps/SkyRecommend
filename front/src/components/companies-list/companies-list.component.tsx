@@ -117,7 +117,7 @@ export const CompaniesListComponent = (): JSX.Element => {
                         <div className="company-info-modal">
                             <Typography variant="h6" component="h2">{moreItem.name}</Typography>
                             <Typography variant="body1">{moreItem.type}</Typography>
-                            {moreItem.algos.length ? (
+                            {moreItem.algos.length > 0 && (
                                 <>
                                     <Box component="h3" sx={{ paddingTop: '16px', textAlign: 'center' }}>
                                         Использованные алгоритмы
@@ -129,7 +129,7 @@ export const CompaniesListComponent = (): JSX.Element => {
                                         </Box>
                                     ))}
                                 </>
-                            ) : null}
+                            )}
                         </div>
                     </Modal>
                 )
