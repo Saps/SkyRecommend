@@ -1,14 +1,17 @@
 import React, {useEffect, useState} from 'react';
+import { useHistory } from 'react-router-dom';
 import {
     Alert, Box, Button, ButtonGroup, FormControl, Grid, InputLabel, MenuItem, Paper, Select,
     Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TextField
 } from '@mui/material';
 import { getServices, getServiceTypes } from "~/api";
-import { CommonError, ServiceItem } from "~/types";
 import { ServiceGraphModalComponent } from '~/components';
+import { CommonError, ServiceItem } from "~/types";
+
 import './services-list.component.scss';
 
 export const ServicesListComponent = (): JSX.Element => {
+    const history = useHistory();
     const [currentList, setCurrentList] = useState<ServiceItem[]>([]);
     const [error, setError] = useState<string>();
     const [isSearched, setIsSearched] = useState<boolean>(false);
@@ -100,6 +103,11 @@ export const ServicesListComponent = (): JSX.Element => {
                 <Grid item>
                     <Button variant="contained" color="primary" onClick={onUpdate}>
                         Обновить
+                    </Button>
+                </Grid>
+                <Grid item>
+                    <Button variant="contained" color="success" onClick={() => history.push('/algorithm-settings')}>
+                        Настройка алгоритмов
                     </Button>
                 </Grid>
             </Grid>

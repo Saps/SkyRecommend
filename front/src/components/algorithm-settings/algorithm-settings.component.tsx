@@ -1,28 +1,46 @@
 import React, {useEffect, useState} from 'react';
+import { useSelector } from 'react-redux';
+import { Redirect, useHistory } from 'react-router-dom';
 import { useFormik } from 'formik';
 import { Alert, Button, Checkbox, FormControl, FormControlLabel, Grid, TextField, Typography } from '@mui/material';
 import { getTuneAlgorithms, updateTuneAlgorithms } from '~/api';
-import { CommonError, ExtendedAlgorithmData } from '~/types';
+import { RootState } from '~/store/rootReducer';
+import { CommonError, ExtendedAlgorithmSettings } from '~/types';
 
 export const AlgorithmSettingsComponent = (): JSX.Element => {
-    const [algorithmData, setAlgorithmData] = useState<ExtendedAlgorithmData[]>([]);
+    const history = useHistory();
+    const user = useSelector((state: RootState) => state.user);
+    const [algorithmSettings, setAlgorithmSettings] = useState<ExtendedAlgorithmSettings[]>([]);
     const [error, setError] = useState<string>();
     const [loading, setLoading] = useState<boolean>();
     const { handleBlur, handleChange, handleSubmit, isValid, setFieldValue, setValues, values } = useFormik({
-        initialValues: {} as { [key: string]: boolean | number },
+        initialValues: {} as { [formKey: string]: boolean | number },
         onSubmit: async fields => {
-            console.log(fields);
+            try {
+                const result = Object.entries(fields)
+                    .reduce((acc: number[][], [key, value], index: number) => {
+                        const [id] = key.split('-');
+                        index % 2 < 1 && acc.push([+id]);
+                        acc[(index - index % 2) / 2].push(+value);
+                        return acc;
+                    }, [])
+                    .map(([id, is_enabled, weight]) => ({ id, is_enabled, weight }));
+                await updateTuneAlgorithms(result);
+            } catch (e) {
+                console.error(e);
+                setError((e as CommonError).message);
+            }
         },
     });
 
-    const handleGetAlgorithmData = async () => {
+    const getAlgorithmSettings = async () => {
         try {
             setError('');
             setLoading(true);
             const result = await getTuneAlgorithms();
-            setAlgorithmData(result);
+            setAlgorithmSettings(result);
             await setValues(result.reduce((acc, item) => ({
-                ...acc, [`${item.id}-is-enabled`]: !!item.is_enabled, [`${item.id}-weight`]: item.weight
+                ...acc, [`${item.id}-isEnabled`]: !!item.is_enabled, [`${item.id}-weight`]: item.weight
             }), {}));
         } catch (e) {
             console.error(e);
@@ -33,10 +51,12 @@ export const AlgorithmSettingsComponent = (): JSX.Element => {
     };
 
     useEffect(() => {
-        handleGetAlgorithmData();
+        getAlgorithmSettings();
     }, []);
 
-    return loading ? (
+    return user.role !== 'admin' ? (
+        <Redirect to="/" />
+    ) : loading ? (
         <Alert severity="warning" sx={{ marginTop: 2 }}>Информация загружается.</Alert>
     ) : error ? (
         <Alert severity="error" sx={{ marginTop: 2 }}>{error}</Alert>
@@ -47,15 +67,15 @@ export const AlgorithmSettingsComponent = (): JSX.Element => {
             </Typography>
             <form onSubmit={handleSubmit} noValidate>
                 {
-                    algorithmData.map(item => (
+                    algorithmSettings.map(item => (
                         <Grid key={`${item.id}`} container item alignItems="center" pb={2}>
-                            <FormControl key={`${item.id}-is-enabled`} sx={{ width: 'calc(100% - 100px)' }}>
+                            <FormControl key={`${item.id}-isEnabled`} sx={{ width: 'calc(100% - 100px)' }}>
                                 <FormControlLabel
                                     control={<Checkbox
-                                        checked={values[`${item.id}-is-enabled`] as boolean}
-                                        name={`${item.id}-is-enabled`}
+                                        checked={values[`${item.id}-isEnabled`] as boolean}
+                                        name={`${item.id}-isEnabled`}
                                         onChange={handleChange}
-                                        value={values[`${item.id}-is-enabled`]}
+                                        value={values[`${item.id}-isEnabled`]}
                                     />}
                                     label={item.caption}
                                 />
@@ -85,8 +105,11 @@ export const AlgorithmSettingsComponent = (): JSX.Element => {
                     <Button color="primary" disabled={!isValid} type="submit" variant="contained">
                         Сохранить
                     </Button>
-                    <Button color="info" type="button" variant="contained" onClick={handleGetAlgorithmData}>
+                    <Button color="info" type="button" variant="contained" onClick={getAlgorithmSettings}>
                         Отменить
+                    </Button>
+                    <Button color="error" type="button" variant="contained" onClick={() => history.push('/')}>
+                        Назад
                     </Button>
                 </Grid>
             </form>

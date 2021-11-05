@@ -113,13 +113,13 @@ export interface ServiceItem {
     serv_type: string;
 }
 
-export interface AlgorithmData {
+export interface AlgorithmSettings {
     id: number;
     is_enabled: number;
     weight: number;
 }
 
-export interface ExtendedAlgorithmData extends AlgorithmData {
+export interface ExtendedAlgorithmSettings extends AlgorithmSettings {
     caption: string;
     name: string;
 }

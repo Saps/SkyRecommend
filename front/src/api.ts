@@ -1,9 +1,9 @@
 import axios, { AxiosResponse, AxiosError } from 'axios';
 import Cookies from 'js-cookie';
 import {
-    AlgorithmData, ApiError, ChangedParams, CompanyCandidate, CompanyFrame, CompanyFrameOptions,
-    CompanyProperty, ExtendedAlgorithmData, LoginInfo, LoginRequest, LogoutInfo, Recommendations,
-    ServiceGraph, ServiceListResponse, SurveyValues, UserCredentials, UserInfo,
+    AlgorithmSettings, ApiError, ChangedParams, CompanyCandidate, CompanyFrame, CompanyFrameOptions,
+    CompanyProperty, ExtendedAlgorithmSettings, LoginInfo, LoginRequest, LogoutInfo,
+    Recommendations, ServiceGraph, ServiceListResponse, SurveyValues, UserCredentials, UserInfo,
 } from '~/types';
 
 const api = axios.create({
@@ -77,7 +77,7 @@ export async function getCompanyProperties(): Promise<CompanyProperty[]> {
     }
 }
 
-export async function changeCompanyProperties(values: ChangedParams): Promise<any> {
+export async function changeCompanyProperties(values: ChangedParams): Promise<{ message: string }> {
     try {
         const { data } = await api.post('/company/props', values);
 
@@ -114,7 +114,7 @@ export async function getCompanyFrameOptions(): Promise<CompanyFrameOptions> {
     }
 }
 
-export async function changeCompanyFrame(newFrame: CompanyFrame): Promise<any> {
+export async function changeCompanyFrame(newFrame: CompanyFrame): Promise<{ message: string }> {
     try {
         const { data } = await api.post('/company/frame', newFrame);
 
@@ -189,17 +189,7 @@ export async function getServiceTypes(): Promise<string[]> {
     }
 }
 
-export async function getServiceGraph(srvId: number): Promise<ServiceGraph> {
-    try {
-        const { data } = await api.get('/servgraph', { params: { srv_id: srvId } });
-
-        return data;
-    }  catch (e) {
-        throw new Error((e as AxiosError<ApiError>)?.response?.data.message);
-    }
-}
-
-export async function getTuneAlgorithms(): Promise<ExtendedAlgorithmData[]> {
+export async function getTuneAlgorithms(): Promise<ExtendedAlgorithmSettings[]> {
     try {
         const { data } = await api.get('/tunealgor');
 
@@ -209,9 +199,19 @@ export async function getTuneAlgorithms(): Promise<ExtendedAlgorithmData[]> {
     }
 }
 
-export async function updateTuneAlgorithms(values: AlgorithmData[]): Promise<any> {
+export async function updateTuneAlgorithms(result: AlgorithmSettings[]): Promise<{ message: string }> {
     try {
-        const { data } = await api.post('/tunealgor', values);
+        const { data } = await api.post('/tunealgor', result);
+
+        return data;
+    }  catch (e) {
+        throw new Error((e as AxiosError<ApiError>)?.response?.data.message);
+    }
+}
+
+export async function getServiceGraph(srvId: number): Promise<ServiceGraph> {
+    try {
+        const { data } = await api.get('/servgraph', { params: { srv_id: srvId } });
 
         return data;
     }  catch (e) {
