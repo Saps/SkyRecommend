@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Modal, Box, Paper } from '@mui/material';
 
-import ReactFlow, {
+import ReactFlow from 'react-flow-renderer';
+
+import type {
     Node as ReactFlowNode,
     Edge as ReactFlowEdge,
     Elements as ReactFlowElements,
@@ -12,7 +14,7 @@ import ReactFlow, {
 import dagre from 'dagre';
 
 import { getServiceGraph } from '~/api';
-import { ServiceGraph } from '~/types';
+import type { ServiceGraph } from '~/types';
 
 const modalStyle = {
     position: 'absolute' as 'absolute',
