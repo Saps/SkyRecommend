@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Alert, CircularProgress, Modal } from '@mui/material';
 import { graphlib, layout } from 'dagre';
-import ReactFlow, { Position as ReactFlowNodeHandlerPosition } from 'react-flow-renderer';
+import ReactFlow, { Position as ReactFlowNodeHandlerPosition, Controls } from 'react-flow-renderer';
 import type {
     Node as ReactFlowNode,
     Edge as ReactFlowEdge,
@@ -26,7 +26,7 @@ interface GraphElementData {
 const NODE_WIDTH = 150;
 const NODE_HEIGHT = 50;
 
-const getLayoutNodes = (nodes: ReactFlowNode[]): ReactFlowNode[] => {
+const getLayoutNodes = (nodes: ReactFlowNode[], edges: ReactFlowEdge[]): ReactFlowNode[] => {
     const dagreGraph = new graphlib.Graph();
 
     dagreGraph.setDefaultEdgeLabel(() => ({}));
@@ -34,6 +34,10 @@ const getLayoutNodes = (nodes: ReactFlowNode[]): ReactFlowNode[] => {
 
     nodes.forEach(node => {
         dagreGraph.setNode(node.id, { width: NODE_WIDTH, height: NODE_HEIGHT });
+    });
+
+    edges.forEach(edge => {
+        dagreGraph.setEdge(edge.source, edge.target);
     });
 
     layout(dagreGraph);
@@ -58,27 +62,29 @@ export const ServiceGraphModalComponent = ({ onClose, serviceId }: ServiceGraphM
         try {
             const data: ServiceGraph = await getServiceGraph(serviceId);
 
-            const graphNodes: ReactFlowNode[] = getLayoutNodes(data.nodes.map(node => (
+            const graphNodes: ReactFlowNode[] = data.nodes.map(node => (
                 {
                     id: `${node.id}`,
                     data: { label: node.caption },
                     style: {
                         backgroundColor: node.color,
-                        width: `${NODE_WIDTH}px`,
-                        height: `${NODE_HEIGHT}px`,
+                        // width: `${NODE_WIDTH}px`,
+                        // height: `${NODE_HEIGHT}px`,
+                        width: 'auto',
                         // borderRadius: '100%',
                         fontSize: '24px',
                         ...(node.style || {}),
                     },
-                    position: { x: Math.round(Math.random() * 100), y : Math.round(Math.random() * 100) }
+                    position: { x: Math.round(Math.random() * 1000), y : Math.round(Math.random() * 1000) }
                 }
-            )));
+            ));
 
             const graphEdges: ReactFlowEdge[] = data.edges.map(edge => (
                 { id: `${edge.id}`, source: `${edge.from}`, target: `${edge.to}`, style: edge.style || {} }
             ));
 
-            const elements: ReactFlowElements<GraphElementData> = [...graphNodes, ...graphEdges];
+            const layoutedNodes = getLayoutNodes(graphNodes, graphEdges);
+            const elements: ReactFlowElements<GraphElementData> = [...layoutedNodes, ...graphEdges];
 
             setGraphElements(elements);
         } catch (e) {
@@ -109,7 +115,9 @@ export const ServiceGraphModalComponent = ({ onClose, serviceId }: ServiceGraphM
                 ) : graphElements.length < 1 ? (
                     <Alert severity="warning">Для построения графа отсутствуют данные</Alert>
                 ) : (
-                    <ReactFlow elements={graphElements} nodesDraggable={false} onLoad={handleReactFlowOnLoad} />
+                    <ReactFlow elements={graphElements} minZoom={0.1} nodesDraggable={false} onLoad={handleReactFlowOnLoad}>
+                        <Controls />
+                    </ReactFlow>
                 )}
             </div>
         </Modal>
