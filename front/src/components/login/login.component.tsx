@@ -17,7 +17,7 @@ export const LoginComponent = (): JSX.Element => {
     const dispatch = useDispatch<ThunkDispatch<RootState, void, AnyAction>>();
     const history = useHistory();
     const [errorMessage, setErrorMessage] = useState<string>('');
-    const { errors, isValid, handleBlur, handleChange, handleSubmit, touched, values } = useFormik({
+    const { errors, handleBlur, handleChange, handleSubmit, isValid, touched, values } = useFormik({
         initialValues: {
             username: '',
             password: '',

@@ -22,7 +22,7 @@ export const CompanyFrameComponent = (): JSX.Element => {
     const [isSurveyModalOpen, setIsSurveyModalOpen] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(true);
 
-    const { errors, isValid, handleBlur, handleChange, handleSubmit, setFieldValue, setValues, values } = useFormik({
+    const { errors, handleBlur, handleChange, handleSubmit, isValid, setFieldValue, setValues, values } = useFormik({
         initialValues: {
             company_name: '',
             inn: '',
