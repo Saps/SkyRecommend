@@ -322,6 +322,15 @@ export const CompanyFrameComponent = (): JSX.Element => {
                                         {errors.techs && <FormHelperText>{errors.techs}</FormHelperText>}
                                     </FormControl>
                                 </Grid>
+                                <Box component="strong" sx={{ marginTop: 2 }}>
+                                    Рекомендательная система позволяет подобрать сервисы от Правительства г. Москвы и партнеров
+                                    стартап-навигаторов, исходя из профиля и потребностей Вашей компании (кнопка "Подобрать сервисы").
+                                </Box>
+                                <Box component="strong" sx={{ marginTop: 2 }}>
+                                    Рекомендательная система также помогает определить наиболее актуальные для Вашей компании
+                                    бизнес-задачи, а также с помощью каких сервисов эти задачи могут быть решены наиболее эффективным
+                                    образом (кнопка "Повысить эффективность").
+                                </Box>
                                 <div className="form-options" key="submit">
                                     <Button color="info" type="button" variant="contained" onClick={getData}>
                                         Отменить
