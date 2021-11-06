@@ -113,6 +113,9 @@ export const CompaniesListComponent = (): JSX.Element => {
                 moreItem && (
                     <Modal open onClose={() => setMoreItem(null)}>
                         <div className="company-info-modal">
+                            <button className="close-button" onClick={() => setMoreItem(null)}>
+                                &#10006;
+                            </button>
                             <Typography variant="h6" component="h2">{moreItem.name}</Typography>
                             <Typography variant="body1">{moreItem.type}</Typography>
                             {moreItem.algos.length > 0 && (
