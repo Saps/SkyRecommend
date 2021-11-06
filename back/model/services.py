@@ -80,3 +80,13 @@ class RSService(Base):
         for m in myset:
             resset.append(m[0])
         return resset
+
+
+    def getFormalRating(self, serv_id):
+        sql = f"""
+                   select formal_rating
+                    from rs_services
+                    where id = {serv_id}
+                                """
+        myset = list(self.performToResult(sql))
+        return myset[0][0]
