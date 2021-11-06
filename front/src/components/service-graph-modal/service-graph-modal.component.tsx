@@ -33,7 +33,7 @@ interface GraphElementData {
     color?: string;
 }
 
-const nodeWidth = 50;
+const nodeWidth = 150;
 const nodeHeight = 50;
 
 const getLayoutedNodes = (nodes: ReactFlowNode[]): ReactFlowNode[] => {
@@ -76,7 +76,8 @@ export const ServiceGraphModalComponent = ({ serviceId, onClose }: ServiceGraphM
                         backgroundColor: node.color,
                         width: `${nodeWidth}px`,
                         height: `${nodeHeight}px`,
-                        borderRadius: '100%',
+                        // borderRadius: '100%',
+                        fontSize: '24px',
                         ...(node.style || {}),
                     },
                     position: { x: Math.round(Math.random() * 100), y : Math.round(Math.random() * 100) }
@@ -102,7 +103,7 @@ export const ServiceGraphModalComponent = ({ serviceId, onClose }: ServiceGraphM
     }, [getGraphData]);
 
     const handleReactFlowOnLoad = (reactFlowInstance: ReactFlowInstance) => {
-        reactFlowInstance.fitView();
+        setTimeout(() => reactFlowInstance.fitView(), 100);
     };
 
     return (
