@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import {
     Alert, Box, Button, ButtonGroup, FormControl, Grid, InputLabel, MenuItem, Paper, Select,
@@ -14,6 +14,7 @@ export const ServicesListComponent = (): JSX.Element => {
     const history = useHistory();
     const [currentList, setCurrentList] = useState<ServiceItem[]>([]);
     const [error, setError] = useState<string>();
+    const [graphModalServiceId, setGraphModalServiceId] = useState<number>(-1);
     const [isSearched, setIsSearched] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>();
     const [page, setPage] = useState<number>(0);
@@ -22,7 +23,6 @@ export const ServicesListComponent = (): JSX.Element => {
     const [serviceType, setServiceType] = useState<string>('all');
     const [serviceTypes, setServiceTypes] = useState<string[]>([]);
     const [total, setTotal] = useState<number>(0);
-    const [graphModalServiceId, setGraphModalServiceId] = useState<number | null>(null);
 
     const handleChangePage = async (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
         setPage(newPage);
@@ -147,7 +147,7 @@ export const ServicesListComponent = (): JSX.Element => {
                         <TablePagination
                             component="div"
                             count={total}
-                            labelDisplayedRows={e => `${e.from}-${e.to} из ${e.count !== -1 ? e.count : `больше чем ${e.to}`}`}
+                            labelDisplayedRows={_ => `${_.from}-${_.to} из ${_.count !== -1 ? _.count : 'больше чем ' + _.to}`}
                             labelRowsPerPage="Количество элементов на странице"
                             onPageChange={handleChangePage}
                             onRowsPerPageChange={handleChangeRowsPerPage}
@@ -167,10 +167,10 @@ export const ServicesListComponent = (): JSX.Element => {
                     </Alert>
                 )
             }
-            {graphModalServiceId && (
+            {graphModalServiceId > -1 && (
                 <ServiceGraphModalComponent
                     serviceId={graphModalServiceId}
-                    onClose={() => setGraphModalServiceId(null)}
+                    onClose={() => setGraphModalServiceId(-1)}
                 />
             )}
         </Grid>

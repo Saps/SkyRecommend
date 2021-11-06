@@ -48,19 +48,15 @@ const getLayoutedNodes = (nodes: ReactFlowNode[]): ReactFlowNode[] => {
 
     dagre.layout(dagreGraph);
 
-    return nodes.map(node => {
-        const result = { ...node };
-        const positionedNode = dagreGraph.node(node.id);
-
-        result.targetPosition = ReactFlowNodeHandlerPosition.Top;
-        result.sourcePosition = ReactFlowNodeHandlerPosition.Bottom;
-        result.position = {
-            x: positionedNode.x - nodeWidth / 2 + Math.random() / 1000,
-            y: positionedNode.y - nodeHeight / 2,
-        };
-
-        return result;
-    });
+    return nodes.map(node => ({
+        ...node,
+        targetPosition: ReactFlowNodeHandlerPosition.Top,
+        sourcePosition: ReactFlowNodeHandlerPosition.Bottom,
+        position: {
+            x: dagreGraph.node(node.id).x - nodeWidth / 2 + Math.random() / 1000,
+            y: dagreGraph.node(node.id).y - nodeHeight / 2,
+        }
+    }));
 };
 
 export const ServiceGraphModalComponent = ({ serviceId, onClose }: ServiceGraphModalComponentProps): JSX.Element => {
@@ -74,7 +70,7 @@ export const ServiceGraphModalComponent = ({ serviceId, onClose }: ServiceGraphM
 
             const graphNodes: ReactFlowNode[] = getLayoutedNodes(data.nodes.map(node => (
                 {
-                    id: String(node.id),
+                    id: `${node.id}`,
                     data: { label: node.caption },
                     style: {
                         backgroundColor: node.color,
@@ -116,7 +112,7 @@ export const ServiceGraphModalComponent = ({ serviceId, onClose }: ServiceGraphM
                     <Box sx={{ p: 2 }}>
                         <Box component="div" style={{ height: 300, display: 'flex', justifyContent: 'center', alignItems: 'center' }} >
                             {loading ? (
-                                <CircularProgress />
+                                <CircularProgress size="3rem" />
                             ) : error ? (
                                 <Alert severity="error">{error}</Alert>
                             ) : (
