@@ -63,11 +63,9 @@ export const CompaniesListComponent = (): JSX.Element => {
         );
     }
 
-    if (user.role === 'admin') {
-        return <Redirect to="/" />
-    }
-
-    return (
+    return user.role === 'admin' ? (
+        <Redirect to="/" />
+    ) : (
         <>
             <Grid container item direction="column" p={2} xs={12} sm={10} md={8}>
                 {error ? (

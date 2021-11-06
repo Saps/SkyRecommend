@@ -1,15 +1,20 @@
-import React, {useEffect, useState} from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import {
     Alert, Box, Button, ButtonGroup, FormControl, Grid, InputLabel, MenuItem, Paper, Select,
     Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TextField
 } from '@mui/material';
 import { getServices, getServiceTypes } from "~/api";
+import { ServiceGraphModalComponent } from '~/components';
 import { CommonError, ServiceItem } from "~/types";
+
 import './services-list.component.scss';
 
 export const ServicesListComponent = (): JSX.Element => {
+    const history = useHistory();
     const [currentList, setCurrentList] = useState<ServiceItem[]>([]);
     const [error, setError] = useState<string>();
+    const [graphModalServiceId, setGraphModalServiceId] = useState<number>(-1);
     const [isSearched, setIsSearched] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>();
     const [page, setPage] = useState<number>(0);
@@ -52,7 +57,7 @@ export const ServicesListComponent = (): JSX.Element => {
         await onRefresh(rowsPerPage, 0);
     };
 
-    const loadServiceTypes = async () => {
+    const loadServiceTypes = useCallback(async () => {
         try {
             setError('');
             setServiceTypes(await getServiceTypes());
@@ -60,11 +65,11 @@ export const ServicesListComponent = (): JSX.Element => {
             console.error(e);
             setError((e as CommonError).message);
         }
-    };
+    }, [setServiceTypes]);
 
     useEffect(() => {
         loadServiceTypes();
-    }, []);
+    }, [loadServiceTypes]);
 
     return (
         <Grid container item direction="column" p={2} xs={12} sm={10} md={8}>
@@ -100,6 +105,11 @@ export const ServicesListComponent = (): JSX.Element => {
                         Обновить
                     </Button>
                 </Grid>
+                <Grid item>
+                    <Button variant="contained" color="success" onClick={() => history.push('/algorithm-settings')}>
+                        Настройка алгоритмов
+                    </Button>
+                </Grid>
             </Grid>
             {
                 loading ? (
@@ -127,6 +137,7 @@ export const ServicesListComponent = (): JSX.Element => {
                                         <TableCell align="center">
                                             <ButtonGroup variant="text" aria-label="text button group">
                                                 <Button>Алгоритм формального соответствия</Button>
+                                                <Button onClick={() => setGraphModalServiceId(item.id)}>Граф</Button>
                                             </ButtonGroup>
                                         </TableCell>
                                     </TableRow>
@@ -136,7 +147,7 @@ export const ServicesListComponent = (): JSX.Element => {
                         <TablePagination
                             component="div"
                             count={total}
-                            labelDisplayedRows={e => `${e.from}-${e.to} из ${e.count !== -1 ? e.count : `больше чем ${e.to}`}`}
+                            labelDisplayedRows={_ => `${_.from}-${_.to} из ${_.count !== -1 ? _.count : 'больше чем ' + _.to}`}
                             labelRowsPerPage="Количество элементов на странице"
                             onPageChange={handleChangePage}
                             onRowsPerPageChange={handleChangeRowsPerPage}
@@ -156,6 +167,12 @@ export const ServicesListComponent = (): JSX.Element => {
                     </Alert>
                 )
             }
+            {graphModalServiceId > -1 && (
+                <ServiceGraphModalComponent
+                    serviceId={graphModalServiceId}
+                    onClose={() => setGraphModalServiceId(-1)}
+                />
+            )}
         </Grid>
     )
 };

@@ -1,3 +1,5 @@
+import type { CSSProperties } from 'react';
+
 export interface UserCredentials {
     username: string;
     password: string;
@@ -109,4 +111,34 @@ export interface ServiceItem {
     id: number;
     serv_name: string;
     serv_type: string;
+}
+
+export interface AlgorithmSettings {
+    id: number;
+    is_enabled: number;
+    weight: number;
+}
+
+export interface ExtendedAlgorithmSettings extends AlgorithmSettings {
+    caption: string;
+    name: string;
+}
+
+export interface ServiceGraph {
+    nodes: ServiceGraphNode[];
+    edges: ServiceGraphEdge[];
+}
+
+export interface ServiceGraphNode {
+    id: number;
+    caption: string;
+    color: string;
+    style?: CSSProperties;
+}
+
+export interface ServiceGraphEdge {
+    id: number;
+    from: number;
+    to: number;
+    style?: CSSProperties;
 }

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import { useHistory } from 'react-router-dom';
 import {
     Alert, Box, Button, Checkbox, Chip, FormControl, FormHelperText,
@@ -8,7 +8,7 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { changeCompanyFrame, findServices, getCompanyFrame, getCompanyFrameOptions, sendSurvey } from '~/api';
 import { CompanyFrameOptions, SurveyValues } from '~/types';
-import { CompanyPropertiesComponent, ConfirmModalComponent, SuccessModalComponent, SurveyModalComponent } from '../index';
+import { ConfirmModalComponent, SuccessModalComponent, SurveyModalComponent } from '../index';
 
 import './company-frame.component.scss';
 
@@ -49,7 +49,7 @@ export const CompanyFrameComponent = (): JSX.Element => {
         return array.filter((item: string, index: number, self: string[]) => self.indexOf(item) === index);
     }
 
-    const getData = async () => {
+    const getData = useCallback(async () => {
         try {
             setLoading(true);
             const [frame, frameOptions] = await Promise.all([
@@ -57,13 +57,13 @@ export const CompanyFrameComponent = (): JSX.Element => {
                 getCompanyFrameOptions()
             ]);
             await setValues(frame);
-            setFrameOptions(frameOptions);
+            await setFrameOptions(frameOptions);
         } catch (err) {
             console.error(err);
         } finally {
             setLoading(false);
         }
-    };
+    }, [setValues, setFrameOptions]);
 
     const onFormSubmit = async () => {
         try {
@@ -108,7 +108,7 @@ export const CompanyFrameComponent = (): JSX.Element => {
 
     useEffect(() => {
         getData();
-    }, []);
+    }, [getData]);
 
     return (
         <Grid container item direction="column" p={2} xs={12} sm={10} md={8}>
@@ -356,7 +356,6 @@ export const CompanyFrameComponent = (): JSX.Element => {
                                 />
                             )}
                         </form>
-                        {/*<CompanyPropertiesComponent />*/}
                     </>
                 )
             }

@@ -23,7 +23,7 @@ export const SuccessModalComponent = ({ foundServices, foundTasks, onCancel, onS
                             foundTasks.length > 0 && (
                                 <div>
                                     <p><strong>На основе ответов были выявлены актуальные для Вашей компании бизнес-задачи:</strong></p>
-                                    {foundTasks.map((task: string) => <p>{task}</p>)}
+                                    {foundTasks.map((task: string) => <p key={task}>{task}</p>)}
                                 </div>
                             )
                         }
@@ -35,7 +35,7 @@ export const SuccessModalComponent = ({ foundServices, foundTasks, onCancel, onS
                                         : 'Были подобраны следующие сервисы:'
                                 }
                             </strong></p>
-                            {foundServices.map((service: string) => <p>{service}</p>)}
+                            {foundServices.map((service: string) => <p key={service}>{service}</p>)}
                         </div>
                     </div>
                     <p>
