@@ -1,31 +1,21 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Modal, Box, Paper, CircularProgress, Alert } from '@mui/material';
-
+import { Alert, CircularProgress, Modal } from '@mui/material';
+import { graphlib, layout } from 'dagre';
 import ReactFlow, { Position as ReactFlowNodeHandlerPosition } from 'react-flow-renderer';
-
 import type {
     Node as ReactFlowNode,
     Edge as ReactFlowEdge,
     Elements as ReactFlowElements,
     OnLoadParams as ReactFlowInstance
 } from 'react-flow-renderer';
-
-import dagre from 'dagre';
-
 import { getServiceGraph } from '~/api';
-import type { ServiceGraph, CommonError } from '~/types';
+import type { CommonResponse, ServiceGraph } from '~/types';
 
-const modalStyle = {
-    position: 'absolute' as 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 400,
-}
+import './service-graph-modal.component.scss';
 
 interface ServiceGraphModalComponentProps {
-    serviceId: number;
     onClose: () => void;
+    serviceId: number;
 }
 
 interface GraphElementData {
@@ -33,33 +23,33 @@ interface GraphElementData {
     color?: string;
 }
 
-const nodeWidth = 150;
-const nodeHeight = 50;
+const NODE_WIDTH = 150;
+const NODE_HEIGHT = 50;
 
-const getLayoutedNodes = (nodes: ReactFlowNode[]): ReactFlowNode[] => {
-    const dagreGraph = new dagre.graphlib.Graph();
+const getLayoutNodes = (nodes: ReactFlowNode[]): ReactFlowNode[] => {
+    const dagreGraph = new graphlib.Graph();
 
     dagreGraph.setDefaultEdgeLabel(() => ({}));
     dagreGraph.setGraph({ rankdir: 'LR' });
 
     nodes.forEach(node => {
-        dagreGraph.setNode(node.id, { width: nodeWidth, height: nodeHeight });
+        dagreGraph.setNode(node.id, { width: NODE_WIDTH, height: NODE_HEIGHT });
     });
 
-    dagre.layout(dagreGraph);
+    layout(dagreGraph);
 
     return nodes.map(node => ({
         ...node,
         targetPosition: ReactFlowNodeHandlerPosition.Top,
         sourcePosition: ReactFlowNodeHandlerPosition.Bottom,
         position: {
-            x: dagreGraph.node(node.id).x - nodeWidth / 2 + Math.random() / 1000,
-            y: dagreGraph.node(node.id).y - nodeHeight / 2,
+            x: dagreGraph.node(node.id).x - NODE_WIDTH / 2 + Math.random() / 1000,
+            y: dagreGraph.node(node.id).y - NODE_HEIGHT / 2,
         }
     }));
 };
 
-export const ServiceGraphModalComponent = ({ serviceId, onClose }: ServiceGraphModalComponentProps): JSX.Element => {
+export const ServiceGraphModalComponent = ({ onClose, serviceId }: ServiceGraphModalComponentProps): JSX.Element => {
     const [graphElements, setGraphElements] = useState<ReactFlowElements<GraphElementData>>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string>('');
@@ -68,14 +58,14 @@ export const ServiceGraphModalComponent = ({ serviceId, onClose }: ServiceGraphM
         try {
             const data: ServiceGraph = await getServiceGraph(serviceId);
 
-            const graphNodes: ReactFlowNode[] = getLayoutedNodes(data.nodes.map(node => (
+            const graphNodes: ReactFlowNode[] = getLayoutNodes(data.nodes.map(node => (
                 {
                     id: `${node.id}`,
                     data: { label: node.caption },
                     style: {
                         backgroundColor: node.color,
-                        width: `${nodeWidth}px`,
-                        height: `${nodeHeight}px`,
+                        width: `${NODE_WIDTH}px`,
+                        height: `${NODE_HEIGHT}px`,
                         // borderRadius: '100%',
                         fontSize: '24px',
                         ...(node.style || {}),
@@ -85,14 +75,14 @@ export const ServiceGraphModalComponent = ({ serviceId, onClose }: ServiceGraphM
             )));
 
             const graphEdges: ReactFlowEdge[] = data.edges.map(edge => (
-                { id: String(edge.id), source: String(edge.from), target: String(edge.to), style: edge.style || {} }
+                { id: `${edge.id}`, source: `${edge.from}`, target: `${edge.to}`, style: edge.style || {} }
             ));
 
             const elements: ReactFlowElements<GraphElementData> = [...graphNodes, ...graphEdges];
 
             setGraphElements(elements);
         } catch (e) {
-            setError((e as CommonError).message);
+            setError((e as CommonResponse).message);
         } finally {
             setLoading(false);
         }
@@ -108,21 +98,20 @@ export const ServiceGraphModalComponent = ({ serviceId, onClose }: ServiceGraphM
 
     return (
         <Modal open onClose={onClose}>
-            <Box sx={modalStyle}>
-                <Paper>
-                    <Box sx={{ p: 2 }}>
-                        <Box component="div" style={{ height: 300, display: 'flex', justifyContent: 'center', alignItems: 'center' }} >
-                            {loading ? (
-                                <CircularProgress size="3rem" />
-                            ) : error ? (
-                                <Alert severity="error">{error}</Alert>
-                            ) : (
-                                <ReactFlow elements={graphElements} nodesDraggable={false} onLoad={handleReactFlowOnLoad} />
-                            )}
-                        </Box>
-                    </Box>
-                </Paper>
-            </Box>
+            <div className="service-graph-modal">
+                <button className="close-button" onClick={onClose}>
+                    &#10006;
+                </button>
+                {loading ? (
+                    <CircularProgress size="3rem" />
+                ) : error ? (
+                    <Alert severity="error">{error}</Alert>
+                ) : graphElements.length < 1 ? (
+                    <Alert severity="warning">Для построения графа отсутствуют данные</Alert>
+                ) : (
+                    <ReactFlow elements={graphElements} nodesDraggable={false} onLoad={handleReactFlowOnLoad} />
+                )}
+            </div>
         </Modal>
     );
 };

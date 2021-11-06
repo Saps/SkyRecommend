@@ -6,7 +6,7 @@ import {
 } from '@mui/material';
 import { findCompanies } from '~/api';
 import { RootState } from '~/store/rootReducer';
-import { CommonError, CompanyCandidate } from '~/types';
+import type { CommonResponse, CompanyCandidate } from '~/types';
 
 import './companies-list.component.scss';
 
@@ -25,7 +25,7 @@ export const CompaniesListComponent = (): JSX.Element => {
             setServices(result);
         } catch (e) {
             console.error(e);
-            setError((e as CommonError).message);
+            setError((e as CommonResponse).message);
         }
     };
 

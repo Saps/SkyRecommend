@@ -1,23 +1,16 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Modal, Box, Paper, CircularProgress, Alert, Typography } from '@mui/material';
-
+import { Alert, CircularProgress, Modal, Typography } from '@mui/material';
 import { getServiceCondition } from '~/api';
-import type { ServiceCondition, CommonError } from '~/types';
+import type { CommonResponse, ServiceCondition } from '~/types';
 
-const modalStyle = {
-    position: 'absolute' as 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 400,
-}
+import './service-condition-modal.component.scss';
 
 interface ServiceConditionModalComponentProps {
-    serviceId: number;
     onClose: () => void;
+    serviceId: number;
 }
 
-export const ServiceConditionModalComponent = ({ serviceId, onClose }: ServiceConditionModalComponentProps): JSX.Element => {
+export const ServiceConditionModalComponent = ({ onClose, serviceId }: ServiceConditionModalComponentProps): JSX.Element => {
     const [condition, setCondition] = useState<ServiceCondition>({ message: '', rating: 0 });
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string>('');
@@ -28,7 +21,7 @@ export const ServiceConditionModalComponent = ({ serviceId, onClose }: ServiceCo
 
             setCondition(data);
         } catch (e) {
-            setError((e as CommonError).message);
+            setError((e as CommonResponse).message);
         } finally {
             setLoading(false);
         }
@@ -40,25 +33,21 @@ export const ServiceConditionModalComponent = ({ serviceId, onClose }: ServiceCo
 
     return (
         <Modal open onClose={onClose}>
-            <Box sx={modalStyle}>
-                <Paper>
-                    <Box sx={{ p: 2 }}>
-                        <Box component="div" style={{ height: 300, display: 'flex', justifyContent: 'center', alignItems: 'center' }} >
-                            {loading ? (
-                                <CircularProgress size="3rem" />
-                            ) : error ? (
-                                <Alert severity="error">{error}</Alert>
-                            ) : (
-                                <Box component="div">
-                                    <Typography variant="h3" textAlign="center" mb={2}>Рейтинг: {condition.rating}</Typography>
-                                    <Typography variant="body1">{condition.message}</Typography>
-                                </Box>
-                                
-                            )}
-                        </Box>
-                    </Box>
-                </Paper>
-            </Box>
+            <div className="service-condition-modal">
+                <button className="close-button" onClick={onClose}>
+                    &#10006;
+                </button>
+                {loading ? (
+                    <CircularProgress size="3rem" />
+                ) : error ? (
+                    <Alert severity="error">{error}</Alert>
+                ) : (
+                    <div>
+                        <Typography variant="h3" textAlign="center" mb={2}>Рейтинг: {condition.rating ?? 0}</Typography>
+                        <Typography variant="body1">{condition.message}</Typography>
+                    </div>
+                )}
+            </div>
         </Modal>
     );
 };

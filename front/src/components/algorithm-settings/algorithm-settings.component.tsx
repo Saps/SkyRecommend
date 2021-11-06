@@ -5,7 +5,7 @@ import { useFormik } from 'formik';
 import { Alert, Button, Checkbox, FormControl, FormControlLabel, Grid, TextField, Typography } from '@mui/material';
 import { getTuneAlgorithms, updateTuneAlgorithms } from '~/api';
 import { RootState } from '~/store/rootReducer';
-import { CommonError, ExtendedAlgorithmSettings } from '~/types';
+import type { CommonResponse, ExtendedAlgorithmSettings } from '~/types';
 
 export const AlgorithmSettingsComponent = (): JSX.Element => {
     const history = useHistory();
@@ -28,7 +28,7 @@ export const AlgorithmSettingsComponent = (): JSX.Element => {
                 await updateTuneAlgorithms(result);
             } catch (e) {
                 console.error(e);
-                setError((e as CommonError).message);
+                setError((e as CommonResponse).message);
             }
         },
     });
@@ -44,7 +44,7 @@ export const AlgorithmSettingsComponent = (): JSX.Element => {
             }), {}));
         } catch (e) {
             console.error(e);
-            setError((e as CommonError).message);
+            setError((e as CommonResponse).message);
         } finally {
             setLoading(false);
         }

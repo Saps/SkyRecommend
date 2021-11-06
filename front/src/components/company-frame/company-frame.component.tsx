@@ -7,7 +7,7 @@ import {
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { changeCompanyFrame, findServices, getCompanyFrame, getCompanyFrameOptions, sendSurvey } from '~/api';
-import { CompanyFrameOptions, SurveyValues } from '~/types';
+import type { CompanyFrameOptions, SurveyValues } from '~/types';
 import { ConfirmModalComponent, SuccessModalComponent, SurveyModalComponent } from '../index';
 
 import './company-frame.component.scss';

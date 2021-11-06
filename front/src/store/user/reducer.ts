@@ -1,6 +1,6 @@
 import { PayloadAction } from '@reduxjs/toolkit';
 import { CURRENT_USER } from '~/store/user/actions';
-import { UserInfo } from '~/types';
+import type { UserInfo } from '~/types';
 
 export const initialState = {
     email: '',

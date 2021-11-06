@@ -9,7 +9,7 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { loginAction } from '~/store/user/actions';
 import { RootState } from '~/store/rootReducer';
-import { CommonError } from '~/types';
+import type { CommonResponse } from '~/types';
 
 import './login.component.scss';
 
@@ -32,7 +32,7 @@ export const LoginComponent = (): JSX.Element => {
                 await dispatch(loginAction(values));
                 history.replace('/');
             } catch (e) {
-                const message = (e as CommonError).message || 'Произошла неизвестная ошибка!';
+                const message = (e as CommonResponse).message || 'Произошла неизвестная ошибка!';
                 setErrorMessage(message);
             }
         }
