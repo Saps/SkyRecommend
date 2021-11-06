@@ -1,11 +1,9 @@
 import React, { PropsWithChildren, useEffect, useState, useCallback } from 'react';
-import { Redirect } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { Redirect } from 'react-router-dom';
 import { ThunkDispatch } from 'redux-thunk';
 import { AnyAction } from '@reduxjs/toolkit';
-
 import { Alert, Grid } from '@mui/material';
-
 import { RootState } from '~/store/rootReducer';
 import { getCurrentUserAction } from '~/store/user/actions';
 

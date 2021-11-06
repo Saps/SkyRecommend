@@ -1,9 +1,9 @@
 import axios, { AxiosResponse, AxiosError } from 'axios';
 import Cookies from 'js-cookie';
 import type {
-    AlgorithmSettings, ApiError, ChangedParams, CommonResponse, CompanyCandidate, CompanyFrame,
-    CompanyFrameOptions, CompanyProperty, ExtendedAlgorithmSettings, LoginInfo, LoginRequest, LogoutInfo,
-    Recommendations, ServiceGraph, ServiceListResponse, SurveyValues, UserCredentials, UserInfo, ServiceCondition,
+    AlgorithmSettings, ApiError, ChangedParams, CommonResponse, CompanyCandidate, CompanyFrame, CompanyFrameOptions,
+    CompanyProperty, ExtendedAlgorithmSettings, LoginInfo, LoginRequest, LogoutInfo, Recommendations,
+    ServiceCondition, ServiceGraph, ServiceListResponse, SurveyValues, UserCredentials, UserInfo,
 } from '~/types';
 
 const api = axios.create({

@@ -81,7 +81,7 @@ export const AlgorithmSettingsComponent = (): JSX.Element => {
                                 />
                             </FormControl>
                             <TextField
-                                InputProps={{ inputProps: { type: 'number', min: 0, max: 3, step: 0.1 } }}
+                                InputProps={{ inputProps: { type: 'number', min: 0, max: 10, step: 0.1 } }}
                                 label={'Вес'}
                                 name={`${item.id}-weight`}
                                 onBlur={event => {
