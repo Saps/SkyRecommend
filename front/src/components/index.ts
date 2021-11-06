@@ -13,3 +13,4 @@ export * from './services-list/services-list.component';
 export * from './success-modal/success-modal.component';
 export * from './survey-modal/survey-modal.component';
 export * from './service-graph-modal/service-graph-modal.component';
+export * from './service-condition-modal/service-condition-modal.component';

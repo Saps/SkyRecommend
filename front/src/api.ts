@@ -3,7 +3,7 @@ import Cookies from 'js-cookie';
 import {
     AlgorithmSettings, ApiError, ChangedParams, CompanyCandidate, CompanyFrame, CompanyFrameOptions,
     CompanyProperty, ExtendedAlgorithmSettings, LoginInfo, LoginRequest, LogoutInfo,
-    Recommendations, ServiceGraph, ServiceListResponse, SurveyValues, UserCredentials, UserInfo,
+    Recommendations, ServiceGraph, ServiceListResponse, SurveyValues, UserCredentials, UserInfo, ServiceCondition,
 } from '~/types';
 
 const api = axios.create({
@@ -212,6 +212,16 @@ export async function updateTuneAlgorithms(result: AlgorithmSettings[]): Promise
 export async function getServiceGraph(srvId: number): Promise<ServiceGraph> {
     try {
         const { data } = await api.get('/servgraph', { params: { srv_id: srvId } });
+
+        return data;
+    }  catch (e) {
+        throw new Error((e as AxiosError<ApiError>)?.response?.data.message);
+    }
+}
+
+export async function getServiceCondition(srvId: number): Promise<ServiceCondition> {
+    try {
+        const { data } = await api.get('/servcond', { params: { srv_id: srvId } });
 
         return data;
     }  catch (e) {

@@ -142,3 +142,8 @@ export interface ServiceGraphEdge {
     to: number;
     style?: CSSProperties;
 }
+
+export interface ServiceCondition {
+    message: string;
+    rating: number;
+}

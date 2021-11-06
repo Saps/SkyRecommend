@@ -5,7 +5,7 @@ import {
     Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TextField
 } from '@mui/material';
 import { getServices, getServiceTypes } from "~/api";
-import { ServiceGraphModalComponent } from '~/components';
+import { ServiceGraphModalComponent, ServiceConditionModalComponent } from '~/components';
 import { CommonError, ServiceItem } from "~/types";
 
 import './services-list.component.scss';
@@ -15,6 +15,7 @@ export const ServicesListComponent = (): JSX.Element => {
     const [currentList, setCurrentList] = useState<ServiceItem[]>([]);
     const [error, setError] = useState<string>();
     const [graphModalServiceId, setGraphModalServiceId] = useState<number>(-1);
+    const [conditionModalServiceId, setConditionModalServiceId] = useState<number>(-1);
     const [isSearched, setIsSearched] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>();
     const [page, setPage] = useState<number>(0);
@@ -136,7 +137,7 @@ export const ServicesListComponent = (): JSX.Element => {
                                         </TableCell>
                                         <TableCell align="center">
                                             <ButtonGroup variant="text" aria-label="text button group">
-                                                <Button>Алгоритм формального соответствия</Button>
+                                                <Button onClick={() => setConditionModalServiceId(item.id)}>Алгоритм формального соответствия</Button>
                                                 <Button onClick={() => setGraphModalServiceId(item.id)}>Граф</Button>
                                             </ButtonGroup>
                                         </TableCell>
@@ -171,6 +172,12 @@ export const ServicesListComponent = (): JSX.Element => {
                 <ServiceGraphModalComponent
                     serviceId={graphModalServiceId}
                     onClose={() => setGraphModalServiceId(-1)}
+                />
+            )}
+            {conditionModalServiceId > -1 && (
+                <ServiceConditionModalComponent
+                    serviceId={conditionModalServiceId}
+                    onClose={() => setConditionModalServiceId(-1)}
                 />
             )}
         </Grid>
