@@ -62,29 +62,26 @@ export const ServiceGraphModalComponent = ({ onClose, serviceId }: ServiceGraphM
         try {
             const data: ServiceGraph = await getServiceGraph(serviceId);
 
-            const graphNodes: ReactFlowNode[] = data.nodes.map(node => (
-                {
-                    id: `${node.id}`,
-                    data: { label: node.caption },
-                    style: {
-                        backgroundColor: node.color,
-                        // width: `${NODE_WIDTH}px`,
-                        // height: `${NODE_HEIGHT}px`,
-                        width: 'auto',
-                        // borderRadius: '100%',
-                        fontSize: '24px',
-                        ...(node.style || {}),
-                    },
-                    position: { x: Math.round(Math.random() * 1000), y : Math.round(Math.random() * 1000) }
-                }
-            ));
+            const graphNodes: ReactFlowNode[] = data.nodes.map(node => ({
+                id: `${node.id}`,
+                data: { label: node.caption },
+                position: {
+                    x: Math.round(Math.random() * 1000),
+                    y: Math.round(Math.random() * 1000)
+                },
+                style: {
+                    backgroundColor: node.color,
+                    width: 'auto',
+                    fontSize: '24px',
+                    ...(node.style || {}),
+                },
+            }));
 
             const graphEdges: ReactFlowEdge[] = data.edges.map(edge => (
                 { id: `${edge.id}`, source: `${edge.from}`, target: `${edge.to}`, style: edge.style || {} }
             ));
 
-            const layoutedNodes = getLayoutNodes(graphNodes, graphEdges);
-            const elements: ReactFlowElements<GraphElementData> = [...layoutedNodes, ...graphEdges];
+            const elements: ReactFlowElements<GraphElementData> = [...getLayoutNodes(graphNodes, graphEdges), ...graphEdges];
 
             setGraphElements(elements);
         } catch (e) {
@@ -113,7 +110,7 @@ export const ServiceGraphModalComponent = ({ onClose, serviceId }: ServiceGraphM
                 ) : error ? (
                     <Alert severity="error">{error}</Alert>
                 ) : graphElements.length < 1 ? (
-                    <Alert severity="warning">Для построения графа отсутствуют данные</Alert>
+                    <Alert severity="warning">Для построения графа отсутствуют данные.</Alert>
                 ) : (
                     <ReactFlow elements={graphElements} minZoom={0.1} nodesDraggable={false} onLoad={handleReactFlowOnLoad}>
                         <Controls />
