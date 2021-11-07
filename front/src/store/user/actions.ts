@@ -2,7 +2,7 @@ import { PayloadAction } from '@reduxjs/toolkit';
 import { login, logout, currentUser } from '~/api';
 import { initialState } from '~/store/user/reducer';
 import { AppDispatch } from '~/store/store';
-import { UserInfo, UserCredentials } from '~/types';
+import type { UserCredentials, UserInfo } from '~/types';
 
 export const CURRENT_USER = 'CURRENT_USER';
 

@@ -6,7 +6,7 @@ import {
 } from '@mui/material';
 import { findCompanies } from '~/api';
 import { RootState } from '~/store/rootReducer';
-import { CommonError, CompanyCandidate } from '~/types';
+import type { CommonResponse, CompanyCandidate } from '~/types';
 
 import './companies-list.component.scss';
 
@@ -25,7 +25,7 @@ export const CompaniesListComponent = (): JSX.Element => {
             setServices(result);
         } catch (e) {
             console.error(e);
-            setError((e as CommonError).message);
+            setError((e as CommonResponse).message);
         }
     };
 
@@ -113,6 +113,9 @@ export const CompaniesListComponent = (): JSX.Element => {
                 moreItem && (
                     <Modal open onClose={() => setMoreItem(null)}>
                         <div className="company-info-modal">
+                            <button className="close-button" onClick={() => setMoreItem(null)}>
+                                &#10006;
+                            </button>
                             <Typography variant="h6" component="h2">{moreItem.name}</Typography>
                             <Typography variant="body1">{moreItem.type}</Typography>
                             {moreItem.algos.length > 0 && (

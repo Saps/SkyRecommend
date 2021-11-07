@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useFormik } from 'formik';
 import { Button, Checkbox, CircularProgress, FormControl, FormControlLabel, Modal, Typography } from '@mui/material';
 import { getQuestions } from '~/api';
-import { SurveyValues } from "~/types";
+import type { SurveyValues } from "~/types";
 
 import './survey-modal.component.scss';
 

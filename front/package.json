@@ -1,6 +1,6 @@
 {
     "name": "front",
-    "version": "0.1.0",
+    "version": "1.0.0",
     "private": true,
     "scripts": {
         "start": "craco start",
@@ -46,7 +46,6 @@
         "redux-thunk": "^2.4.0",
         "reselect": "^4.0.0",
         "typescript": "^4.3.5",
-        "uuid": "^8.3.2",
         "yup": "^0.32.11"
     },
     "eslintConfig": {

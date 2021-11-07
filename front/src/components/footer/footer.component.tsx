@@ -4,7 +4,7 @@ import './footer.component.scss';
 export const FooterComponent = (): JSX.Element => {
     return (
         <footer>
-            <span>© {new Date().getFullYear()}, all rights reserved</span>
+            <span>© {new Date().getFullYear()} Скайдев, все права защищены</span>
         </footer>
     );
 }

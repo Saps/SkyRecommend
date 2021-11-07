@@ -4,13 +4,12 @@ import { ExpandMore } from '@mui/icons-material';
 import {
     Accordion, AccordionDetails, AccordionSummary, Alert, Button, FormControl, InputLabel, MenuItem, Select, TextField
 } from '@mui/material';
-
 import { changeCompanyProperties, getCompanyProperties } from '~/api';
-import { CompanyProperty, FieldValues, Value } from '~/types';
+import type { CompanyProperty, FieldValues, Value } from '~/types';
 
 import './company-properties.component.scss';
 
-export const CompanyPropertiesComponent = (): JSX.Element | null => {
+export const CompanyPropertiesComponent = (): JSX.Element => {
     const [expanded, setExpanded] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(true);
     const [companyProperties, setCompanyProperties] = useState<CompanyProperty[]>([]);

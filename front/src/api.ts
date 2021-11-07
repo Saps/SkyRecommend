@@ -1,9 +1,9 @@
 import axios, { AxiosResponse, AxiosError } from 'axios';
 import Cookies from 'js-cookie';
-import {
-    AlgorithmSettings, ApiError, ChangedParams, CompanyCandidate, CompanyFrame, CompanyFrameOptions,
-    CompanyProperty, ExtendedAlgorithmSettings, LoginInfo, LoginRequest, LogoutInfo,
-    Recommendations, ServiceGraph, ServiceListResponse, SurveyValues, UserCredentials, UserInfo, ServiceCondition,
+import type {
+    AlgorithmSettings, ApiError, ChangedParams, CommonResponse, CompanyCandidate, CompanyFrame, CompanyFrameOptions,
+    CompanyProperty, ExtendedAlgorithmSettings, LoginInfo, LoginRequest, LogoutInfo, Recommendations,
+    ServiceCondition, ServiceGraph, ServiceListResponse, SurveyValues, UserCredentials, UserInfo,
 } from '~/types';
 
 const api = axios.create({
@@ -114,7 +114,7 @@ export async function getCompanyFrameOptions(): Promise<CompanyFrameOptions> {
     }
 }
 
-export async function changeCompanyFrame(newFrame: CompanyFrame): Promise<{ message: string }> {
+export async function changeCompanyFrame(newFrame: CompanyFrame): Promise<CommonResponse> {
     try {
         const { data } = await api.post('/company/frame', newFrame);
 
@@ -199,7 +199,7 @@ export async function getTuneAlgorithms(): Promise<ExtendedAlgorithmSettings[]> 
     }
 }
 
-export async function updateTuneAlgorithms(result: AlgorithmSettings[]): Promise<{ message: string }> {
+export async function updateTuneAlgorithms(result: AlgorithmSettings[]): Promise<CommonResponse> {
     try {
         const { data } = await api.post('/tunealgor', result);
 

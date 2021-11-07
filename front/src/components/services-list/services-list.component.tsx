@@ -6,7 +6,7 @@ import {
 } from '@mui/material';
 import { getServices, getServiceTypes } from "~/api";
 import { ServiceGraphModalComponent, ServiceConditionModalComponent } from '~/components';
-import { CommonError, ServiceItem } from "~/types";
+import type { CommonResponse, ServiceItem } from "~/types";
 
 import './services-list.component.scss';
 
@@ -47,7 +47,7 @@ export const ServicesListComponent = (): JSX.Element => {
             setTotal(total);
         } catch (e) {
             console.error(e);
-            setError((e as CommonError).message);
+            setError((e as CommonResponse).message);
         } finally {
             setLoading(false);
         }
@@ -64,7 +64,7 @@ export const ServicesListComponent = (): JSX.Element => {
             setServiceTypes(await getServiceTypes());
         } catch (e) {
             console.error(e);
-            setError((e as CommonError).message);
+            setError((e as CommonResponse).message);
         }
     }, [setServiceTypes]);
 
@@ -168,16 +168,16 @@ export const ServicesListComponent = (): JSX.Element => {
                     </Alert>
                 )
             }
-            {graphModalServiceId > -1 && (
-                <ServiceGraphModalComponent
-                    serviceId={graphModalServiceId}
-                    onClose={() => setGraphModalServiceId(-1)}
-                />
-            )}
             {conditionModalServiceId > -1 && (
                 <ServiceConditionModalComponent
-                    serviceId={conditionModalServiceId}
                     onClose={() => setConditionModalServiceId(-1)}
+                    serviceId={conditionModalServiceId}
+                />
+            )}
+            {graphModalServiceId > -1 && (
+                <ServiceGraphModalComponent
+                    onClose={() => setGraphModalServiceId(-1)}
+                    serviceId={graphModalServiceId}
                 />
             )}
         </Grid>

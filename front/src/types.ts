@@ -32,7 +32,7 @@ export interface ApiError {
     message: string;
 }
 
-export interface CommonError {
+export interface CommonResponse {
     message: string;
 }
 

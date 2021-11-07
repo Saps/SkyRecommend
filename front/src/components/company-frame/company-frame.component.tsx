@@ -7,7 +7,7 @@ import {
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { changeCompanyFrame, findServices, getCompanyFrame, getCompanyFrameOptions, sendSurvey } from '~/api';
-import { CompanyFrameOptions, SurveyValues } from '~/types';
+import type { CompanyFrameOptions, SurveyValues } from '~/types';
 import { ConfirmModalComponent, SuccessModalComponent, SurveyModalComponent } from '../index';
 
 import './company-frame.component.scss';
@@ -22,7 +22,7 @@ export const CompanyFrameComponent = (): JSX.Element => {
     const [isSurveyModalOpen, setIsSurveyModalOpen] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(true);
 
-    const { errors, isValid, handleBlur, handleChange, handleSubmit, setFieldValue, setValues, values } = useFormik({
+    const { errors, handleBlur, handleChange, handleSubmit, isValid, setFieldValue, setValues, values } = useFormik({
         initialValues: {
             company_name: '',
             inn: '',
@@ -322,6 +322,15 @@ export const CompanyFrameComponent = (): JSX.Element => {
                                         {errors.techs && <FormHelperText>{errors.techs}</FormHelperText>}
                                     </FormControl>
                                 </Grid>
+                                <Box component="strong" sx={{ marginTop: 2 }}>
+                                    Рекомендательная система позволяет подобрать сервисы от Правительства г. Москвы и партнеров
+                                    стартап-навигаторов, исходя из профиля и потребностей Вашей компании (кнопка "Подобрать сервисы").
+                                </Box>
+                                <Box component="strong" sx={{ marginTop: 2 }}>
+                                    Рекомендательная система также помогает определить наиболее актуальные для Вашей компании
+                                    бизнес-задачи, а также с помощью каких сервисов эти задачи могут быть решены наиболее эффективным
+                                    образом (кнопка "Повысить эффективность").
+                                </Box>
                                 <div className="form-options" key="submit">
                                     <Button color="info" type="button" variant="contained" onClick={getData}>
                                         Отменить
