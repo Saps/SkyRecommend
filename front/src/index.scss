@@ -1,5 +1,4 @@
 @import './assets/styles/fonts';
-@import './assets/styles/mui-customization';
 
 * {
     box-sizing: border-box;
@@ -24,8 +23,8 @@ html, body, #root {
 body {
     background-color: #f5f7fa;
     font-family: 'TTFirs', sans-serif;
-    font-weight: 300;
     font-style: normal;
+    font-weight: 300;
 }
 
 .main-container {
