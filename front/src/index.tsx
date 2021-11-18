@@ -32,6 +32,9 @@ const theme = createTheme({
             main: '#ffc107'
         },
     },
+    typography: {
+        fontFamily: '\'TTFirs\',sans-serif'
+    }
 });
 
 ReactDOM.render(
