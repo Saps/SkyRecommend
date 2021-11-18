@@ -8,6 +8,8 @@ class FindServApi:
     def getFramed(self, comp_data):
         dm = domains.RSDomain()
         dm.initLOV()
+
+        #################################### Thanks to K.!!! #############################################
         n_st = dm.getId(comp_data['frame']['study'])
         n_t = comp_data['frame']['techs']
         n_m = comp_data['frame']['markets']
@@ -53,7 +55,6 @@ class FindServApi:
             select c9 from kip
             where id in ({add_wh})
         """
-        #where id in (1924, 2373, 759)
         rt_set = []
         for n1 in self.performToResult(sql2):
             rt_set.append(n1[0])
@@ -73,6 +74,7 @@ class FindServApi:
             result_list.append(recode_arr[n4])
             if n4 in recode_arr2.keys():
                 result_list.append(recode_arr2[n4])
+        #################################### Thanks to K.!!! #############################################
         return {'needs':rt_set, 'servs': result_list}
 
 

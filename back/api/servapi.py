@@ -16,6 +16,7 @@ forbid = ['','в','с','и','по','c','или','для','о','на','к','др�
 
 class ServApi:
 
+    #################################### Thanks to K.!!! #############################################
     def getServCond(self, srv_id):
         morph = pymorphy2.MorphAnalyzer()
         sql = f"""select rus_name from rs_domains where val_type in ('Techs','Market') """

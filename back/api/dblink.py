@@ -13,7 +13,7 @@ def db_engine():
 
 class Db:
     def __init__(self):
-        self.cstring = 'postgresql://recsys:sysrec1@185.221.152.242/postgres'
+        self.cstring = 'postgresql://---:---@185.221.152.242/postgres'
         self.engine = create_engine(self.cstring)
         self.bdsession = sessionmaker(bind=self.engine, autocommit=True, autoflush=False)()
         self.connect = self.engine.connect()
